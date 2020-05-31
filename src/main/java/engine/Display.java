@@ -2,6 +2,7 @@ package engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class Display {
 
@@ -9,11 +10,17 @@ public class Display {
     private Canvas canvas;
     public String title = "Age Engine";
     private int width = 1280, height = 720;
+    private String attachedScene;
+    public Color backGround = Color.white;
+    private boolean fullScreen = false;
 
     Display() {
         createWindow();
     }
 
+    /**
+     * Creates the window the user sees.
+     */
     private void createWindow() {
         frame = new JFrame(title);
         frame.setSize(width, height);
@@ -34,6 +41,7 @@ public class Display {
      * @param fullScreen <p>true = FullScreen</p> <p>false = Windowed</p>
      */
     public Display setFullScreen(boolean fullScreen) {
+        this.fullScreen = fullScreen;
         frame.dispose();
         if (fullScreen) {
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -55,18 +63,70 @@ public class Display {
      * @param height The window height.
      */
     public Display setSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-        frame.setSize(width, height);
+        if (!fullScreen) {
+            this.width = width;
+            this.height = height;
+            frame.setSize(width, height);
+        }
         return this;
     }
 
     /**
      * Sets the background color of the canvas.
+     *
      * @param BgColor The color that will be set.
      */
     public Display setBackgroundColor(Color BgColor) {
+        backGround = BgColor;
         canvas.setBackground(BgColor);
         return this;
+    }
+
+    /**
+     * This method is used to attach a scene to a window. The scene will be shown in the chosen window.
+     *
+     * @param alias The alias of the scene.
+     * @return
+     */
+    public Display attachScene(String alias) {
+        //runs the init in a loaded scene
+        Game.scenes.get(alias).init();
+        this.attachedScene = alias;
+        return this;
+    }
+
+    /**
+     * @return Returns the currently attached scene.
+     */
+    public String getAttachedScene() {
+        return attachedScene;
+    }
+
+    /**
+     * This creates the buffer-Strategy for the Graphics object. Can be interesting. But can be ignored for normal use.
+     *
+     * @return Returns the bufferStrategy
+     */
+    public BufferStrategy bs() {
+        BufferStrategy bs = canvas.getBufferStrategy();
+        if (bs == null) {
+            canvas.createBufferStrategy(3);
+            bs = canvas.getBufferStrategy();
+        }
+        return bs;
+    }
+
+    /**
+     * @return Returns the screen width.
+     */
+    public int getWidth() {
+        return canvas.getWidth();
+    }
+
+    /**
+     * @return Returns the screen height.
+     */
+    public int getHeight() {
+        return canvas.getHeight();
     }
 }

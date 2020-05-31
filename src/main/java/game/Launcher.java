@@ -8,15 +8,16 @@ import java.awt.*;
 public class Launcher {
 
     public static void main(String[] args) {
-        Display d = Game.d();
+        Display d = Game.display();
         d.setFullScreen(false);
         d.setSize(1280, 720);
-        d.setBackgroundColor(Color.BLACK);
+        d.setBackgroundColor(Color.WHITE);
+        Game.addScene(new TestScene(), "Test");
+        d.attachScene("Test");
 
-        d = Game.d("secondary")
-                .setFullScreen(false)
-                .setSize(1280, 720)
-                .setBackgroundColor(Color.gray);
-        d.notifyAll();
+        Display d1 = Game.display("Test");
+        d1.attachScene("Test");
+        Game.start();
+        Game.setFrameRate(120);
     }
 }
