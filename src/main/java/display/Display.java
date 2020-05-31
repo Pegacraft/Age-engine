@@ -6,6 +6,7 @@ import java.awt.*;
 public class Display {
 
     private JFrame frame;
+    private Canvas canvas;
     public String title = "Age Engine";
     public int width = 1280, height = 720;
 
@@ -19,6 +20,12 @@ public class Display {
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        canvas = new Canvas();
+        canvas.setSize(width, height);
+        canvas.setVisible(true);
+
+        frame.add(canvas);
+        frame.pack();
         frame.setVisible(true);
 
     }
@@ -44,13 +51,23 @@ public class Display {
 
     /**
      * This method is used to resize the window.
-     * @param width The window width.
+     *
+     * @param width  The window width.
      * @param height The window height.
      */
     public Display setSize(int width, int height) {
         this.width = width;
         this.height = height;
         frame.setSize(width, height);
+        return this;
+    }
+
+    /**
+     * Sets the background color of the canvas.
+     * @param BgColor The color that will be set.
+     */
+    public Display setBackgroundColor(Color BgColor) {
+        canvas.setBackground(BgColor);
         return this;
     }
 }
