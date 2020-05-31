@@ -8,7 +8,7 @@ public class Display {
     private JFrame frame;
     private Canvas canvas;
     public String title = "Age Engine";
-    public int width = 1280, height = 720;
+    private int width = 1280, height = 720;
 
     Display() {
         createWindow();
@@ -33,7 +33,7 @@ public class Display {
      *
      * @param fullScreen <p>true = FullScreen</p> <p>false = Windowed</p>
      */
-    public void setFullScreen(boolean fullScreen) {
+    public Display setFullScreen(boolean fullScreen) {
         frame.dispose();
         if (fullScreen) {
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -45,6 +45,7 @@ public class Display {
         }
 
         frame.setVisible(true);
+        return this;
     }
 
     /**

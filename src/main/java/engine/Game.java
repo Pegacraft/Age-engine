@@ -2,6 +2,10 @@ package engine;
 
 import java.util.HashMap;
 
+/**
+ * This is the centralized object where all information is included.
+ * This contains info about Displays, and future stuff
+ */
 public class Game {
 
     private static final HashMap<String, Display> displays = new HashMap<>();

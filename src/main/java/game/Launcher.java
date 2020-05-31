@@ -12,9 +12,11 @@ public class Launcher {
         d.setFullScreen(false);
         d.setSize(1280, 720);
         d.setBackgroundColor(Color.BLACK);
-        d = Game.d("secondary");
-        d.setFullScreen(false);
-        d.setSize(1280, 720);
-        d.setBackgroundColor(Color.BLACK);
+
+        d = Game.d("secondary")
+                .setFullScreen(false)
+                .setSize(1280, 720)
+                .setBackgroundColor(Color.gray);
+        d.notifyAll();
     }
 }
