@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+/**
+ * The class that is used to create/interact with the different windows.
+ */
 public class Display {
 
     private JFrame frame;

@@ -18,6 +18,6 @@ public class Launcher {
         Display d1 = Game.display("Test");
         d1.attachScene("Test");
         Game.start();
-        Game.setFrameRate(120);
+        Game.setFrameRate(60);
     }
 }

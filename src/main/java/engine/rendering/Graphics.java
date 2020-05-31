@@ -5,7 +5,15 @@ import engine.Game;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+/**
+ * This is the <code>Graphics</code> class. It is used for everything that has to do with graphics.
+ * E. g. if you want to draw a rectangle, you can achieve it in the following way <code>Graphics.g.fillRect(x,y,width,height);</code>
+ * <p>The <code>g</code> is the normal <code>Graphics2D</code> object.</p>
+ */
 public class Graphics {
+    /**
+     * the normal Graphics2D object.
+     */
     public static Graphics2D g;
 
     /**
