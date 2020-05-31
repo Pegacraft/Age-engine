@@ -1,4 +1,4 @@
-package display;
+package engine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,8 @@ public class Display {
     public String title = "Age Engine";
     public int width = 1280, height = 720;
 
-    public Display() {
+    Display() {
         createWindow();
-
     }
 
     private void createWindow() {
@@ -27,7 +26,6 @@ public class Display {
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
-
     }
 
     /**
