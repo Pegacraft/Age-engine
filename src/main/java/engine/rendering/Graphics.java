@@ -1,6 +1,7 @@
 package engine.rendering;
 
 import engine.Game;
+import engine.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -27,10 +28,9 @@ public class Graphics {
             g.setColor(e.backGround);
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
             g.scale(((float) e.getWidth()) / 1280, ((float) e.getHeight()) / 720);
-            try {
-                Game.scenes.get(e.getAttachedScene()).renderLoop();
-            } catch (NullPointerException ignore) {
-            }
+            Scene s = Game.scenes.get(e.getAttachedScene());
+            if (s != null) s.renderLoop();
+            else throw new IllegalStateException("no state defined for that display");
             bs.show();
             g.dispose();
         });

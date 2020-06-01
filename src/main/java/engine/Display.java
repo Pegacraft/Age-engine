@@ -89,7 +89,6 @@ public class Display {
      * This method is used to attach a scene to a window. The scene will be shown in the chosen window.
      *
      * @param alias The alias of the scene.
-     * @return
      */
     public Display attachScene(String alias) {
         //runs the init in a loaded scene

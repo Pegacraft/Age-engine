@@ -32,7 +32,7 @@ public class Game {
      * @param frameRate The frame rate you want in fps.
      */
     public static void setFrameRate(int frameRate) {
-        loop.frame = 1000 / frameRate;
+        loop.frameRate = frameRate;
     }
 
     /**

@@ -1,6 +1,7 @@
 package engine.loops;
 
 import engine.Game;
+import engine.Scene;
 import engine.rendering.Graphics;
 
 /**
@@ -9,16 +10,25 @@ import engine.rendering.Graphics;
 public class Loop implements Runnable {
     boolean running = false;
     Thread thread;
-    public long frame = (long) 16.6666667;
+    /**
+     * the time it took to calculate the last frame in ns
+     */
+    public static long frameTime = 1;
+    public int frameRate = 60;
 
     @Override
     public void run() {
         init();
         while (running) {
+            long startTime = System.nanoTime();
             logicLoop();
             renderLoop();
             try {
-                Thread.sleep(frame - System.currentTimeMillis() % frame);
+                frameTime = (System.nanoTime() - startTime);
+                long toWait = (long) 1E9 / frameRate - frameTime;
+                if (toWait < 0) toWait = 0;
+                //noinspection BusyWait
+                Thread.sleep((long) (toWait / 1E6), (int) (toWait % 1E6));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -28,10 +38,9 @@ public class Loop implements Runnable {
     private void logicLoop() {
         //Loops through the active scene
         Game.displays.values().forEach(e -> {
-            try {
-                Game.scenes.get(e.getAttachedScene()).logicLoop();
-            } catch (NullPointerException ignore) {
-            }
+            Scene s = Game.scenes.get(e.getAttachedScene());
+            if (s != null) s.logicLoop();
+            else throw new IllegalStateException("no state defined for that display");
         });
     }
 
@@ -49,16 +58,5 @@ public class Loop implements Runnable {
         running = true;
         thread = new Thread(this);
         thread.start();
-    }
-
-    public synchronized void stop() {
-        if (!running)
-            return;
-        running = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
