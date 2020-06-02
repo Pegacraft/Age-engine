@@ -16,6 +16,9 @@ public class Display {
      * This variable can be used to interact with the KeyListener.
      */
     public final Keyboard keyListener = new Keyboard();
+    /**
+     * This variable can be used to interact with the MouseListener.
+     */
     public final Mouse mouseListener = new Mouse();
     public String title = "Age Engine";
     public Color backGround = Color.white;
