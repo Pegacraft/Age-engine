@@ -44,6 +44,7 @@ public class Loop implements Runnable {
                 s.logicLoop();
                 s.getObjectList().forEach(Object::logicLoop);
             } else throw new IllegalStateException("no state defined for that display");
+            e.mouseListener.MouseLoop(e);
         });
     }
 

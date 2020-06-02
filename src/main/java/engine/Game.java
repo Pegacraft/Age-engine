@@ -18,7 +18,11 @@ public class Game {
      */
     public static void start() {
         loop = new Loop();
-        scenes.values().forEach(Scene::init);
+        try {
+            scenes.values().forEach(Scene::init);
+        } catch (NullPointerException ignored) {
+
+        }
         loop.start();
     }
 
@@ -34,6 +38,7 @@ public class Game {
 
     /**
      * This function is used to register a new Scene in your Game.
+     *
      * @param scene The scene class you want to add.
      * @param alias The alias as what the class is going to be saved.
      */

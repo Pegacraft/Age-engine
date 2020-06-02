@@ -19,11 +19,16 @@ public class TestScene extends Scene {
             System.exit(0);
             return false;
         });
+        display.mouseListener.addPressEvent(1, e -> {
+            System.out.println("Mouse 1 pressed");
+        });
         this.addObject(new TestObject());
     }
 
     @Override
     public void logicLoop() {
+        if (display.mouseListener.isHeld(1))
+            System.out.println("test");
 //        for (int j = 0; j++ <= 1E6; ) Math.sin(4); // benchmark to increase the frameTimes
     }
 

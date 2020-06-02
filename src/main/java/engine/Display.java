@@ -1,6 +1,7 @@
 package engine;
 
 import engine.listeners.Keyboard;
+import engine.listeners.Mouse;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,11 @@ import java.awt.image.BufferStrategy;
  */
 public class Display {
 
+    /**
+     * This variable can be used to interact with the KeyListener.
+     */
     public final Keyboard keyListener = new Keyboard();
+    public final Mouse mouseListener = new Mouse();
     public String title = "Age Engine";
     public Color backGround = Color.white;
     private JFrame frame;
@@ -41,6 +46,7 @@ public class Display {
         frame.setVisible(true);
 
         canvas.addKeyListener(keyListener);
+        canvas.addMouseListener(mouseListener);
     }
 
     /**
@@ -135,5 +141,14 @@ public class Display {
      */
     public int getHeight() {
         return canvas.getHeight();
+    }
+
+    /**
+     * This is a internal method, it shall not be used
+     *
+     * @return The canvas in a display.
+     */
+    public Canvas getCanvas() {
+        return canvas;
     }
 }
