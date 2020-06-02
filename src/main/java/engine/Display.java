@@ -1,5 +1,7 @@
 package engine;
 
+import engine.listeners.Keyboard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -9,12 +11,13 @@ import java.awt.image.BufferStrategy;
  */
 public class Display {
 
+    public final Keyboard keyListener = new Keyboard();
+    public String title = "Age Engine";
+    public Color backGround = Color.white;
     private JFrame frame;
     private Canvas canvas;
-    public String title = "Age Engine";
     private int width = 1280, height = 720;
     private String attachedScene;
-    public Color backGround = Color.white;
     private boolean fullScreen = false;
 
     Display() {
@@ -36,6 +39,8 @@ public class Display {
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
+
+        canvas.addKeyListener(keyListener);
     }
 
     /**

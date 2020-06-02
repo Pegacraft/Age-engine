@@ -1,6 +1,5 @@
 package engine;
 
-import engine.loops.InputLoop;
 import engine.loops.Loop;
 
 import java.util.HashMap;
@@ -13,7 +12,6 @@ public class Game {
     public static final HashMap<String, Display> displays = new HashMap<>();
     public static final HashMap<String, Scene> scenes = new HashMap<>();
     private static Loop loop;
-    private static InputLoop ILoop;
 
     /**
      * This method starts the Loop components. Essential for game logic.
@@ -21,8 +19,6 @@ public class Game {
     public static void start() {
         loop = new Loop();
         loop.start();
-        ILoop = new InputLoop();
-        ILoop.start();
     }
 
     /**
