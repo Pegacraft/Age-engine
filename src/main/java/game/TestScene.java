@@ -12,6 +12,7 @@ public class TestScene extends Scene {
 
     @Override
     public void init() {
+        display.keyListener.addListener(KeyEvent.VK_E,this::test);
     }
 
     @Override
@@ -29,5 +30,10 @@ public class TestScene extends Scene {
         Graphics.g.setColor(Color.BLACK);
         Graphics.g.drawString(String.format("Time per frame in ms: %.3f", Loop.frameTime / 1E6), 0, 100);
         Graphics.g.fillRect(0, 200, i++, 520);
+    }
+
+    private boolean test(KeyEvent keyEvent){
+        System.out.println("test");
+        return false;
     }
 }

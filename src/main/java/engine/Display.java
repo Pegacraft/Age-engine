@@ -97,6 +97,7 @@ public class Display {
      */
     public Display attachScene(String alias) {
         //runs the init in a loaded scene
+        Game.scenes.get(alias).display = this;
         Game.scenes.get(alias).init();
         this.attachedScene = alias;
         return this;
