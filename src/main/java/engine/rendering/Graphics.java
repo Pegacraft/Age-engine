@@ -1,6 +1,7 @@
 package engine.rendering;
 
 import engine.Game;
+import engine.Object;
 import engine.Scene;
 
 import java.awt.*;
@@ -29,8 +30,10 @@ public class Graphics {
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
             g.scale(((float) e.getWidth()) / 1280, ((float) e.getHeight()) / 720);
             Scene s = Game.scenes.get(e.getAttachedScene());
-            if (s != null) s.renderLoop();
-            else throw new IllegalStateException("no state defined for that display");
+            if (s != null) {
+                s.renderLoop();
+                s.getObjectList().forEach(Object::renderLoop);
+            } else throw new IllegalStateException("no state defined for that display");
             bs.show();
             g.dispose();
         });

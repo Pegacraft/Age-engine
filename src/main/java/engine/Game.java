@@ -18,6 +18,7 @@ public class Game {
      */
     public static void start() {
         loop = new Loop();
+        scenes.values().forEach(Scene::init);
         loop.start();
     }
 
@@ -25,7 +26,7 @@ public class Game {
      * This method is used set a custom frame rate to the logic and render loop. If you don't define it with this method,
      * it'll be set to 60fps.
      *
-     * @param frameRate The frame rate you want in fps.
+     * @param frameRate The frame rate you want.
      */
     public static void setFrameRate(int frameRate) {
         loop.frameRate = frameRate;

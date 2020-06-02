@@ -1,6 +1,7 @@
 package engine.loops;
 
 import engine.Game;
+import engine.Object;
 import engine.Scene;
 import engine.rendering.Graphics;
 
@@ -39,8 +40,10 @@ public class Loop implements Runnable {
         //Loops through the active scene
         Game.displays.values().forEach(e -> {
             Scene s = Game.scenes.get(e.getAttachedScene());
-            if (s != null) s.logicLoop();
-            else throw new IllegalStateException("no state defined for that display");
+            if (s != null) {
+                s.logicLoop();
+                s.getObjectList().forEach(Object::logicLoop);
+            } else throw new IllegalStateException("no state defined for that display");
         });
     }
 
