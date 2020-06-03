@@ -14,12 +14,12 @@ public class TestScene extends Scene {
     @Override
     public void init() {
         display.keyListener.addListener(KeyEvent.VK_E, e -> System.out.println("test"), false);
-        display.keyListener.addListener(KeyEvent.VK_SPACE, this::reset);
+        display.keyListener.addListener(KeyEvent.VK_SPACE, this::reset, false);
         display.keyListener.addListener(KeyEvent.VK_ESCAPE, e -> {
             System.exit(0);
             return false;
         });
-        display.mouseListener.addEvent(MouseButtons.LEFT_UP, e -> System.out.println("Mouse 1 pressed"), false);
+        display.mouseListener.addEvent(MouseButtons.MOUSE4_DOWN, e -> System.out.println("Mouse 1 pressed"), false);
         this.addObject(new TestObject());
     }
 
@@ -28,13 +28,12 @@ public class TestScene extends Scene {
 //        for (int j = 0; j++ <= 1E6; ) Math.sin(4); // benchmark to increase the frameTimes
     }
 
-    public boolean reset(KeyEvent e) {
+    public void reset(KeyEvent e) {
         Object o = this.getObject(0);
         if (o instanceof TestObject) {
             TestObject t = (TestObject) o;
             t.i = 0;
         }
-        return false;
     }
 
     @Override

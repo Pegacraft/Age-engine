@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+
+/**
+ * This handles all mouse presses.
+ * use the <code>addListener</code> function to add callbacks on mouse presses.
+ *
+ * @see Mouse#addEvent
+ */
 public class Mouse implements MouseListener {
     private final HashMap<MouseButtons, ArrayList<Function<MouseEvent, Boolean>>> onMouseEvent = new HashMap<>();
     private int x, y;
@@ -57,11 +64,12 @@ public class Mouse implements MouseListener {
     }
 
     /**
-     * This method is used to register a function when you click a mouse button.
+     * This method is used to register a function when you press a mouse button.
      *
-     * @param button   The mouse Button you want to be pressed.
+     * @param button   The mouse event on which you want the function to happen.
      * @param function The function to be executed.
      * @param blocking whether further processing of the key should be done
+     * @see MouseButtons
      */
     public void addEvent(MouseButtons button, Consumer<MouseEvent> function, boolean blocking) {
         addEvent(button, e -> {
@@ -71,10 +79,11 @@ public class Mouse implements MouseListener {
     }
 
     /**
-     * This method is used to register a function when you release a mouse button.
+     * This method is used to register a function when you press a mouse button.
      *
-     * @param button The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
+     * @param button   The mouse event on which you want the function to happen.
+     * @param function The function to be executed.
+     * @see MouseButtons
      */
     public void addEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
         onMouseEvent.computeIfAbsent(button, k -> new ArrayList<>());

@@ -25,7 +25,6 @@ public class Graphics {
         Game.displays.values().forEach(e -> {
             BufferStrategy bs = e.bs();
             g = (Graphics2D) bs.getDrawGraphics();
-            g.scale(1, 1);
             g.setColor(e.backGround);
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
             g.scale(((float) e.getWidth()) / 1280, ((float) e.getHeight()) / 720);
