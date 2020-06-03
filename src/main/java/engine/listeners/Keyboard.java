@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -25,14 +26,12 @@ public class Keyboard implements KeyListener {
     /**
      * internal function
      */
-    @Override
     public void keyTyped(KeyEvent e) {
     }
 
     /**
      * internal function
      */
-    @Override
     public void keyPressed(KeyEvent e) {
         ArrayList<Function<KeyEvent, Boolean>> functions = onKeyPress.get(e.getKeyCode());
         if (functions != null)
@@ -60,5 +59,20 @@ public class Keyboard implements KeyListener {
     public void addListener(Integer keyCode, Function<KeyEvent, Boolean> function) {
         onKeyPress.computeIfAbsent(keyCode, k -> new ArrayList<>());
         onKeyPress.get(keyCode).add(function);
+    }
+
+    /**
+     * this function server the same functionality as the addListener, but defaults to return false.
+     *
+     * @param keyCode  the code to which the function reacts
+     * @param function the callback to be executed when said key gets pressed.
+     * @param blocking if the function should disable all other processing of the key
+     * @see Keyboard#addListener(Integer, Function)
+     */
+    public void addListener(Integer keyCode, Consumer<KeyEvent> function, boolean blocking) {
+        addListener(keyCode, e -> {
+            function.accept(e);
+            return blocking;
+        });
     }
 }
