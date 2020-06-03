@@ -2,12 +2,12 @@ package game;
 
 import engine.Object;
 import engine.Scene;
+import engine.listeners.MouseButtons;
 import engine.loops.Loop;
 import engine.rendering.Graphics;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 
 public class TestScene extends Scene {
 
@@ -19,14 +19,12 @@ public class TestScene extends Scene {
             System.exit(0);
             return false;
         });
-        display.mouseListener.addPressEvent(MouseEvent.BUTTON1, e -> System.out.println("Mouse 1 pressed"), false);
+        display.mouseListener.addEvent(MouseButtons.LEFT_UP, e -> System.out.println("Mouse 1 pressed"), false);
         this.addObject(new TestObject());
     }
 
     @Override
     public void logicLoop() {
-        if (display.mouseListener.isHeld(1))
-            System.out.println("test");
 //        for (int j = 0; j++ <= 1E6; ) Math.sin(4); // benchmark to increase the frameTimes
     }
 
@@ -35,7 +33,6 @@ public class TestScene extends Scene {
         if (o instanceof TestObject) {
             TestObject t = (TestObject) o;
             t.i = 0;
-            System.out.println(this.getObjectList());
         }
         return false;
     }

@@ -11,15 +11,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Mouse implements MouseListener {
-    private final HashMap<Integer, ArrayList<Function<MouseEvent, Boolean>>> onMouseClick = new HashMap<>();
-    private final HashMap<Integer, ArrayList<Function<MouseEvent, Boolean>>> onMousePress = new HashMap<>();
-    private final HashMap<Integer, ArrayList<Function<MouseEvent, Boolean>>> onMouseRelease = new HashMap<>();
+    private final HashMap<MouseButtons, ArrayList<Function<MouseEvent, Boolean>>> onMouseEvent = new HashMap<>();
     private int x, y;
     private boolean held = false;
     private int mouseEvent;
 
     public void mouseClicked(MouseEvent e) {
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseClick.get(e.getButton());
+        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
             for (Function<MouseEvent, Boolean> f : functions)
                 if (f.apply(e)) return;
@@ -28,7 +26,7 @@ public class Mouse implements MouseListener {
     public void mousePressed(MouseEvent e) {
         held = true;
         mouseEvent = e.getButton();
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMousePress.get(e.getButton());
+        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
             for (Function<MouseEvent, Boolean> f : functions)
                 if (f.apply(e)) return;
@@ -36,7 +34,7 @@ public class Mouse implements MouseListener {
 
     public void mouseReleased(MouseEvent e) {
         held = false;
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseRelease.get(e.getButton());
+        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
             for (Function<MouseEvent, Boolean> f : functions)
                 if (f.apply(e)) return;
@@ -61,26 +59,12 @@ public class Mouse implements MouseListener {
     /**
      * This method is used to register a function when you click a mouse button.
      *
-     * @param mouseEvent The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
-     * @param blocking   whether further processing of the key should be done
+     * @param button   The mouse Button you want to be pressed.
+     * @param function The function to be executed.
+     * @param blocking whether further processing of the key should be done
      */
-    public void addClickEvent(int mouseEvent, Consumer<MouseEvent> function, boolean blocking) {
-        addClickEvent(mouseEvent, e -> {
-            function.accept(e);
-            return blocking;
-        });
-    }
-
-    /**
-     * This method is used to register a function when you press a mouse button.
-     *
-     * @param mouseEvent The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
-     * @param blocking   whether further processing of the key should be done
-     */
-    public void addPressEvent(int mouseEvent, Consumer<MouseEvent> function, boolean blocking) {
-        addPressEvent(mouseEvent, e -> {
+    public void addEvent(MouseButtons button, Consumer<MouseEvent> function, boolean blocking) {
+        addEvent(button, e -> {
             function.accept(e);
             return blocking;
         });
@@ -89,58 +73,21 @@ public class Mouse implements MouseListener {
     /**
      * This method is used to register a function when you release a mouse button.
      *
-     * @param mouseEvent The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
-     * @param blocking   whether further processing of the key should be done
-     */
-    public void addReleaseEvent(int mouseEvent, Consumer<MouseEvent> function, boolean blocking) {
-        addReleaseEvent(mouseEvent, e -> {
-            function.accept(e);
-            return blocking;
-        });
-    }
-
-    /**
-     * This method is used to register a function when you click a mouse button.
-     *
-     * @param MouseEvent The mouse Button you want to be pressed.
+     * @param button The mouse Button you want to be pressed.
      * @param function   The function to be executed.
      */
-    public void addClickEvent(int MouseEvent, Function<MouseEvent, Boolean> function) {
-        onMouseClick.computeIfAbsent(MouseEvent, k -> new ArrayList<>());
-        onMouseClick.get(MouseEvent).add(function);
-    }
-
-    /**
-     * This method is used to register a function when you press a mouse button.
-     *
-     * @param MouseEvent The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
-     */
-    public void addPressEvent(int MouseEvent, Function<MouseEvent, Boolean> function) {
-        onMousePress.computeIfAbsent(MouseEvent, k -> new ArrayList<>());
-        onMousePress.get(MouseEvent).add(function);
-    }
-
-    /**
-     * This method is used to register a function when you release a mouse button.
-     *
-     * @param MouseEvent The mouse Button you want to be pressed.
-     * @param function   The function to be executed.
-     */
-    public void addReleaseEvent(int MouseEvent, Function<MouseEvent, Boolean> function) {
-        onMouseRelease.computeIfAbsent(MouseEvent, k -> new ArrayList<>());
-        onMouseRelease.get(MouseEvent).add(function);
+    public void addEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
+        onMouseEvent.computeIfAbsent(button, k -> new ArrayList<>());
+        onMouseEvent.get(button).add(function);
     }
 
     /**
      * Use this method to check if a certain mouse button is held down.
      *
-     * @param mouseEvent The mouse button that you want to check.
-     * @return true/false
+     * @param mouseButton The mouse button that you want to check.
      */
-    public boolean isHeld(int mouseEvent) {
-        return (held && this.mouseEvent == mouseEvent);
+    public boolean isHeld(int mouseButton) {
+        return (held && this.mouseEvent == mouseButton);
     }
 
     /**
