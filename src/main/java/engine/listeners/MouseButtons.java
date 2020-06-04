@@ -30,7 +30,7 @@ public enum MouseButtons {
         this.mouseEvent = mouseEvent;
     }
 
-    static MouseButtons getByValues(int button, int mouseEvent) {
+    public static MouseButtons getByValues(int button, int mouseEvent) {
         for (MouseButtons b : values())
             if (b.button == button && b.mouseEvent == mouseEvent)
                 return b;
