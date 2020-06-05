@@ -30,7 +30,6 @@ public class TestObject extends Object {
 
     @Override
     public void renderLoop() {
-        h.show();
         Graphics.g.fillRect(0, 200, i, 520);
     }
 }

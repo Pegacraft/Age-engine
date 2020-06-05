@@ -22,7 +22,7 @@ public class Player extends Object {
     @Override
     public void init() {
         h = new Hitbox(new Point((int) x, (int) y), new Point((int) (x + width), (int) (y + height)));
-        c = new Hitbox(new Point(100, 100), new Point(200, 200));
+        c = new Hitbox(new Point(100, 100), new Point(200, 120), new Point(150, 250));
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             this.x = mouseListener.getMousePos().x;
             this.y = mouseListener.getMousePos().y;
@@ -31,7 +31,7 @@ public class Player extends Object {
 
     @Override
     public void logicLoop() {
-        xspeed = xspeed * 0.9 + (((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1)) * accel);
+        xspeed = xspeed * 0.9 + ((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1) * accel);
         yspeed = yspeed * 0.9 + ((keyListener.isHeld('W') ? 0 : 1) - (keyListener.isHeld('S') ? 0 : 1)) * accel;
         do {
             h.move((int) (x + xspeed), (int) (y + yspeed));
@@ -42,7 +42,6 @@ public class Player extends Object {
                 yspeed = 0;
                 break;
             }
-
         } while (h.isInside(c));
         x += xspeed;
         y += yspeed;
@@ -51,14 +50,13 @@ public class Player extends Object {
 
     @Override
     public void renderLoop() {
-        if(h.isInside(c))
-        Graphics.g.setColor(Color.CYAN);
+        if (h.isInside(c))
+            Graphics.g.setColor(Color.CYAN);
         else
             Graphics.g.setColor(Color.RED);
         Graphics.g.fillRect((int) x, (int) y, width, height);
-        if (c.isInside(mouseListener.getMousePos()))
-            Graphics.g.drawString("inside", 0, 100);
-        h.show();
-        c.show();
+
+        Graphics.g.draw(c.shape);
+        Graphics.g.draw(h.shape);
     }
 }
