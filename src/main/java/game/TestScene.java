@@ -20,7 +20,7 @@ public class TestScene extends Scene {
             return false;
         });
         display.mouseListener.addEvent(MouseButtons.MOUSE4_DOWN, e -> System.out.println("Mouse 1 pressed"), false);
-        this.addObject(new TestObject());
+        this.addObject(new TestObject(this));
     }
 
     @Override

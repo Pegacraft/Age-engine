@@ -1,5 +1,8 @@
 package engine;
 
+import engine.listeners.Keyboard;
+import engine.listeners.Mouse;
+
 import java.util.ArrayList;
 
 /**
@@ -13,7 +16,9 @@ public abstract class Scene {
     /**
      * The display, where this scene is attached to.
      */
-    protected Display display;
+    public Display display;
+    public Keyboard keyListener;
+    public Mouse mouseListener;
 
     /**
      * This method will be called once at the activation of the scene.

@@ -46,7 +46,7 @@ public class MouseTest {
         d.attachScene("TestScene");
         assertEquals("Display should keep scene attached. ", d.getAttachedScene(), "TestScene");
 //        int width = Math.abs(r.nextInt(1000)), height = Math.abs(r.nextInt(1000));
-//        d.setSize(width, height);
+//       d.setSize(width, height);
 //        assertEquals("Display's width should be kept. ", width, d.getHeight());
 //        assertEquals("Display's height should be kept. ", height, d.getWidth());
     }

@@ -22,6 +22,11 @@ public class Mouse implements MouseListener {
     private int x, y;
     private boolean held = false;
     private int mouseEvent;
+    private Display display;
+
+    public Mouse(Display display) {
+        this.display = display;
+    }
 
     public void mouseClicked(MouseEvent e) {
         ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
@@ -61,6 +66,9 @@ public class Mouse implements MouseListener {
                 - display.getCanvas().getLocationOnScreen().getX());
         y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
                 - display.getCanvas().getLocationOnScreen().getY());
+        x = (int) scaledX(x);
+        y = (int) scaledY(y);
+        
     }
 
     /**
@@ -104,7 +112,15 @@ public class Mouse implements MouseListener {
      *
      * @return Returns a dimension with the mouse position.
      */
-    public Dimension getMousePos() {
-        return new Dimension(x, y);
+    public Point getMousePos() {
+        return new Point(x, y);
+    }
+
+    private double scaledX(int x) {
+        return (x / ((double) (display.getWidth()) / 1280));
+    }
+
+    private double scaledY(int y) {
+        return (y / ((double) (display.getHeight()) / 720));
     }
 }

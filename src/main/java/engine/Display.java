@@ -19,7 +19,7 @@ public class Display {
     /**
      * This variable can be used to interact with the MouseListener.
      */
-    public final Mouse mouseListener = new Mouse();
+    public final Mouse mouseListener = new Mouse(this);
     public String title = "Age Engine";
     public Color backGround = Color.white;
     private JFrame frame;
@@ -107,6 +107,13 @@ public class Display {
     public Display attachScene(String alias) {
         //runs the init in a loaded scene
         Game.scenes.get(alias).display = this;
+        Game.scenes.get(alias).keyListener = this.keyListener;
+        Game.scenes.get(alias).mouseListener = this.mouseListener;
+        try {
+            Game.scenes.values().forEach(Scene::init);
+        } catch (NullPointerException ignored) {
+
+        }
         this.attachedScene = alias;
         return this;
     }

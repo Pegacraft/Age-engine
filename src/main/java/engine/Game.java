@@ -18,11 +18,6 @@ public class Game {
      */
     public static void start() {
         loop = new Loop();
-        try {
-            scenes.values().forEach(Scene::init);
-        } catch (NullPointerException ignored) {
-
-        }
         loop.start();
     }
 

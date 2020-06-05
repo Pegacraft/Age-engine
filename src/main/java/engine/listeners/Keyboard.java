@@ -44,7 +44,7 @@ public class Keyboard implements KeyListener {
      * internal function
      */
     public void keyReleased(KeyEvent e) {
-        pressesKeys[e.getKeyCode()] = true;
+        pressesKeys[e.getKeyCode()] = false;
     }
 
     /**
@@ -74,5 +74,14 @@ public class Keyboard implements KeyListener {
             function.accept(e);
             return blocking;
         });
+    }
+
+    /**
+     * Use this method to check if i key is held down
+     *
+     * @param key The key you wanna check
+     */
+    public boolean isHeld(int key) {
+        return pressesKeys[key];
     }
 }
