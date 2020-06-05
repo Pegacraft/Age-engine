@@ -1,8 +1,6 @@
 package engine.mechanics;
 
-import engine.Game;
 import engine.rendering.Graphics;
-import game.test.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,14 +11,12 @@ import java.util.Collections;
  */
 public class Hitbox {
 
-    private boolean collided = false;
     private final ArrayList<Point> points = new ArrayList<>();
-    private final ArrayList<Dimension> ray = new ArrayList<>();
-    Dimension ray1 = new Dimension(-100, -90);
-    Dimension ray2 = new Dimension(-100, -50);
-    Dimension ray3 = new Dimension(-100, -10);
-
-    private int accuracy = 0;
+    private final ArrayList<Point> ray = new ArrayList<>();
+    Point ray1 = new Point(-100, 9000);
+    Point ray2 = new Point(-100, -100);
+    Point ray3 = new Point(9000, -100);
+    private Point prevoious = new Point(0, 0);
 
     /**
      * The constructor of the hitbox class. It takes an infinite amount of points which represent an n-shape. If only two
@@ -52,30 +48,23 @@ public class Hitbox {
      * @param test The position that should be tested as an dimension.
      */
     public boolean isInside(Point test) {
-        accuracy = 0;
-        for (Dimension ray : ray) {
-
-            collided = false;
-            int intersections = 0;
-            Point previous = points.get(points.size() - 1);
-
-            for (Point point : points) {
-                if (intersects(
-                        new Dimension(point.x, point.y),
-                        new Dimension(previous.x, previous.y),
-                        new Dimension(test.x, test.y), ray)
-                ) intersections++;
-                previous = point;
-            }
-            if (intersections % 2 == 1) {
-                accuracy += 1;
-            }
-            if (accuracy >= 2) {
-                collided = true;
-                return true;
-            }
+        int accuracy = 0;
+        prevoious = test;
+        for (Point ray : ray) {
+            accuracy += isInside(test, ray) ? 1 : 0;
         }
-        return false;
+        return accuracy >= 2;
+    }
+
+    private boolean isInside(Point test, Point ray) {
+        int intersections = 0;
+        Point previous = points.get(points.size() - 1);
+
+        for (Point point : points) {
+            if (intersects(point, previous, test, ray)) intersections++;
+            previous = point;
+        }
+        return intersections % 2 == 1;
     }
 
     /**
@@ -96,22 +85,20 @@ public class Hitbox {
         return b;
     }
 
-    private boolean intersects(Dimension e1, Dimension e2, Dimension v1, Dimension v2) {
+    private boolean intersects(Point e1, Point e2, Point v1, Point v2) {
         double d1, d2;
-        double a1 = Math.round(e2.height - e1.height);
-        double b1 = Math.round(e1.width - e2.width);
-        double c1 = Math.round(e2.width * e1.height - (e1.width * e2.height));
-        d1 = a1 * v1.width + b1 * v1.height + c1;
-        d2 = a1 * v2.width + b1 * v2.height + c1;
-        if (d1 > 0 && d2 > 0) return false;
-        if (d1 < 0 && d2 < 0) return false;
-        double a2 = Math.round(v2.height - v1.height);
-        double b2 = Math.round(v1.width - v2.width);
-        double c2 = Math.round(v2.width * v1.height - (v1.width * v2.height));
-        d1 = a2 * e1.width + b2 * e1.height + c2;
-        d2 = a2 * e2.width + b2 * e2.height + c2;
-        if (d1 > 0 && d2 > 0) return false;
-        if (d1 < 0 && d2 < 0) return false;
+        double a1 = e2.y - e1.y;
+        double b1 = e1.x - e2.x;
+        double c1 = e2.x * e1.y - e1.x * e2.y;
+        d1 = a1 * v1.x + b1 * v1.y + c1;
+        d2 = a1 * v2.x + b1 * v2.y + c1;
+        if (d1 > 0 && d2 > 0 || d1 < 0 && d2 < 0) return false;
+        double a2 = v2.y - v1.y;
+        double b2 = v1.x - v2.x;
+        double c2 = v2.x * v1.y - v1.x * v2.y;
+        d1 = a2 * e1.x + b2 * e1.y + c2;
+        d2 = a2 * e2.x + b2 * e2.y + c2;
+        if (d1 > 0 && d2 > 0 || d1 < 0 && d2 < 0) return false;
         else return a1 * b2 - a2 * b1 != 0.0;
     }
 
@@ -119,13 +106,17 @@ public class Hitbox {
      * Use this method in the rendering loop, to show the hitbox.
      */
     public void show() {
-        Player pl = (Player) Game.scenes.get("Game").getObjectList().get(0);
         Point cached = points.get(points.size() - 1);
-        if (collided)
-            Graphics.g.setColor(Color.red);
-        else
-            Graphics.g.setColor(Color.green);
+        for (Point p : ray) {
+            if (isInside(prevoious, p))
+                Graphics.g.setColor(Color.red);
+            else Graphics.g.setColor(Color.green);
+            Graphics.g.drawLine(prevoious.x, prevoious.y, p.x, p.y);
+        }
         for (Point p : points) {
+            if (intersects(ray.get(1), prevoious, cached, p))
+                Graphics.g.setColor(Color.red);
+            else Graphics.g.setColor(Color.green);
             Graphics.g.drawLine(cached.x, cached.y, p.x, p.y);
             cached = p;
         }

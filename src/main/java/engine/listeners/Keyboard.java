@@ -77,7 +77,7 @@ public class Keyboard implements KeyListener {
     }
 
     /**
-     * Use this method to check if i key is held down
+     * Use this method to check if a key is held down
      *
      * @param key The key you wanna check
      */
