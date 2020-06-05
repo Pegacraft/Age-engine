@@ -25,7 +25,6 @@ public class EngineTests {
                 MouseButtons.LEFT_UP, MouseButtons.getByValues(MouseEvent.BUTTON1, MouseEvent.MOUSE_RELEASED));
     }
 
-    @Test
     public void DisplayShouldStayConstant() {
         Display d = Game.display();
         assertSame("main display should stay main display. ", d, Game.display());
@@ -36,7 +35,6 @@ public class EngineTests {
         }
     }
 
-    @Test
     public void ScenesShouldMatch() {
         Display d = Game.display();
         Scene s = new TestingScene();
