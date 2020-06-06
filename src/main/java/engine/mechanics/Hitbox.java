@@ -43,19 +43,30 @@ public class Hitbox {
     /**
      * Use this method to test if another hitbox collides with this one.
      *
-     * @param test The hitbox it should colide with.
+     * @param test The hitbox it should collide with.
      */
     public boolean isInside(Hitbox test) {
-        if (shape.getBounds2D().intersects(test.shape.getBounds2D())) return true;
-        if (test.shape.getBounds2D().intersects(shape.getBounds2D())) return true;
+        if (!shape.getBounds2D().intersects(test.shape.getBounds2D())) return false;
+        if (shape instanceof Rectangle && test.shape instanceof Rectangle) return true;
 
-//        for (int i = 0; i < test.shape.npoints; i++)
-//            if (isInside(new Point(test.shape.xpoints[i], test.shape.ypoints[i])))
-//                return true;
-//
-//        for (int i = 0; i < shape.npoints; i++)
-//            if (test.isInside(new Point(shape.xpoints[i], shape.ypoints[i])))
-//                return true;
+        if (shape instanceof Polygon && test.shape instanceof Polygon) {
+            Polygon poly = (Polygon) shape, other = (Polygon) test.shape;
+            for (int i = 0; i < other.npoints; i++)
+                if (poly.contains(other.xpoints[i], other.ypoints[i])) return true;
+            for (int i = 0; i < poly.npoints; i++)
+                if (other.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+        }
+
+        if (shape instanceof Rectangle) {
+            Polygon poly = (Polygon) test.shape;
+            for (int i = 0; i < poly.npoints; i++)
+                if (shape.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+        }
+        if (test.shape instanceof Rectangle) {
+            Polygon poly = (Polygon) shape;
+            for (int i = 0; i < poly.npoints; i++)
+                if (test.shape.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+        }
 
         return false;
     }
@@ -75,9 +86,7 @@ public class Hitbox {
             poly.translate(xDiff, yDiff);
             return;
         }
-        if (shape instanceof Rectangle) {
-            Rectangle rect = (Rectangle) shape;
-            rect.setLocation(x, y);
-        }
+        if (shape instanceof Rectangle)
+            ((Rectangle) shape).setLocation(x, y);
     }
 }
