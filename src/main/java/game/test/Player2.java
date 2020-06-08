@@ -8,10 +8,12 @@ import engine.rendering.Graphics;
 import engine.rendering.Image;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player2 extends Object {
     private int x = 100, y = 100, width = 20, height = 20, speed = 5, prc = 1;
+    BufferedImage img = Image.load("blush.png");
     public Hitbox h = new Hitbox(
             new Point(x, y),
             new Point(x + width, y + height)
@@ -77,7 +79,7 @@ public class Player2 extends Object {
     @Override
     public void renderLoop() {
         Graphics.g.setColor(Color.CYAN);
-        Graphics.g.drawImage(Image.load("/blush.png"), x, y, width, height, null);
+        Graphics.g.drawImage(img, x, y, width, height, null);
         Graphics.g.draw(h.shape);
         Graphics.g.drawString(String.format("Time per frame in ms: %.3f", Loop.frameTime / 1E6), 0, 100);
         hitList.forEach(e -> Graphics.g.draw(e.shape));
