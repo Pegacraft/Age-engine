@@ -5,7 +5,9 @@ import engine.Scene;
 public class GameScene extends Scene {
     @Override
     public void init() {
-        this.addObject(new Player());
+        Player2 pl = new Player2();
+        this.addObject(new Button());
+        this.addObject(pl);
     }
 
     @Override
