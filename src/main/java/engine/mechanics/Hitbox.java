@@ -1,6 +1,8 @@
 package engine.mechanics;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Use this class to create an hitbox.
@@ -48,27 +50,28 @@ public class Hitbox {
     public boolean isInside(Hitbox test) {
         if (!shape.getBounds2D().intersects(test.shape.getBounds2D())) return false;
         if (shape instanceof Rectangle && test.shape instanceof Rectangle) return true;
-
+        Polygon poly = null;
         if (shape instanceof Polygon && test.shape instanceof Polygon) {
-            Polygon poly = (Polygon) shape, other = (Polygon) test.shape;
+            poly = (Polygon) shape;
+            Polygon other = (Polygon) test.shape;
             for (int i = 0; i < other.npoints; i++)
                 if (poly.contains(other.xpoints[i], other.ypoints[i])) return true;
             for (int i = 0; i < poly.npoints; i++)
                 if (other.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+            return false;
         }
 
+        Rectangle2D rect = null;
         if (shape instanceof Rectangle) {
-            Polygon poly = (Polygon) test.shape;
-            for (int i = 0; i < poly.npoints; i++)
-                if (shape.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+            poly = (Polygon) test.shape;
+            rect = (Rectangle2D) shape;
         }
         if (test.shape instanceof Rectangle) {
-            Polygon poly = (Polygon) shape;
-            for (int i = 0; i < poly.npoints; i++)
-                if (test.shape.contains(poly.xpoints[i], poly.ypoints[i])) return true;
+            poly = (Polygon) shape;
+            rect = (Rectangle2D) test.shape;
         }
-
-        return false;
+        if(rect == null) throw new NullPointerException("wtf did you do to achieve this?");
+        return poly.intersects(rect);
     }
 
     /**

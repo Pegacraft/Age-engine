@@ -15,9 +15,9 @@ public class Player extends Object {
     public final int width = 50, height = 50;
     private final Keyboard keyListener = Game.scenes.get("Game").keyListener;
     private final Mouse mouseListener = Game.scenes.get("Game").mouseListener;
-    public double accel = 1;
+    public double acceleration = 3.5;
     private Hitbox h, c;
-    private double xspeed, yspeed, x = 400, y = 200;
+    private double xSpeed, ySpeed, x = 400, y = 200;
 
     @Override
     public void init() {
@@ -43,30 +43,30 @@ public class Player extends Object {
 
     @Override
     public void logicLoop() {
-        xspeed = xspeed * 0.9 + ((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1) * accel);
-        yspeed = yspeed * 0.9 + ((keyListener.isHeld('W') ? 0 : 1) - (keyListener.isHeld('S') ? 0 : 1)) * accel;
+        xSpeed = xSpeed * 0.9 + ((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1)) * acceleration;
+        ySpeed = ySpeed * 0.9 + ((keyListener.isHeld('W') ? 0 : 1) - (keyListener.isHeld('S') ? 0 : 1)) * acceleration;
         boolean wasInside = false;
-        int bounce = 128;
+        double bounce = acceleration;
         do {
-            h.move((int) (x + xspeed), (int) (y + yspeed));
-            xspeed *= 0.9;
-            yspeed *= 0.9;
-            if (Math.abs(xspeed) <= 0.01 && Math.abs(yspeed) <= 0.01) {
+            h.move((int) (x + xSpeed), (int) (y + ySpeed));
+            xSpeed *= 0.9;
+            ySpeed *= 0.9;
+            if (Math.abs(xSpeed) <= 0.01 && Math.abs(ySpeed) <= 0.01) {
                 if (h.isInside(c)) {
-                    if (wasInside) bounce *= 2;
+                    if (wasInside) bounce *= acceleration+1;
                     else {
-                        if (xspeed == 0 && yspeed == 0) xspeed = Math.random();
-                        xspeed *= -1;
-                        yspeed *= -1;
+                        if (xSpeed == 0 && ySpeed == 0) xSpeed = Math.random();
+                        xSpeed *= -1;
+                        ySpeed *= -1;
                         wasInside = true;
                     }
-                    xspeed *= bounce;
-                    yspeed *= bounce;
+                    xSpeed *= bounce;
+                    ySpeed *= bounce;
                 } else break;
             }
         } while (h.isInside(c));
-        x += xspeed;
-        y += yspeed;
+        x += xSpeed;
+        y += ySpeed;
         h.move((int) x, (int) y);
     }
 
