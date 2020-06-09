@@ -41,11 +41,20 @@ public class Graphics {
         });
     }
 
+    /**
+     * Use this method to offset the camera location
+     *
+     * @param x The x offset
+     * @param y The y offset
+     */
     public static void moveCam(int x, int y) {
         xOffset = -x + 640;
         yOffset = -y + 360;
     }
 
+    /**
+     * @return Returns the current offset
+     */
     public static Point getCamPos() {
         return new Point(xOffset, yOffset);
     }
