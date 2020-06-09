@@ -2,6 +2,7 @@ package game.test;
 
 import engine.Game;
 import engine.Object;
+import engine.listeners.Keyboard;
 import engine.loops.Loop;
 import engine.mechanics.Hitbox;
 import engine.rendering.Animation;
@@ -14,70 +15,46 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player2 extends Object {
-    private int x = 100, y = 100, width = 20, height = 20, speed = 5, prc = 1;
-    BufferedImage img = Image.load("blush.png");
-    public Hitbox h = new Hitbox(
+    private final int width = 20, height = 20, speed = 5;
+    private final Keyboard keyListener = Game.scenes.get("Game").keyListener;
+    private final ArrayList<Hitbox> hitList = new ArrayList<>();
+    private final BufferedImage img = Image.load("blush.png");
+    private int x = 100, y = 100;
+    public final Hitbox h = new Hitbox(
             new Point(x, y),
             new Point(x + width, y + height)
     );
-
-    private ArrayList<Hitbox> hitList = new ArrayList<>();
 
     @Override
     public void init() {
         hitList.add(new Hitbox(new Point(0, 0), new Point(200, 50)));
         hitList.add(new Hitbox(new Point(200, 200), new Point(400, 400), new Point(200, 300)));
         Animation.createAnimation(Image.load("testSheet.png"), 20, 4, 20, null, "Idle");
-        Game.scenes.get("Game").keyListener.addListener(KeyEvent.VK_SPACE, e -> {
-            Animation.play("Idle", x, y);
-        }, false);
+        Game.scenes.get("Game").keyListener.addListener(KeyEvent.VK_SPACE, e -> Animation.play("Idle", x, y), false);
     }
 
     @Override
     public void logicLoop() {
-        if (Game.scenes.get("Game").keyListener.isHeld('W')) {
-            prc = 0;
-            for (int i = 0; i < speed; i++) {
-                hitList.forEach(e -> {
-                    h.move(x, y - speed + prc);
-                    if (h.isInside(e))
-                        prc += 1;
-                });
+        for (double velo = ((keyListener.isHeld('W') ? 0 : 1) - (keyListener.isHeld('S') ? 0 : 1)) * speed;
+             Math.abs(velo) >= 1; velo *= 0.9) {
+            h.move(x, (int) (y + velo));
+            boolean hit = false;
+            for (Hitbox e : hitList) if (h.isInside(e)) hit = true;
+            if (!hit) {
+                y += velo;
+                break;
             }
-            y = y - speed + prc;
         }
-        if (Game.scenes.get("Game").keyListener.isHeld('A')) {
-            prc = 0;
-            for (int i = 0; i < speed; i++) {
-                hitList.forEach(e -> {
-                    h.move(x - speed + prc, y);
-                    if (h.isInside(e))
-                        prc += 1;
-                });
+
+        for (double velo = ((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1)) * speed;
+             Math.abs(velo) > 1; velo *= 0.9) {
+            h.move((int) (x + velo), y);
+            boolean hit = false;
+            for (Hitbox e : hitList) if (h.isInside(e)) hit = true;
+            if (!hit) {
+                x += velo;
+                break;
             }
-            x = x - speed + prc;
-        }
-        if (Game.scenes.get("Game").keyListener.isHeld('S')) {
-            prc = 0;
-            for (int i = 0; i < speed; i++) {
-                hitList.forEach(e -> {
-                    h.move(x, y + speed - prc);
-                    if (h.isInside(e))
-                        prc += 1;
-                });
-            }
-            y = y + speed - prc;
-        }
-        if (Game.scenes.get("Game").keyListener.isHeld('D')) {
-            prc = 0;
-            for (int i = 0; i < speed; i++) {
-                hitList.forEach(e -> {
-                    h.move(x + speed - prc, y);
-                    if (h.isInside(e))
-                        prc += 1;
-                });
-            }
-            x = x + speed - prc;
         }
         h.move(x, y);
     }

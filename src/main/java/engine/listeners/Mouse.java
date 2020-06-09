@@ -22,7 +22,7 @@ public class Mouse implements MouseListener {
     private int x, y;
     private boolean held = false;
     private int mouseEvent;
-    private Display display;
+    private final Display display;
 
     public Mouse(Display display) {
         this.display = display;

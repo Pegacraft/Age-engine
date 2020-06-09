@@ -9,17 +9,15 @@ import engine.rendering.Graphics;
  * This is a engine internal function. It shall not be used.
  */
 public class Loop implements Runnable {
-    boolean running = false;
-    Thread thread;
     /**
      * the time it took to calculate the last frame in ns
      */
     public static long frameTime = 1;
     public int frameRate = 60;
+    private boolean running = false;
 
     @Override
     public void run() {
-        init();
         while (running) {
             long startTime = System.nanoTime();
             logicLoop();
@@ -52,15 +50,11 @@ public class Loop implements Runnable {
         Graphics.GraphicsLoop();
     }
 
-    private void init() {
-
-    }
-
     public synchronized void start() {
         if (running)
             return;
         running = true;
-        thread = new Thread(this);
+        Thread thread = new Thread(this);
         thread.start();
     }
 }

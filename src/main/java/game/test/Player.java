@@ -13,9 +13,9 @@ import java.awt.*;
 public class Player extends Object {
 
     public final int width = 50, height = 50;
+    public final double acceleration = 3.5;
     private final Keyboard keyListener = Game.scenes.get("Game").keyListener;
     private final Mouse mouseListener = Game.scenes.get("Game").mouseListener;
-    public double acceleration = 3.5;
     private Hitbox h, c;
     private double xSpeed, ySpeed, x = 400, y = 200;
 
@@ -53,7 +53,7 @@ public class Player extends Object {
             ySpeed *= 0.9;
             if (Math.abs(xSpeed) <= 0.01 && Math.abs(ySpeed) <= 0.01) {
                 if (h.isInside(c)) {
-                    if (wasInside) bounce *= acceleration+1;
+                    if (wasInside) bounce *= acceleration + 1;
                     else {
                         if (xSpeed == 0 && ySpeed == 0) xSpeed = Math.random();
                         xSpeed *= -1;

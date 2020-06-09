@@ -8,13 +8,13 @@ import java.net.URL;
  * Use this class to handle sounds.
  */
 public class Sound {
-    URL url;
-    Clip clip;
-    long startPos = 0;
-    AudioInputStream audioIn;
+    private final URL url;
+    private Clip clip;
+    private long startPos = 0;
+    private AudioInputStream audioIn;
 
     /**
-     * Import the sound, that you wanna work with here.
+     * Import the sound, that you want to work with here.
      *
      * @param path The path to the sound.
      */
@@ -22,6 +22,7 @@ public class Sound {
         url = this.getClass().getClassLoader().getResource(path);
         try {
             // Open an audio input stream.
+            assert url != null;
             audioIn = AudioSystem.getAudioInputStream(url);
             // Get a sound clip resource.
             clip = AudioSystem.getClip();
@@ -50,7 +51,7 @@ public class Sound {
     /**
      * Changes the volume the sound.
      *
-     * @param db the value in decibel you wanna change
+     * @param db the value in decibel you want to change
      */
     public Sound setVolume(float db) {
         ((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(db);
@@ -60,7 +61,7 @@ public class Sound {
     /**
      * Stets the starting point of the sound you wanna play.
      *
-     * @param startPos The time stamp in ms.
+     * @param startPos The timestamp in ms.
      */
     public Sound setPlayLocation(long startPos) {
         if (startPos > 0 && startPos < clip.getMicrosecondLength()) {

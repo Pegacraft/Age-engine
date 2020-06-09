@@ -11,10 +11,10 @@ import engine.sound.Sound;
 import java.awt.*;
 
 public class Button extends Object {
-    int x = 500, y = 500, width = 100, height = 50;
-    Mouse mouseListener = Game.scenes.get("Game").mouseListener;
-    Hitbox h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
-    Sound s = new Sound("escape.wav").setVolume(-20.0f);
+    private final int x = 500, y = 500, width = 100, height = 50;
+    private final Mouse mouseListener = Game.scenes.get("Game").mouseListener;
+    private final Hitbox h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
+    private final Sound s = new Sound("escape.wav").setVolume(-20.0f);
     boolean playing = false;
 
     @Override

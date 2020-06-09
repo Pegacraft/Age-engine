@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Use this method to do everything that has to do with animations.
  */
 public class Animation {
-    private static HashMap<String, FrameAnimation> animations = new HashMap<>();
+    private static final HashMap<String, FrameAnimation> animations = new HashMap<>();
     private static int x, y;
 
     /**

@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class TestObject extends Object {
     public int i = 0;
-    private Scene scene;
-    Hitbox h = new Hitbox(new Point(100, 100), new Point(0, 0));
+    final Hitbox h = new Hitbox(new Point(100, 100), new Point(0, 0));
+    private final Scene scene;
 
     public TestObject(Scene scene) {
         this.scene = scene;
@@ -18,7 +18,7 @@ public class TestObject extends Object {
 
     @Override
     public void init() {
-        System.out.println("Got initted");
+        System.out.println("Got initialized");
     }
 
     @Override

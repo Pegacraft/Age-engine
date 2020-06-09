@@ -10,15 +10,14 @@ import java.util.ArrayList;
  */
 class FrameAnimation {
 
-    private ArrayList<Image> imageList = new ArrayList<java.awt.Image>();
-    int frameTime;
+    final int frameTime;
+    final int imgCount;
     int i = 0;
     int currentImg = 0;
     int x, y;
-    int imgCount;
-    boolean playing = false;
+    final ImageObserver obs;
     public boolean start = false;
-    ImageObserver obs;
+    private final ArrayList<Image> imageList = new ArrayList<>();
 
     /**
      * @param tileSheet The tile sheet that should be used
@@ -31,7 +30,7 @@ class FrameAnimation {
         this.obs = obs;
         this.frameTime = frameTime;
         this.imgCount = imgCount;
-        int width = 0, height = 0;
+        int width, height;
         int yS = 0;
         width = tileSheet.getWidth();
         height = tileSheet.getHeight() / imgCount;

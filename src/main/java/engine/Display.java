@@ -100,6 +100,17 @@ public class Display {
     }
 
     /**
+     * set the window's title to a given string
+     *
+     * @param name the name to set the title to
+     */
+    public Display setTitle(String name) {
+        this.title = name;
+        frame.setTitle(name);
+        return this;
+    }
+
+    /**
      * This method is used to attach a scene to a window. The scene will be shown in the chosen window.
      *
      * @param alias The alias of the scene.

@@ -1,7 +1,6 @@
 package engine.mechanics;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -67,6 +66,7 @@ public class Hitbox {
             rect = (Rectangle2D) shape;
         }
         if (test.shape instanceof Rectangle) {
+            assert shape instanceof Polygon;
             poly = (Polygon) shape;
             rect = (Rectangle2D) test.shape;
         }
