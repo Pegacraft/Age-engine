@@ -1,6 +1,8 @@
 package engine.mechanics;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -8,7 +10,8 @@ import java.awt.geom.Rectangle2D;
  */
 public class Hitbox {
 
-    public final Shape shape;
+    public Shape shape;
+    private Shape original;
 
     /**
      * The constructor of the hitbox class. It takes an infinite amount of points which represent an n-shape. If only two
@@ -70,7 +73,7 @@ public class Hitbox {
             poly = (Polygon) shape;
             rect = (Rectangle2D) test.shape;
         }
-        if(rect == null) throw new NullPointerException("wtf did you do to achieve this?");
+        if (rect == null) throw new NullPointerException("wtf did you do to achieve this?");
         return poly.intersects(rect);
     }
 
@@ -91,5 +94,37 @@ public class Hitbox {
         }
         if (shape instanceof Rectangle)
             ((Rectangle) shape).setLocation(x, y);
+    }
+
+    /**
+     * rotate the hitbox by a given angle
+     *
+     * @param angle the angle to rotate by in radians
+     */
+    public void rotate(double angle) {
+        if (shape instanceof Rectangle) {
+            Rectangle rect = (Rectangle) shape;
+            Point p1 = new Point(rect.x, rect.y);
+            Point p2 = new Point(rect.x + rect.width, rect.y + rect.height);
+            Polygon poly = new Polygon();
+            poly.addPoint(p1.x, p1.y);
+            poly.addPoint(p2.x, p1.y);
+            poly.addPoint(p2.x, p2.y);
+            poly.addPoint(p1.x, p2.y);
+            shape = poly;
+        }
+        if (shape instanceof Polygon) {
+            Polygon poly = (Polygon) shape;
+            Polygon next = new Polygon();
+            if (original == null)
+                original = new Polygon(poly.xpoints, poly.ypoints, poly.npoints);
+            Polygon orig = (Polygon) original;
+            AffineTransform transform = AffineTransform.getRotateInstance(angle);
+            for (int i = 0; i < poly.npoints; i++) {
+                Point2D p = transform.transform(new Point(orig.xpoints[i], orig.ypoints[i]), null);
+                next.addPoint((int) p.getX(), (int) p.getY());
+            }
+            shape = next;
+        }
     }
 }
