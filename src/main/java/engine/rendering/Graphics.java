@@ -33,6 +33,7 @@ public class Graphics {
                 s.renderLoop();
                 s.getObjectList().forEach(Object::renderLoop);
             } else throw new IllegalStateException("no state defined for that display");
+            Animation.animationLoop();
             bs.show();
             g.dispose();
         });

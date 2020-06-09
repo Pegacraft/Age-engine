@@ -1,62 +1,69 @@
 package engine.rendering;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * Use this class to create an animation using a tile sheet.
+ * Use this method to do everything that has to do with animations.
  */
 public class Animation {
-
-    private ArrayList<Image> imageList = new ArrayList<java.awt.Image>();
-    int frameTime;
-    int i = 0;
-    int currentImg = 0;
-    int x, y;
-    int imgCount;
-    ImageObserver obs;
+    private static HashMap<String, FrameAnimation> animations = new HashMap<>();
+    private static int x, y;
 
     /**
+     * Use this method to create a new animation.
+     *
      * @param tileSheet The tile sheet that should be used
      * @param frameTime The duration a image will we visible
      * @param imgCount  The number of different images in the tile sheet
-     * @param x         the x position where you wanna show the animation
-     * @param y         the y position where you wanna show the animation
      * @param scale     the scale multiplier
      * @param obs       the observer of the images
+     * @param alias     The name of the animation you wanna create
      */
-    public Animation(BufferedImage tileSheet, int frameTime, int imgCount, int x, int y, int scale, ImageObserver obs) {
-        this.x = x;
-        this.y = y;
-        this.obs = obs;
-        this.frameTime = frameTime;
-        this.imgCount = imgCount;
-        int width = 0, height = 0;
-        int yS = 0;
-        width = tileSheet.getWidth();
-        height = tileSheet.getHeight() / imgCount;
-
-        for (int i = 0; i < imgCount; i++) {
-            imageList.add(tileSheet.getSubimage(0, yS, width, height).getScaledInstance(width * scale, height * scale, 3));
-            yS += height;
-        }
+    public static void createAnimation(BufferedImage tileSheet, int frameTime, int imgCount, int scale, ImageObserver obs, String alias) {
+        animations.put(alias, new FrameAnimation(tileSheet, frameTime, imgCount, scale, obs));
     }
 
     /**
-     * put this method in the renderLoop to start showing the animation
+     * Use this method to play an animation
+     *
+     * @param alias The animation name you wanna play.
+     * @param x     The x position you want it to be played.
+     * @param y     The y position you want it to be played.
      */
-    public void playAnimation() {
-        if (i <= frameTime) {
-            Graphics.g.drawImage(imageList.get(currentImg), x, y, obs);
-            i++;
-        }
-        if (i > frameTime) {
-            currentImg++;
-            i = 0;
-        }
-        if (currentImg >= imgCount)
-            currentImg = 0;
+    public static void play(String alias, int x, int y) {
+        animations.get(alias).x = x;
+        animations.get(alias).y = y;
+        animations.get(alias).start = true;
+    }
+
+    /**
+     * This method stops a playing animation.
+     *
+     * @param alias The animation you wanna stop
+     */
+    public static void stop(String alias) {
+        System.out.println("test");
+        animations.get(alias).start = false;
+        animations.get(alias).currentImg = 0;
+    }
+
+    /**
+     * Use this method to update the position of a animation, that is only played once.
+     *
+     * @param x The x position you want it to be played.
+     * @param y The y position you want it to be played.
+     */
+    public static void updatePos(String alias, int x, int y) {
+        animations.get(alias).x = x;
+        animations.get(alias).y = y;
+    }
+
+    /**
+     * Internal function.
+     */
+    public static void animationLoop() {
+        animations.values().forEach(FrameAnimation::playAnimation);
     }
 }

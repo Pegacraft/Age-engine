@@ -4,10 +4,12 @@ import engine.Game;
 import engine.Object;
 import engine.loops.Loop;
 import engine.mechanics.Hitbox;
+import engine.rendering.Animation;
 import engine.rendering.Graphics;
 import engine.rendering.Image;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -25,6 +27,10 @@ public class Player2 extends Object {
     public void init() {
         hitList.add(new Hitbox(new Point(0, 0), new Point(200, 50)));
         hitList.add(new Hitbox(new Point(200, 200), new Point(400, 400), new Point(200, 300)));
+        Animation.createAnimation(Image.load("testSheet.png"), 20, 4, 20, null, "Idle");
+        Game.scenes.get("Game").keyListener.addListener(KeyEvent.VK_SPACE, e -> {
+            Animation.play("Idle", x, y);
+        }, false);
     }
 
     @Override
@@ -78,6 +84,7 @@ public class Player2 extends Object {
 
     @Override
     public void renderLoop() {
+        Animation.updatePos("Idle", x, y);
         Graphics.g.setColor(Color.CYAN);
         Graphics.g.drawImage(img, x, y, width, height, null);
         Graphics.g.draw(h.shape);
