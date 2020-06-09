@@ -1,6 +1,7 @@
 package engine.listeners;
 
 import engine.Display;
+import engine.rendering.Graphics;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -66,9 +67,9 @@ public class Mouse implements MouseListener {
                 - display.getCanvas().getLocationOnScreen().getX());
         y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
                 - display.getCanvas().getLocationOnScreen().getY());
-        x = (int) scaledX(x);
-        y = (int) scaledY(y);
-        
+        x = (int) scaledX(x) - Graphics.getCamPos().x;
+        y = (int) scaledY(y) - Graphics.getCamPos().y;
+
     }
 
     /**

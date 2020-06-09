@@ -1,6 +1,7 @@
 package game.test;
 
 import engine.Scene;
+import engine.rendering.Graphics;
 
 public class GameScene extends Scene {
 
@@ -18,5 +19,6 @@ public class GameScene extends Scene {
 
     @Override
     public void renderLoop() {
+        Graphics.g.fillRect(-100, -100, 20, 20);
     }
 }

@@ -13,6 +13,7 @@ import java.awt.image.BufferStrategy;
  * <p>The <code>g</code> is the normal <code>Graphics2D</code> object.</p>
  */
 public class Graphics {
+    private static int xOffset = 0, yOffset = 0;
     /**
      * the normal Graphics2D object.
      */
@@ -28,6 +29,7 @@ public class Graphics {
             g.setColor(e.backGround);
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
             g.scale(((float) e.getWidth()) / 1280, ((float) e.getHeight()) / 720);
+            Graphics.g.translate(xOffset, yOffset);
             Scene s = Game.scenes.get(e.getAttachedScene());
             if (s != null) {
                 s.renderLoop();
@@ -37,5 +39,14 @@ public class Graphics {
             bs.show();
             g.dispose();
         });
+    }
+
+    public static void moveCam(int x, int y) {
+        xOffset = -x + 640;
+        yOffset = -y + 360;
+    }
+
+    public static Point getCamPos() {
+        return new Point(xOffset, yOffset);
     }
 }

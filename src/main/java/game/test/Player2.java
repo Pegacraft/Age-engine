@@ -27,10 +27,12 @@ public class Player2 extends Object {
 
     @Override
     public void init() {
-        hitList.add(new Hitbox(new Point(0, 0), new Point(200, 50)));
+        hitList.add(new Hitbox(new Point(50, 0), new Point(200, 50)));
         hitList.add(new Hitbox(new Point(200, 200), new Point(400, 400), new Point(200, 300)));
-        Animation.createAnimation(Image.load("testSheet.png"), 20, 4, 20, null, "Idle");
-        Game.scenes.get("Game").keyListener.addListener(KeyEvent.VK_SPACE, e -> Animation.play("Idle", x, y), false);
+        Animation.createAnimation(Image.load("testSheet.png"), 3, 4, 20, null, "Idle");
+        Game.scenes.get("Game").keyListener.addListener(KeyEvent.VK_SPACE, e -> {
+            Animation.play("Idle", x, y);
+        }, false);
     }
 
     @Override
@@ -57,6 +59,7 @@ public class Player2 extends Object {
             }
         }
         h.move(x, y);
+        Graphics.moveCam(x, y);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class Player2 extends Object {
         Graphics.g.setColor(Color.CYAN);
         Graphics.g.drawImage(img, x, y, width, height, null);
         Graphics.g.draw(h.shape);
-        Graphics.g.drawString(String.format("Time per frame in ms: %.3f", Loop.frameTime / 1E6), 0, 100);
+        Graphics.g.drawString(String.format("Time per frame in ms: %.3f", Loop.frameTime / 1E6), -Graphics.getCamPos().x, 100 - Graphics.getCamPos().y);
         hitList.forEach(e -> Graphics.g.draw(e.shape));
     }
 }
