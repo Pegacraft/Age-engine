@@ -20,10 +20,10 @@ import java.util.function.Function;
  */
 public class Mouse implements MouseListener {
     private final HashMap<MouseButtons, ArrayList<Function<MouseEvent, Boolean>>> onMouseEvent = new HashMap<>();
+    private final Display display;
     private int x, y;
     private boolean held = false;
     private int mouseEvent;
-    private final Display display;
 
     public Mouse(Display display) {
         this.display = display;
@@ -95,6 +95,16 @@ public class Mouse implements MouseListener {
     public void addEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
         onMouseEvent.computeIfAbsent(button, k -> new ArrayList<>());
         onMouseEvent.get(button).add(function);
+    }
+
+    /**
+     * Use this method to delete a mouseEvent of a certain object.
+     *
+     * @param button   the button of the trigger
+     * @param function the function to be deleted
+     */
+    public void deleteEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
+        onMouseEvent.get(button).remove(function);
     }
 
     /**

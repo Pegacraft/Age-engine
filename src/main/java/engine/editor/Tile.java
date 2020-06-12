@@ -7,6 +7,7 @@ import engine.mechanics.Hitbox;
 import engine.rendering.Image;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,27 +15,27 @@ import java.io.File;
 import static engine.rendering.Graphics.g;
 
 public class Tile extends Object {
-    int x, y;
-    int width = 90, height = 90;
-    BufferedImage select = Image.load("editor/Selected.png");
-    public BufferedImage preview;
-    public boolean selected = false;
-    Hitbox h;
-    Hitbox workArea;
-    JFileChooser chooser = new JFileChooser();
+    private final int x;
+    private final int y;
+    private final int width = 90;
+    private final int height = 90;
+    private final BufferedImage select = Image.load("editor/Selected.png");
+    private final Hitbox h;
+    private final JFileChooser chooser = new JFileChooser();
     String importPath;
+    boolean selected = false;
+    private BufferedImage preview;
 
     public Tile(int x, int y, Hitbox workArea) {
         this.x = x;
         this.y = y;
-        this.workArea = workArea;
         h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
+        chooser.setFileFilter(new FileNameExtensionFilter("images", "png", "jpeg", "jpg", "gif"));
         //opens the import dialog
         Game.scenes.get("EditScene").mouseListener.addEvent(MouseButtons.RIGHT_DOWN, e -> {
             if (h.isInside(Game.scenes.get("EditScene").mouseListener.getMousePos())) {
                 File f = new File("src/main/resources");
                 String url = f.getAbsolutePath();
-                System.out.println(url);
                 chooser.setCurrentDirectory(new File(url));
                 int returnValue = chooser.showOpenDialog(Game.scenes.get("EditScene").display.getCanvas());
                 //gets file path
@@ -44,9 +45,9 @@ public class Tile extends Object {
                     importPath = importPath.substring(importPath.lastIndexOf("resources\\") + 10);
 
                     //checks if file type is compatible
-                    if (getFileExtension(importPath).equals("png") || getFileExtension(importPath).equals("jpg") ||
-                            getFileExtension(importPath).equals("jpeg") || getFileExtension(importPath).equals("gif"))
+                    if (getFileExtension(importPath).matches("png|jpe?g|gif"))
                         preview = Image.load(importPath);
+                    else throw new IllegalArgumentException("this is not a valid image i believe");
                 }
             }
         }, false);
@@ -83,7 +84,6 @@ public class Tile extends Object {
     }
 
     public String getFileExtension(String fullName) {
-
         String fileName = new File(fullName).getName();
         int dotIndex = fileName.lastIndexOf('.');
         return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);

@@ -7,38 +7,45 @@ import engine.mechanics.Hitbox;
 import engine.rendering.Image;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.function.Function;
 
 import static engine.rendering.Graphics.g;
 
 public class Sprite extends Object {
-    int x, y;
-    double scale;
-    BufferedImage sprite;
-    String spritePath;
-    java.awt.Image spriteScaled;
-    private Hitbox h;
+    public final Function<MouseEvent, Boolean> onClickEvent;
+    private final int x;
+    private final int y;
+    private final java.awt.Image spriteScaled;
+    private final Hitbox h;
     public boolean delete = false;
 
-    public Sprite(int x, int y, double scale, String sprite, Scene scene) {
-        this.scale = scale;
+    /**
+     * create a sprite at a given location using a position, a scale,a path to an image, and a scene to be bound to.
+     *
+     * @param x          the x coordinate of the sprite
+     * @param y          the y coordinate of the sprite
+     * @param scale      the sprite's scaling factor
+     * @param spritePath a path to an image
+     * @param scene      the scene to be bound to
+     */
+    public Sprite(int x, int y, double scale, String spritePath, Scene scene) {
         this.x = x;
         this.y = y;
-        spritePath = sprite;
-        this.sprite = Image.load(sprite);
-        spriteScaled = this.sprite.getScaledInstance((int) (this.sprite.getWidth() * scale),
-                (int) (this.sprite.getHeight() * scale), 3);
+        BufferedImage sprite = Image.load(spritePath);
+        spriteScaled = sprite.getScaledInstance((int) (sprite.getWidth() * scale),
+                (int) (sprite.getHeight() * scale), 3);
 
-        h = new Hitbox(new Point(x, y), new Point(x + this.sprite.getWidth(), y + this.sprite.getHeight()));
-
-        scene.mouseListener.addEvent(MouseButtons.RIGHT_DOWN, e -> {
+        h = new Hitbox(new Point(x, y), new Point(x + sprite.getWidth(), y + sprite.getHeight()));
+        onClickEvent = e -> {
             if (h.isInside(scene.mouseListener.getMousePos())) {
-                System.out.println("test");
                 delete = true;
                 return true;
             }
             return false;
-        });
+        };
+        scene.mouseListener.addEvent(MouseButtons.RIGHT_DOWN, onClickEvent);
     }
 
     @Override

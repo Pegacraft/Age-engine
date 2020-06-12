@@ -9,18 +9,17 @@ import java.awt.*;
 import static engine.rendering.Graphics.g;
 
 public class TextBox extends Object {
-    public String text = "";
     private final Scene scene;
+    private final Font font;
+    private final Hitbox h;
+    public String text = "";
     private int x, y, width, height;
     private boolean clicked = false;
     private Color fontColor = Color.BLACK;
     private Color borderColor = Color.BLACK;
     private String textType = "JhengHei UI";
     private int fontSize = 12;
-    private final Font font;
     private int maxValue = 10;
-
-    Hitbox h;
 
     /**
      * This is a text box. Use it to create an input field.

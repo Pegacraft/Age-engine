@@ -8,16 +8,17 @@ import engine.mechanics.TextBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import static engine.rendering.Graphics.g;
 
 public class EditScene extends Scene {
 
-    ArrayList<Tile> Selector = new ArrayList<>();
-    ArrayList<Sprite> sprites = new ArrayList<>();
+    private final ArrayList<Tile> Selector = new ArrayList<>();
+    private final ArrayList<Sprite> sprites = new ArrayList<>();
+    private final Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
+    private final TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
     public double scale = 1;
-    Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
-    TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
 
     @Override
     public void init() {
@@ -52,18 +53,21 @@ public class EditScene extends Scene {
             scale = Double.parseDouble(scaleBox.text);
         } catch (NumberFormatException ignore) {
         }
+        sprites.forEach(e -> {
+            if (e.delete) mouseListener.deleteEvent(MouseButtons.RIGHT_DOWN, e.onClickEvent);
+        });
+        sprites.removeIf(sprite -> sprite.delete);
         Selector.forEach(Tile::logicLoop);
         sprites.forEach(Sprite::logicLoop);
-
-        for (int i = 0; i < sprites.size(); i++)
-            if (sprites.get(i).delete)
-                sprites.remove(i);
     }
 
     @Override
     public void renderLoop() {
-        sprites.forEach(Sprite::renderLoop);
-        Selector.forEach(Tile::renderLoop);
+        try {
+            sprites.forEach(Sprite::renderLoop);
+            Selector.forEach(Tile::renderLoop);
+        } catch (ConcurrentModificationException ignored) {
+        }
         g.setColor(Color.BLACK);
         g.drawString("Scale:", 1150, 475);
         g.draw(workArea.shape);
