@@ -1,5 +1,6 @@
 package engine;
 
+import engine.editor.EditScene;
 import engine.loops.Loop;
 
 import java.util.HashMap;
@@ -63,5 +64,14 @@ public class Game {
         if (displays.get(name) == null)
             displays.put(name, new Display());
         return displays.get(name);
+    }
+
+    public static void startEditor() {
+        Display display = Game.display("editor");
+        Game.addScene(new EditScene(), "EditScene");
+        display.attachScene("EditScene");
+        Game.start();
+        Game.setFrameRate(60);
+        display.setTitle("Map Editor");
     }
 }

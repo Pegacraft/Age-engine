@@ -30,6 +30,10 @@ public class Mouse implements MouseListener {
     }
 
     public void mouseClicked(MouseEvent e) {
+        mouseEvent(e);
+    }
+
+    private void mouseEvent(MouseEvent e) {
         ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
             for (Function<MouseEvent, Boolean> f : functions)
@@ -39,18 +43,12 @@ public class Mouse implements MouseListener {
     public void mousePressed(MouseEvent e) {
         held = true;
         mouseEvent = e.getButton();
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
-        if (functions != null)
-            for (Function<MouseEvent, Boolean> f : functions)
-                if (f.apply(e)) return;
+        mouseEvent(e);
     }
 
     public void mouseReleased(MouseEvent e) {
         held = false;
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
-        if (functions != null)
-            for (Function<MouseEvent, Boolean> f : functions)
-                if (f.apply(e)) return;
+        mouseEvent(e);
     }
 
     public void mouseEntered(MouseEvent e) {

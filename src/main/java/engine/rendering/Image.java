@@ -17,8 +17,9 @@ public class Image {
     public static BufferedImage load(String path) {
         try {
             return ImageIO.read(Image.class.getResource("/" + path));
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
+            System.exit(1);
             return null;
         }
     }

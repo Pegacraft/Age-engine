@@ -27,6 +27,7 @@ public class Display {
     private int width = 1280, height = 720;
     private String attachedScene;
     private boolean fullScreen = false;
+    public TextField textField;
 
     Display() {
         createWindow();
@@ -40,11 +41,18 @@ public class Display {
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        textField = new TextField();
+        JPanel panel = new JPanel();
+
+        LayoutManager overlay = new OverlayLayout(panel);
+        panel.setLayout(overlay);
         canvas = new Canvas();
         canvas.setSize(width, height);
         canvas.setVisible(true);
-
-        frame.add(canvas);
+        //frame.add(canvas);
+        panel.add(canvas);
+        panel.add(textField);
+        frame.add(panel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
 
@@ -171,5 +179,14 @@ public class Display {
      */
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    /**
+     * This is a internal method, it shall not be used
+     *
+     * @return The Frame of a display.
+     */
+    public Frame getFrame() {
+        return frame;
     }
 }
