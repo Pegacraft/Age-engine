@@ -1,4 +1,4 @@
-package game.test;
+package engine.editor.menu;
 
 import engine.Game;
 import engine.Object;
@@ -21,20 +21,12 @@ public class Button extends Object {
     public void init() {
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             if (h.isInside(mouseListener.getMousePos())) {
-                if (!playing) {
-                    s.playSound();
-                    playing = true;
-                } else {
-                    s.stopSound();
-                    playing = false;
-                }
             }
         }, false);
     }
 
     @Override
     public void logicLoop() {
-
     }
 
     @Override

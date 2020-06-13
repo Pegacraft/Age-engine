@@ -15,18 +15,17 @@ import java.io.File;
 import static engine.rendering.Graphics.g;
 
 public class Tile extends Object {
-    private final int x;
-    private final int y;
-    private final int width = 90;
-    private final int height = 90;
+    private final int x, y;
+    private final int width = 90, height = 90;
     private final BufferedImage select = Image.load("editor/Selected.png");
     private final Hitbox h;
     private final JFileChooser chooser = new JFileChooser();
+    private final EditScene scene = (EditScene) Game.scenes.get("EditScene");
     String importPath;
     boolean selected = false;
     private BufferedImage preview;
 
-    public Tile(int x, int y, Hitbox workArea) {
+    public Tile(int x, int y) {
         this.x = x;
         this.y = y;
         h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
@@ -53,22 +52,17 @@ public class Tile extends Object {
         }, false);
         // selects a sprite
         Game.scenes.get("EditScene").mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
-            if (h.isInside(Game.scenes.get("EditScene").mouseListener.getMousePos()))
-                selected = true;
-            else if (!workArea.isInside(Game.scenes.get("EditScene").mouseListener.getMousePos())) {
-                selected = false;
-            }
+            if (h.isInside(scene.mouseListener.getMousePos()))
+                scene.selection = this;
         }, false);
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
     public void logicLoop() {
-
     }
 
     @Override
@@ -77,10 +71,12 @@ public class Tile extends Object {
         g.fillRect(x, y, width, height);
         if (preview != null)
             g.drawImage(preview, x, y, width, height, null);
-        if (selected)
-            g.drawImage(select, x, y, null);
         g.setColor(Color.red);
         g.draw(h.shape);
+    }
+
+    public void drawSelectionHUD() {
+        g.drawImage(select, x, y, null);
     }
 
     public String getFileExtension(String fullName) {

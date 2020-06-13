@@ -1,6 +1,7 @@
 package game.test;
 
 import engine.Scene;
+import engine.editor.menu.Button;
 import engine.rendering.Graphics;
 
 public class GameScene extends Scene {

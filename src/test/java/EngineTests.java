@@ -18,7 +18,7 @@ public class EngineTests {
         assertEquals("Mouse should be the same using both ways of access. ",
                 MouseButtons.LEFT_CLICK, MouseButtons.getByValues(MouseEvent.BUTTON1, MouseEvent.MOUSE_CLICKED));
         assertEquals("Mouse should be the same using both ways of access. ",
-                MouseButtons.RIGHT_CLICK, MouseButtons.getByValues(MouseEvent.BUTTON2, MouseEvent.MOUSE_CLICKED));
+                MouseButtons.RIGHT_CLICK, MouseButtons.getByValues(MouseEvent.BUTTON3, MouseEvent.MOUSE_CLICKED));
         assertEquals("Mouse should be the same using both ways of access. ",
                 MouseButtons.LEFT_DOWN, MouseButtons.getByValues(MouseEvent.BUTTON1, MouseEvent.MOUSE_PRESSED));
         assertEquals("Mouse should be the same using both ways of access. ",

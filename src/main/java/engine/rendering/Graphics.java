@@ -32,8 +32,8 @@ public class Graphics {
             Graphics.g.translate(xOffset, yOffset);
             Scene s = Game.scenes.get(e.getAttachedScene());
             if (s != null) {
-                s.renderLoop();
                 s.getObjectList().forEach(Object::renderLoop);
+                s.renderLoop();
             } else throw new IllegalStateException("no state defined for that display");
             Animation.animationLoop();
             bs.show();

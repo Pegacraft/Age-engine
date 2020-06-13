@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -36,8 +37,12 @@ public class Mouse implements MouseListener {
     private void mouseEvent(MouseEvent e) {
         ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
-            for (Function<MouseEvent, Boolean> f : functions)
-                if (f.apply(e)) return;
+            while (true) try {
+                for (Function<MouseEvent, Boolean> f : functions)
+                    if (f.apply(e)) return;
+                break;
+            } catch (ConcurrentModificationException ignored) {
+            }
     }
 
     public void mousePressed(MouseEvent e) {
