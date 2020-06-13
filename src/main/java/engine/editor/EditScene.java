@@ -3,6 +3,7 @@ package engine.editor;
 import engine.Scene;
 import engine.editor.menu.Sprite;
 import engine.listeners.MouseButtons;
+import engine.mechanics.Grid;
 import engine.mechanics.Hitbox;
 import engine.mechanics.TextBox;
 
@@ -17,8 +18,13 @@ public class EditScene extends Scene {
     private final ArrayList<Sprite> sprites = new ArrayList<>();
     private final Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
     private final TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
+    private final TextBox gridWidth = new TextBox(1190, 460, 30, 20, this);
+    private final TextBox gridHeight = new TextBox(1190, 460, 30, 20, this);
+    private final TextBox gridRow = new TextBox(1190, 460, 30, 20, this);
+    private final TextBox gridColumn = new TextBox(1190, 460, 30, 20, this);
     public double scale = 1;
     public Tile selection;
+    private Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
 
     @Override
     public void init() {
@@ -26,9 +32,11 @@ public class EditScene extends Scene {
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
         addObject(scaleBox);
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
+            Point p = new Point(mouseListener.getMousePos().x, mouseListener.getMousePos().y);
+            p = grid.toGrid(p);
             if (workArea.isInside(mouseListener.getMousePos()) && selection != null && selection.importPath != null)
                 sprites.add(new Sprite(
-                        mouseListener.getMousePos().x, mouseListener.getMousePos().y,
+                        p.x, p.y,
                         scale, selection.importPath, this));
         }, false);
     }
@@ -60,5 +68,6 @@ public class EditScene extends Scene {
         g.setColor(Color.BLACK);
         g.drawString("Scale:", 1150, 475);
         g.draw(workArea.shape);
+        grid.show(Color.DARK_GRAY);
     }
 }

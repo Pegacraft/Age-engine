@@ -37,7 +37,8 @@ public class Sprite extends Object {
         spriteScaled = sprite.getScaledInstance((int) (sprite.getWidth() * scale),
                 (int) (sprite.getHeight() * scale), 3);
 
-        h = new Hitbox(new Point(x, y), new Point(x + sprite.getWidth(), y + sprite.getHeight()));
+        h = new Hitbox(new Point(x, y), new Point(x + (int) (sprite.getWidth() * scale),
+                y + (int) (sprite.getHeight() * scale)));
         onClickEvent = e -> {
             if (h.isInside(scene.mouseListener.getMousePos())) {
                 delete = true;
