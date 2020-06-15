@@ -1,6 +1,6 @@
 package engine.editor.menu;
 
-import engine.Object;
+import engine.Entity;
 import engine.Scene;
 import engine.listeners.MouseButtons;
 import engine.mechanics.Hitbox;
@@ -9,12 +9,12 @@ import engine.rendering.Image;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static engine.rendering.Graphics.g;
 
-public class Sprite extends Object {
-    public final Function<MouseEvent, Boolean> onClickEvent;
+public class Sprite implements Entity {
+    public final Predicate<MouseEvent> onClickEvent;
     private final int x;
     private final int y;
     private final java.awt.Image spriteScaled;
@@ -51,10 +51,12 @@ public class Sprite extends Object {
 
     @Override
     public void init() {
+        // TBD
     }
 
     @Override
     public void logicLoop() {
+        // TBD
     }
 
     @Override

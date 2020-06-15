@@ -4,15 +4,20 @@ import engine.editor.EditScene;
 import engine.loops.Loop;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is the centralized object where all information is included.
  * This contains info about Displays, and future stuff
  */
 public class Game {
-    public static final HashMap<String, Display> displays = new HashMap<>();
-    public static final HashMap<String, Scene> scenes = new HashMap<>();
+    private static final Map<String, Display> displays = new HashMap<>();
+    private static final Map<String, Scene> scenes = new HashMap<>();
     private static Loop loop;
+
+    private Game() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * This method starts the Loop components. Essential for game logic.
@@ -29,7 +34,7 @@ public class Game {
      * @param frameRate The frame rate you want.
      */
     public static void setFrameRate(int frameRate) {
-        loop.frameRate = frameRate;
+        loop.setFrameRate(frameRate);
     }
 
     /**
@@ -61,11 +66,13 @@ public class Game {
      * @return the display with the given name
      */
     public static Display display(String name) {
-        if (displays.get(name) == null)
-            displays.put(name, new Display());
+        displays.computeIfAbsent(name, k -> new Display());
         return displays.get(name);
     }
 
+    /**
+     * start the environment-editor using a new display called "editor"
+     */
     public static void startEditor() {
         Display display = Game.display("editor");
         Game.addScene(new EditScene(), "EditScene");
@@ -73,5 +80,33 @@ public class Game {
         Game.start();
         Game.setFrameRate(60);
         display.setTitle("Map Editor");
+    }
+
+    /**
+     * get a scene using it's alias
+     *
+     * @param alias the alias to look for
+     * @return the wanted scene
+     */
+    public static Scene getScene(String alias) {
+        return scenes.get(alias);
+    }
+
+    /**
+     * get the sceneMap (don't use unless you know what you're doing)
+     *
+     * @return the scenes map
+     */
+    public static Map<String, Scene> getScenes() {
+        return scenes;
+    }
+
+    /**
+     * get the displayMap (don't use unless you know what you're doing)
+     *
+     * @return the displays map
+     */
+    public static Map<String, Display> getDisplays() {
+        return displays;
     }
 }

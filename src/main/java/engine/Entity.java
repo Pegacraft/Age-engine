@@ -1,16 +1,18 @@
 package engine;
 
-public abstract class Object {
+public interface Entity {
     /**
      * This Method will be called once on creation of the object
      */
-    public abstract void init();
+    void init();
+
     /**
      * The loop for the object logic
      */
-    public abstract void logicLoop();
+    void logicLoop();
+
     /**
      * The loop for the object render
      */
-    public abstract void renderLoop();
+    void renderLoop();
 }

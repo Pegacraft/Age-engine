@@ -42,7 +42,7 @@ public class EngineTests {
                 NullPointerException.class, () -> d.attachScene("TestScene"));
         Game.addScene(s, "TestScene");
         d.attachScene("TestScene");
-        assertEquals("Display should keep scene attached. ", d.getAttachedScene(), "TestScene");
+        assertEquals("Display should keep scene attached. ", "TestScene", d.getAttachedScene());
 //        int width = Math.abs(r.nextInt(1000)), height = Math.abs(r.nextInt(1000));
 //       d.setSize(width, height);
 //        assertEquals("Display's width should be kept. ", width, d.getHeight());

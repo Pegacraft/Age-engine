@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
  */
 public class Hitbox {
 
-    public Polygon shape;
+    private Polygon shape;
     private Polygon original;
 
     /**
@@ -107,5 +107,9 @@ public class Hitbox {
         str.deleteCharAt(str.length() - 1);
         str.append("}");
         return str.toString();
+    }
+
+    public Polygon getShape() {
+        return shape;
     }
 }

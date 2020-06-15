@@ -8,23 +8,22 @@ import engine.mechanics.Hitbox;
 import engine.mechanics.TextBox;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static engine.rendering.Graphics.g;
 
 public class EditScene extends Scene {
 
-    private final ArrayList<Sprite> sprites = new ArrayList<>();
+    private final CopyOnWriteArrayList<Sprite> sprites = new CopyOnWriteArrayList<>();
     private final Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
     private final TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
     private final TextBox gridWidth = new TextBox(1190, 460, 30, 20, this);
     private final TextBox gridHeight = new TextBox(1190, 460, 30, 20, this);
     private final TextBox gridRow = new TextBox(1190, 460, 30, 20, this);
     private final TextBox gridColumn = new TextBox(1190, 460, 30, 20, this);
-    public double scale = 1;
-    public Tile selection;
-    private Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
+    private final Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
+    private double scale = 1;
+    private Tile selection;
 
     @Override
     public void init() {
@@ -32,8 +31,7 @@ public class EditScene extends Scene {
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
         addObject(scaleBox);
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
-            Point p = new Point(mouseListener.getMousePos().x, mouseListener.getMousePos().y);
-            p = grid.toGrid(p);
+            Point p = grid.toGrid(mouseListener.getMousePos());
             if (workArea.isInside(mouseListener.getMousePos()) && selection != null && selection.importPath != null)
                 sprites.add(new Sprite(
                         p.x, p.y,
@@ -44,30 +42,28 @@ public class EditScene extends Scene {
     @Override
     public void logicLoop() {
         try {
-            scale = Double.parseDouble(scaleBox.text);
-        } catch (NumberFormatException ignore) {
+            scale = Double.parseDouble(scaleBox.getText());
+        } catch (NumberFormatException ignore) { //
         }
-        try {
-            sprites.forEach(e -> {
-                if (e.delete) mouseListener.deleteEvent(MouseButtons.RIGHT_DOWN, e.onClickEvent);
-            });
-            sprites.removeIf(sprite -> sprite.delete);
-        } catch (ConcurrentModificationException ignore) {
-        }
+        sprites.forEach(e -> {
+            if (e.delete) mouseListener.deleteEvent(MouseButtons.RIGHT_DOWN, e.onClickEvent);
+        });
+        sprites.removeIf(sprite -> sprite.delete);
         sprites.forEach(Sprite::logicLoop);
     }
 
     @Override
     public void renderLoop() {
-        try {
-            sprites.forEach(Sprite::renderLoop);
-            if (selection != null)
-                selection.drawSelectionHUD();
-        } catch (ConcurrentModificationException ignored) {
-        }
+        sprites.forEach(Sprite::renderLoop);
+        if (selection != null)
+            selection.drawSelectionHUD();
         g.setColor(Color.BLACK);
         g.drawString("Scale:", 1150, 475);
-        g.draw(workArea.shape);
+        g.draw(workArea.getShape());
         grid.show(Color.DARK_GRAY);
+    }
+
+    public void setSelection(Tile selection) {
+        this.selection = selection;
     }
 }

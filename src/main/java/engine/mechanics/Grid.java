@@ -6,7 +6,12 @@ import static engine.rendering.Graphics.g;
 
 public class Grid {
 
-    private int x, y, width, height, row, column;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private int row;
+    private int column;
 
     public Grid(int x, int y, int width, int height, int row, int column) {
         this.x = x;
@@ -24,21 +29,9 @@ public class Grid {
      * @return The locked point according to the grid
      */
     public Point toGrid(Point point) {
-        int Px = point.x - x;
-        int Py = point.y - y;
-        for (int i = column - 1; i >= 0; i--) {
-            if (width * i <= point.x - x) {
-                Px = width * i;
-                break;
-            }
-        }
-        for (int i = row - 1; i >= 0; i--) {
-            if (height * i <= point.y - y) {
-                Py = height * i;
-                break;
-            }
-        }
-        return new Point(x + Px, y + Py);
+        if (point.x > x && point.y > y && point.x < x + width * column && point.y < y + height * column)
+            return new Point(x + (point.x - x) / width * width, y + (point.y - y) / height * height);
+        return point;
     }
 
     /**
@@ -50,10 +43,10 @@ public class Grid {
         g.setColor(color);
         g.drawRect(x, y, width * column, height * row);
         for (int i = 0; i < column; i++) {
-            g.drawLine(width * i, y, width * i, height * row);
+            g.drawLine(x + width * i, y, x + width * i, y + height * row);
         }
         for (int i = 0; i < row; i++) {
-            g.drawLine(x, height * i, width * column, height * i);
+            g.drawLine(x, y + height * i, x + width * column, y + height * i);
         }
     }
 

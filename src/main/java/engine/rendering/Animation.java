@@ -9,7 +9,10 @@ import java.util.HashMap;
  */
 public class Animation {
     private static final HashMap<String, FrameAnimation> animations = new HashMap<>();
-    private static int x, y;
+
+    private Animation() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Use this method to create a new animation.
@@ -33,9 +36,9 @@ public class Animation {
      * @param y     The y position you want it to be played.
      */
     public static void play(String alias, int x, int y) {
-        animations.get(alias).x = x;
-        animations.get(alias).y = y;
-        animations.get(alias).start = true;
+        animations.get(alias).setX(x);
+        animations.get(alias).setY(y);
+        animations.get(alias).start();
     }
 
     /**
@@ -44,9 +47,8 @@ public class Animation {
      * @param alias The animation you wanna stop
      */
     public static void stop(String alias) {
-        System.out.println("test");
-        animations.get(alias).start = false;
-        animations.get(alias).currentImg = 0;
+        animations.get(alias).stop();
+        animations.get(alias).setCurrentImg(0);
     }
 
     /**
@@ -56,8 +58,8 @@ public class Animation {
      * @param y The y position you want it to be played.
      */
     public static void updatePos(String alias, int x, int y) {
-        animations.get(alias).x = x;
-        animations.get(alias).y = y;
+        animations.get(alias).setX(x);
+        animations.get(alias).setY(y);
     }
 
     /**

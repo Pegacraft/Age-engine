@@ -1,7 +1,7 @@
 package game.test;
 
+import engine.Entity;
 import engine.Game;
-import engine.Object;
 import engine.listeners.Keyboard;
 import engine.loops.Loop;
 import engine.mechanics.Hitbox;
@@ -17,15 +17,17 @@ import java.util.ArrayList;
 import static engine.rendering.Graphics.g;
 import static java.lang.Math.toRadians;
 
-public class Player2 extends Object {
-    private final int width = 20, height = 20, speed = 5;
-    private final Keyboard keyListener = Game.scenes.get("Game").keyListener;
+public class Player2 implements Entity {
+    private static final int WIDTH = 20;
+    private static final int HEIGHT = 20;
+    private final Keyboard keyListener = Game.getScene("Game").keyListener;
     private final ArrayList<Hitbox> hitList = new ArrayList<>();
     private final BufferedImage img = Image.load("blush.png");
-    private int x = 100, y = 100;
+    private int x = 100;
+    private int y = 100;
     public final Hitbox h = new Hitbox(
             new Point(x, y),
-            new Point(x + width, y + height)
+            new Point(x + WIDTH, y + HEIGHT)
     );
     private int i = 0;
 
@@ -45,6 +47,7 @@ public class Player2 extends Object {
         boolean inside = false;
         for (Hitbox e : hitList) if (h.isInside(e)) inside = true;
         if (!inside) {
+            double speed = 5;
             for (double velo = ((keyListener.isHeld('W') ? 0 : 1) - (keyListener.isHeld('S') ? 0 : 1)) * speed;
                  Math.abs(velo) >= 1; velo *= 0.9) {
                 h.move(x, (int) (y + velo));
@@ -55,7 +58,6 @@ public class Player2 extends Object {
                     break;
                 }
             }
-
             for (double velo = ((keyListener.isHeld('A') ? 0 : 1) - (keyListener.isHeld('D') ? 0 : 1)) * speed;
                  Math.abs(velo) >= 1; velo *= 0.9) {
                 h.move((int) (x + velo), y);
@@ -79,13 +81,12 @@ public class Player2 extends Object {
     @Override
     public void renderLoop() {
         Animation.updatePos("Idle", x, y);
-        if (hitList.get(0).isInside(Game.scenes.get("Game").mouseListener.getMousePos()))
+        if (hitList.get(0).isInside(Game.getScene("Game").mouseListener.getMousePos()))
             g.setColor(Color.CYAN);
-        else
-            g.setColor(Color.blue);
-        g.drawImage(img, x, y, width, height, null);
-        g.draw(h.shape);
+        else g.setColor(Color.blue);
+        g.drawImage(img, x, y, WIDTH, HEIGHT, null);
+        g.draw(h.getShape());
         g.drawString(String.format("Time per frame in ms: %.3f", Loop.frameTime / 1E6), -Graphics.getCamPos().x, 100 - Graphics.getCamPos().y);
-        hitList.forEach(e -> g.draw(e.shape));
+        hitList.forEach(e -> g.draw(e.getShape()));
     }
 }

@@ -1,6 +1,6 @@
 package engine.mechanics;
 
-import engine.Object;
+import engine.Entity;
 import engine.Scene;
 import engine.listeners.MouseButtons;
 
@@ -8,12 +8,16 @@ import java.awt.*;
 
 import static engine.rendering.Graphics.g;
 
-public class TextBox extends Object {
+public class TextBox implements Entity {
     private final Scene scene;
     private final Font font;
     private final Hitbox h;
-    public String text = "";
-    private int x, y, width, height;
+    private TextField textField;
+    private String text = "";
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private boolean clicked = false;
     private Color fontColor = Color.BLACK;
     private Color borderColor = Color.BLACK;
@@ -40,12 +44,12 @@ public class TextBox extends Object {
         h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
     }
 
-    @Override
     public void init() {
+        textField = scene.display.getTextField();
         scene.mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             if (h.isInside(scene.mouseListener.getMousePos())) {
                 clicked = h.isInside(scene.mouseListener.getMousePos());
-                scene.display.textField.setText(text.replace("|", ""));
+                scene.display.getTextField().setText(text.replace("|", ""));
             } else {
                 clicked = false;
                 text = text.replace("|", "");
@@ -54,21 +58,21 @@ public class TextBox extends Object {
     }
 
     public void logicLoop() {
-
+        // textBoxes don't need logic loops
     }
 
     public void renderLoop() {
         if (clicked) {
-            scene.display.textField.requestFocus();
-            int caretPos = scene.display.textField.getCaretPosition();
-            text = scene.display.textField.getText();
+            textField.requestFocus();
+            int caretPos = textField.getCaretPosition();
+            text = textField.getText();
             if (text.length() > maxValue) {
-                scene.display.textField.setText(text.substring(0, maxValue));
-                scene.display.textField.setCaretPosition(maxValue);
+                textField.setText(text.substring(0, maxValue));
+                textField.setCaretPosition(maxValue);
             }
             try {
                 text = text.substring(0, caretPos) + "|" + text.substring(caretPos);
-            } catch (StringIndexOutOfBoundsException ignore) {
+            } catch (StringIndexOutOfBoundsException ignore) { //
             }
         }
         g.setFont(font);
@@ -80,23 +84,27 @@ public class TextBox extends Object {
         g.setColor(fontColor);
         g.drawString(text, drawStrX, drawStrY);
         g.setColor(borderColor);
-        g.draw(h.shape);
+        g.draw(h.getShape());
     }
 
-    public void setX(int x) {
+    public TextBox setX(int x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(int y) {
+    public TextBox setY(int y) {
         this.y = y;
+        return this;
     }
 
-    public void setWidth(int width) {
+    public TextBox setWidth(int width) {
         this.width = width;
+        return this;
     }
 
-    public void setHeight(int height) {
+    public TextBox setHeight(int height) {
         this.height = height;
+        return this;
     }
 
     public TextBox setFontColor(Color fontColor) {
@@ -121,6 +129,16 @@ public class TextBox extends Object {
 
     public TextBox setMaxValue(int maxValue) {
         this.maxValue = maxValue;
+        return this;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public TextBox setText(String text) {
+        this.text = text;
+        scene.display.getTextField().setText(text);
         return this;
     }
 }

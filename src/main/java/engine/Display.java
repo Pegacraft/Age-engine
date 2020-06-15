@@ -20,14 +20,14 @@ public class Display {
      * This variable can be used to interact with the MouseListener.
      */
     public final Mouse mouseListener = new Mouse(this);
-    public String title = "Age Engine";
-    public Color backGround = Color.white;
+    private String title = "Age Engine";
+    private TextField textField;
     private JFrame frame;
     private Canvas canvas;
-    private int width = 1280, height = 720;
+    private int width = 1280;
+    private int height = 720;
     private String attachedScene;
     private boolean fullScreen = false;
-    public TextField textField;
 
     Display() {
         createWindow();
@@ -49,7 +49,6 @@ public class Display {
         canvas = new Canvas();
         canvas.setSize(width, height);
         canvas.setVisible(true);
-        //frame.add(canvas);
         panel.add(canvas);
         panel.add(textField);
         frame.add(panel, BorderLayout.CENTER);
@@ -99,11 +98,10 @@ public class Display {
     /**
      * Sets the background color of the canvas.
      *
-     * @param BgColor The color that will be set.
+     * @param bgColor The color that will be set.
      */
-    public Display setBackgroundColor(Color BgColor) {
-        backGround = BgColor;
-        canvas.setBackground(BgColor);
+    public Display setBackgroundColor(Color bgColor) {
+        canvas.setBackground(bgColor);
         return this;
     }
 
@@ -125,13 +123,12 @@ public class Display {
      */
     public Display attachScene(String alias) {
         //runs the init in a loaded scene
-        Game.scenes.get(alias).display = this;
-        Game.scenes.get(alias).keyListener = this.keyListener;
-        Game.scenes.get(alias).mouseListener = this.mouseListener;
+        Game.getScene(alias).display = this;
+        Game.getScene(alias).keyListener = this.keyListener;
+        Game.getScene(alias).mouseListener = this.mouseListener;
         try {
-            Game.scenes.values().forEach(Scene::init);
-        } catch (NullPointerException ignored) {
-
+            Game.getScenes().values().forEach(Scene::init);
+        } catch (NullPointerException ignored) { //
         }
         this.attachedScene = alias;
         return this;
@@ -173,7 +170,7 @@ public class Display {
     }
 
     /**
-     * This is a internal method, it shall not be used
+     * This is an internal method, it shall not be used
      *
      * @return The canvas in a display.
      */
@@ -182,11 +179,20 @@ public class Display {
     }
 
     /**
-     * This is a internal method, it shall not be used
+     * This is an internal method, it shall not be used
      *
      * @return The Frame of a display.
      */
     public Frame getFrame() {
         return frame;
+    }
+
+    /**
+     * This is an internal method, it shall not be used
+     *
+     * @return The textField in a display
+     */
+    public TextField getTextField() {
+        return textField;
     }
 }

@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * This handles all keyPresses. In here you have an array of booleans to show you which keys are pressed inside of the current frame.
@@ -21,22 +21,23 @@ public class Keyboard implements KeyListener {
     /**
      * don't look at it, please
      */
-    private final HashMap<Integer, ArrayList<Function<KeyEvent, Boolean>>> onKeyPress = new HashMap<>();
+    private final HashMap<Integer, ArrayList<Predicate<KeyEvent>>> onKeyPress = new HashMap<>();
 
     /**
      * internal function
      */
     public void keyTyped(KeyEvent e) {
+        // unhandled event
     }
 
     /**
      * internal function
      */
     public void keyPressed(KeyEvent e) {
-        ArrayList<Function<KeyEvent, Boolean>> functions = onKeyPress.get(e.getKeyCode());
+        ArrayList<Predicate<KeyEvent>> functions = onKeyPress.get(e.getKeyCode());
         if (functions != null)
-            for (Function<KeyEvent, Boolean> f : functions)
-                if (f.apply(e)) return;
+            for (Predicate<KeyEvent> f : functions)
+                if (f.test(e)) return;
         pressesKeys[e.getKeyCode()] = true;
     }
 
@@ -56,7 +57,7 @@ public class Keyboard implements KeyListener {
      *                 <code>true</code>: no further execution of other callbacks will be handled<br>
      *                 <code>false</code>: all other callbacks registered will be executed (until one returns true)
      */
-    public void addListener(Integer keyCode, Function<KeyEvent, Boolean> function) {
+    public void addListener(Integer keyCode, Predicate<KeyEvent> function) {
         onKeyPress.computeIfAbsent(keyCode, k -> new ArrayList<>());
         onKeyPress.get(keyCode).add(function);
     }
@@ -67,7 +68,7 @@ public class Keyboard implements KeyListener {
      * @param keyCode  the code to which the function reacts
      * @param function the callback to be executed when said key gets pressed.
      * @param blocking if the function should disable all other processing of the key
-     * @see Keyboard#addListener(Integer, Function)
+     * @see Keyboard#addListener(Integer, Predicate)
      */
     public void addListener(Integer keyCode, Consumer<KeyEvent> function, boolean blocking) {
         addListener(keyCode, e -> {

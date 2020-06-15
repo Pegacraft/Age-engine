@@ -1,7 +1,7 @@
 package engine.loops;
 
+import engine.Entity;
 import engine.Game;
-import engine.Object;
 import engine.Scene;
 import engine.rendering.Graphics;
 
@@ -13,7 +13,7 @@ public class Loop implements Runnable {
      * the time it took to calculate the last frame in ns
      */
     public static long frameTime = 1;
-    public int frameRate = 60;
+    private int frameRate = 60;
     private boolean running = false;
 
     @Override
@@ -30,24 +30,25 @@ public class Loop implements Runnable {
                 Thread.sleep((long) (toWait / 1E6), (int) (toWait % 1E6));
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     private void logicLoop() {
         //Loops through the active scene
-        Game.displays.values().forEach(e -> {
-            Scene s = Game.scenes.get(e.getAttachedScene());
+        Game.getDisplays().values().forEach(e -> {
+            Scene s = Game.getScene(e.getAttachedScene());
             if (s != null) {
                 s.logicLoop();
-                s.getObjectList().forEach(Object::logicLoop);
+                s.getObjectList().forEach(Entity::logicLoop);
             } else throw new IllegalStateException("no state defined for that display");
-            e.mouseListener.MouseLoop(e);
+            e.mouseListener.mouseLoop(e);
         });
     }
 
     private void renderLoop() {
-        Graphics.GraphicsLoop();
+        Graphics.graphicsLoop();
     }
 
     public synchronized void start() {
@@ -56,5 +57,9 @@ public class Loop implements Runnable {
         running = true;
         Thread thread = new Thread(this);
         thread.start();
+    }
+
+    public void setFrameRate(int frameRate) {
+        this.frameRate = frameRate;
     }
 }

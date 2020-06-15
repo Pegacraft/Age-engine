@@ -1,7 +1,7 @@
 package engine.editor;
 
+import engine.Entity;
 import engine.Game;
-import engine.Object;
 import engine.listeners.MouseButtons;
 import engine.mechanics.Hitbox;
 import engine.rendering.Image;
@@ -14,29 +14,30 @@ import java.io.File;
 
 import static engine.rendering.Graphics.g;
 
-public class Tile extends Object {
-    private final int x, y;
-    private final int width = 90, height = 90;
+public class Tile implements Entity {
+    private static final int WIDTH = 90;
+    private static final int HEIGHT = 90;
+    private final int x;
+    private final int y;
     private final BufferedImage select = Image.load("editor/Selected.png");
     private final Hitbox h;
     private final JFileChooser chooser = new JFileChooser();
-    private final EditScene scene = (EditScene) Game.scenes.get("EditScene");
+    private final EditScene scene = (EditScene) Game.getScene("EditScene");
     String importPath;
-    boolean selected = false;
     private BufferedImage preview;
 
     public Tile(int x, int y) {
         this.x = x;
         this.y = y;
-        h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
+        h = new Hitbox(new Point(x, y), new Point(x + WIDTH, y + HEIGHT));
         chooser.setFileFilter(new FileNameExtensionFilter("images", "png", "jpeg", "jpg", "gif"));
         //opens the import dialog
-        Game.scenes.get("EditScene").mouseListener.addEvent(MouseButtons.RIGHT_DOWN, e -> {
-            if (h.isInside(Game.scenes.get("EditScene").mouseListener.getMousePos())) {
+        scene.mouseListener.addEvent(MouseButtons.RIGHT_DOWN, e -> {
+            if (h.isInside(scene.mouseListener.getMousePos())) {
                 File f = new File("src/main/resources");
                 String url = f.getAbsolutePath();
                 chooser.setCurrentDirectory(new File(url));
-                int returnValue = chooser.showOpenDialog(Game.scenes.get("EditScene").display.getCanvas());
+                int returnValue = chooser.showOpenDialog(scene.display.getCanvas());
                 //gets file path
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     importPath = chooser.getSelectedFile().getPath();
@@ -51,28 +52,30 @@ public class Tile extends Object {
             }
         }, false);
         // selects a sprite
-        Game.scenes.get("EditScene").mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
+        Game.getScene("EditScene").mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             if (h.isInside(scene.mouseListener.getMousePos()))
-                scene.selection = this;
+                scene.setSelection(this);
         }, false);
     }
 
     @Override
     public void init() {
+        // TBD
     }
 
     @Override
     public void logicLoop() {
+        // TBD
     }
 
     @Override
     public void renderLoop() {
         g.setColor(Color.blue);
-        g.fillRect(x, y, width, height);
+        g.fillRect(x, y, WIDTH, HEIGHT);
         if (preview != null)
-            g.drawImage(preview, x, y, width, height, null);
+            g.drawImage(preview, x, y, WIDTH, HEIGHT, null);
         g.setColor(Color.red);
-        g.draw(h.shape);
+        g.draw(h.getShape());
     }
 
     public void drawSelectionHUD() {

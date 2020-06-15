@@ -11,6 +11,10 @@ import java.util.HashMap;
 public class Image {
     private static final HashMap<String, BufferedImage> cache = new HashMap<>();
 
+    private Image() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * This method imports an image through an path
      *
@@ -23,7 +27,8 @@ public class Image {
             if (image == null) {
                 image = ImageIO.read(Image.class.getResource("/" + path));
                 cache.put(path, image);
-            } return image;
+            }
+            return image;
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
             System.exit(1);

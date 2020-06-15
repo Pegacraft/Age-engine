@@ -6,11 +6,10 @@ import engine.rendering.Graphics;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 /**
@@ -20,11 +19,14 @@ import java.util.function.Function;
  * @see Mouse#addEvent
  */
 public class Mouse implements MouseListener {
-    private final HashMap<MouseButtons, ArrayList<Function<MouseEvent, Boolean>>> onMouseEvent = new HashMap<>();
+    private final EnumMap<MouseButtons, CopyOnWriteArrayList<Predicate<MouseEvent>>> onMouseEvent =
+            new EnumMap<>(MouseButtons.class);
     private final Display display;
-    private int x, y;
+    private int x;
+    private int y;
     private boolean held = false;
     private int mouseEvent;
+    private boolean isMouseInside = true;
 
     public Mouse(Display display) {
         this.display = display;
@@ -35,14 +37,11 @@ public class Mouse implements MouseListener {
     }
 
     private void mouseEvent(MouseEvent e) {
-        ArrayList<Function<MouseEvent, Boolean>> functions = onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
+        CopyOnWriteArrayList<Predicate<MouseEvent>> functions =
+                onMouseEvent.get(MouseButtons.getByValues(e.getButton(), e.getID()));
         if (functions != null)
-            while (true) try {
-                for (Function<MouseEvent, Boolean> f : functions)
-                    if (f.apply(e)) return;
-                break;
-            } catch (ConcurrentModificationException ignored) {
-            }
+            for (Predicate<MouseEvent> f : functions)
+                if (f.test(e)) return;
     }
 
     public void mousePressed(MouseEvent e) {
@@ -57,15 +56,17 @@ public class Mouse implements MouseListener {
     }
 
     public void mouseEntered(MouseEvent e) {
+        isMouseInside = true;
     }
 
     public void mouseExited(MouseEvent e) {
+        isMouseInside = false;
     }
 
     /**
      * Internal function. it shall not be used.
      */
-    public void MouseLoop(Display display) {
+    public void mouseLoop(Display display) {
         x = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()
                 - display.getCanvas().getLocationOnScreen().getX());
         y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
@@ -97,8 +98,8 @@ public class Mouse implements MouseListener {
      * @param function The function to be executed.
      * @see MouseButtons
      */
-    public void addEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
-        onMouseEvent.computeIfAbsent(button, k -> new ArrayList<>());
+    public void addEvent(MouseButtons button, Predicate<MouseEvent> function) {
+        onMouseEvent.computeIfAbsent(button, k -> new CopyOnWriteArrayList<>());
         onMouseEvent.get(button).add(function);
     }
 
@@ -108,8 +109,15 @@ public class Mouse implements MouseListener {
      * @param button   the button of the trigger
      * @param function the function to be deleted
      */
-    public void deleteEvent(MouseButtons button, Function<MouseEvent, Boolean> function) {
+    public void deleteEvent(MouseButtons button, Predicate<MouseEvent> function) {
         onMouseEvent.get(button).remove(function);
+    }
+
+    /**
+     * Use this method to check if the mouse is inside a windows
+     */
+    public boolean isMouseInside() {
+        return isMouseInside;
     }
 
     /**

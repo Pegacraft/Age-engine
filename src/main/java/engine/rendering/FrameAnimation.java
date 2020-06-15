@@ -10,14 +10,15 @@ import java.util.ArrayList;
  */
 class FrameAnimation {
 
-    final int frameTime;
-    final int imgCount;
-    int i = 0;
-    int currentImg = 0;
-    int x, y;
-    final ImageObserver obs;
-    public boolean start = false;
+    private final int frameTime;
+    private final int imgCount;
+    private final ImageObserver obs;
     private final ArrayList<Image> imageList = new ArrayList<>();
+    private int i = 0;
+    private int currentImg = 0;
+    private int x;
+    private int y;
+    private boolean start = false;
 
     /**
      * @param tileSheet The tile sheet that should be used
@@ -30,15 +31,11 @@ class FrameAnimation {
         this.obs = obs;
         this.frameTime = frameTime;
         this.imgCount = imgCount;
-        int width, height;
-        int yS = 0;
-        width = tileSheet.getWidth();
-        height = tileSheet.getHeight() / imgCount;
-
-        for (int i = 0; i < imgCount; i++) {
-            imageList.add(tileSheet.getSubimage(0, yS, width, height).getScaledInstance(width * scale, height * scale, 3));
-            yS += height;
-        }
+        int width = tileSheet.getWidth();
+        int height = tileSheet.getHeight() / imgCount;
+        for (int yS = 0; yS < imgCount * height; yS += height)
+            imageList.add(tileSheet.getSubimage(0, yS, width, height)
+                    .getScaledInstance(width * scale, height * scale, 3));
     }
 
     /**
@@ -59,5 +56,25 @@ class FrameAnimation {
             start = false;
             currentImg = 0;
         }
+    }
+
+    void setX(int x) {
+        this.x = x;
+    }
+
+    void setY(int y) {
+        this.y = y;
+    }
+
+    void start() {
+        start = true;
+    }
+
+    void stop() {
+        start = false;
+    }
+
+    void setCurrentImg(int currentImg) {
+        this.currentImg = currentImg;
     }
 }
