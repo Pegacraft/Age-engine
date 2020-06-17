@@ -52,7 +52,7 @@ public class Tile implements Entity {
             }
         }, false);
         // selects a sprite
-        Game.getScene("EditScene").mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
+        scene.mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             if (h.isInside(scene.mouseListener.getMousePos()))
                 scene.setSelection(this);
         }, false);

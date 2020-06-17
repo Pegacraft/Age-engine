@@ -19,6 +19,8 @@ public class Sprite implements Entity {
     private final int y;
     private final java.awt.Image spriteScaled;
     private final Hitbox h;
+    private final String spritePath;
+    private final double scale;
     public boolean delete = false;
 
     /**
@@ -33,6 +35,8 @@ public class Sprite implements Entity {
     public Sprite(int x, int y, double scale, String spritePath, Scene scene) {
         this.x = x;
         this.y = y;
+        this.spritePath = spritePath;
+        this.scale = scale;
         BufferedImage sprite = Image.load(spritePath);
         spriteScaled = sprite.getScaledInstance((int) (sprite.getWidth() * scale),
                 (int) (sprite.getHeight() * scale), 3);
@@ -62,5 +66,17 @@ public class Sprite implements Entity {
     @Override
     public void renderLoop() {
         g.drawImage(spriteScaled, x, y, null);
+    }
+
+    public Point getPos() {
+        return new Point(x, y);
+    }
+
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public double getScale() {
+        return scale;
     }
 }
