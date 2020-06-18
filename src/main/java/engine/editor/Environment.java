@@ -8,6 +8,7 @@ import engine.listeners.MouseButtons;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +29,7 @@ public class Environment implements Entity {
                 fw.write(format("[%d]%n", e.hashCode()));
                 fw.write(format("Pos=%d,%d%n", e.getPos().x, e.getPos().y));
                 fw.write(format("Image=%s%n", e.getSpritePath()));
-                fw.write(format("Scale=%s%n%n", e.getScale()));
+                fw.write(format("Scale=%s%n", e.getScale()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,34 +53,34 @@ public class Environment implements Entity {
      */
     public void loadEnv(String path) throws InvalidPropertiesFormatException {
         entityList.clear();
-        String content = "";
+        String[] content = new String[0];
         try (FileReader fr = new FileReader(path)) {
             int c;
             StringBuilder temp = new StringBuilder();
             while ((c = fr.read()) != -1) {
                 temp.append((char) c);
             }
-            content = temp.toString();
+            content = temp.toString().replaceAll("\r", "").split("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (content.isBlank()) return;
+        if (content.length == 0) return;
+
         int id = 0;
         int x = 0;
         int y = 0;
         double scale = 0;
         String spritePath = "";
-        for (String line : content.split(String.format("%n"))) {
+        for (String line : content) {
             if (line.startsWith("[")) {
+                if (id != 0)
+                    entityList.put(id, new Sprite(x, y, scale, spritePath, Game.getScene("EditScene")));
                 id = Integer.parseInt(line.replaceAll("[\\[\\]]", " ").trim());
-                continue;
-            } else if (line.isBlank()) {
-                entityList.put(id, new Sprite(x, y, scale, spritePath, Game.getScene("EditScene")));
-                continue;
             }
 
-            String key = line.split("=")[0];
-            String value = line.split("=")[1];
+            if (!line.contains("=")) continue;
+            String key = line.split("=")[0].trim();
+            String value = line.split("=")[1].trim();
             switch (key) {
                 case "Pos":
                     x = Integer.parseInt(value.split(",")[0]);
@@ -92,7 +93,8 @@ public class Environment implements Entity {
                     scale = Double.parseDouble(value);
                     break;
                 default:
-                    throw new InvalidPropertiesFormatException("environment file is invalid");
+                    throw new InvalidPropertiesFormatException("invalid value in line " +
+                            (Arrays.asList(content).indexOf(line) + 1));
             }
         }
 
