@@ -11,8 +11,8 @@ import engine.mechanics.TextBox;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.InvalidPropertiesFormatException;
 
 import static engine.rendering.Graphics.g;
 
@@ -36,37 +36,17 @@ public class EditScene extends Scene {
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
         addObject(scaleBox);
         addObject(env);
-
-        addObject(new Button(1150, 500, 80, 40, MouseButtons.LEFT_DOWN, e -> {
-            File f = new File("src/main/resources");
-            String url = f.getAbsolutePath();
-            chooser.setCurrentDirectory(new File(url));
-            chooser.setFileFilter(new FileNameExtensionFilter("Environments", "ini"));
-
-            int returnValue = chooser.showSaveDialog(display.getCanvas());
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String path = chooser.getSelectedFile().getPath();
-                if (!path.matches(".*\\.ini")) path += ".ini";
-                env.saveEnv(path);
-            }
-        }));
-        addObject(new Button(1150, 600, 80, 40, MouseButtons.LEFT_DOWN, e -> {
-            File f = new File("src/main/resources");
-            String url = f.getAbsolutePath();
-            chooser.setCurrentDirectory(new File(url));
-            chooser.setFileFilter(new FileNameExtensionFilter("Environments", "ini"));
-
-            int returnValue = chooser.showOpenDialog(display.getCanvas());
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String path = chooser.getSelectedFile().getPath();
-                if (!path.matches(".*\\.ini")) path += ".ini";
-                try {
-                    env.loadEnv(path);
-                } catch (InvalidPropertiesFormatException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }));
+        addObject(new Button(1130, 500, 100, 40)
+                        .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
+                        .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
+//                .addEvent(MouseButtons.MIDDLE_DOWN, this::mouseHandler) // TODO why tf does this break the button?
+                        .setColor(Color.cyan)
+                        .setText("[L]oad/Save[R]")
+                        .setHoverColor(Color.cyan.darker())
+                        .setTextColor(Color.red)
+                        .setFontSize(15)
+                        .setFont("JhengHei UI")
+        );
 
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             Point p = grid.toGrid(mouseListener.getMousePos());
@@ -76,6 +56,26 @@ public class EditScene extends Scene {
                         scale, selection.importPath, this));
         }, false);
 
+    }
+
+    private void mouseHandler(MouseEvent e) {
+        File f = new File("src/main/resources");
+        String url = f.getAbsolutePath();
+        chooser.setCurrentDirectory(new File(url));
+        chooser.setFileFilter(new FileNameExtensionFilter("Environments", "ini"));
+        int returnValue;
+        if (e.getButton() == MouseEvent.BUTTON1) returnValue = chooser.showOpenDialog(display.getCanvas());
+        else if (e.getButton() == MouseEvent.BUTTON3) returnValue = chooser.showSaveDialog(display.getCanvas());
+        else {
+            env.reload();
+            return;
+        }
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            String path = chooser.getSelectedFile().getPath();
+            if (!path.matches(".*\\.ini")) path += ".ini";
+            if (e.getButton() == MouseEvent.BUTTON1) env.loadEnv(path);
+            else env.saveEnv(path);
+        }
     }
 
     @Override

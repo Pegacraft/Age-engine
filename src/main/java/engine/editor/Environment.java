@@ -17,6 +17,7 @@ import static java.lang.String.format;
 
 public class Environment implements Entity {
     private final Map<Integer, Sprite> entityList = new ConcurrentHashMap<>();
+    private String path;
 
     /**
      * save the environment to a given path
@@ -24,6 +25,7 @@ public class Environment implements Entity {
      * @param path the path to save to
      */
     public void saveEnv(String path) {
+        this.path = path;
         try (FileWriter fw = new FileWriter(path)) {
             for (Sprite e : entityList.values()) {
                 fw.write(format("[%d]%n", e.hashCode()));
@@ -51,7 +53,8 @@ public class Environment implements Entity {
      * @param path the path pointing to said file
      * @throws InvalidPropertiesFormatException probably an invalid ini file when this is thrown
      */
-    public void loadEnv(String path) throws InvalidPropertiesFormatException {
+    public void loadEnv(String path) {
+        this.path = path;
         entityList.clear();
         String[] content = new String[0];
         try (FileReader fr = new FileReader(path)) {
@@ -93,11 +96,9 @@ public class Environment implements Entity {
                     scale = Double.parseDouble(value);
                     break;
                 default:
-                    throw new InvalidPropertiesFormatException("invalid value in line " +
-                            (Arrays.asList(content).indexOf(line) + 1));
+                    System.out.println("invalid value in line " + (Arrays.asList(content).indexOf(line) + 1));
             }
         }
-
     }
 
     @Override
@@ -128,5 +129,9 @@ public class Environment implements Entity {
      */
     public Sprite getSprite(int id) {
         return entityList.get(id);
+    }
+
+    public void reload() {
+        loadEnv(path);
     }
 }
