@@ -36,17 +36,17 @@ public class EditScene extends Scene {
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
         addObject(scaleBox);
         addObject(env);
-        addObject(new Button(1130, 500, 100, 40)
-                        .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
-                        .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
-//                .addEvent(MouseButtons.MIDDLE_DOWN, this::mouseHandler) // TODO why tf does this break the button?
-                        .setColor(Color.cyan)
-                        .setText("[L]oad/Save[R]")
-                        .setHoverColor(Color.cyan.darker())
-                        .setTextColor(Color.red)
-                        .setFontSize(15)
-                        .setFont("JhengHei UI")
-        );
+        Button b = new Button(1130, 500, 100, 40)
+                .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
+                .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
+                .addEvent(MouseButtons.MIDDLE_DOWN, this::mouseHandler)
+                .setColor(Color.cyan)
+                .setText("[L]oad/Save[R]")
+                .setHoverColor(Color.cyan.darker())
+                .setTextColor(Color.red)
+                .setFontSize(15)
+                .setFont("JhengHei UI");
+        addObject(b);
 
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             Point p = grid.toGrid(mouseListener.getMousePos());

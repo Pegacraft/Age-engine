@@ -30,6 +30,8 @@ public class Mouse implements MouseListener {
 
     public Mouse(Display display) {
         this.display = display;
+        MouseButtons[] values = MouseButtons.values();
+        for (MouseButtons b : values) onMouseEvent.putIfAbsent(b, new CopyOnWriteArrayList<>());
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -99,7 +101,6 @@ public class Mouse implements MouseListener {
      * @see MouseButtons
      */
     public void addEvent(MouseButtons button, Predicate<MouseEvent> function) {
-        onMouseEvent.computeIfAbsent(button, k -> new CopyOnWriteArrayList<>());
         onMouseEvent.get(button).add(function);
     }
 

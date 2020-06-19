@@ -41,19 +41,6 @@ public class Button implements Entity {
         updateFont();
     }
 
-    public Button addEvent(MouseButtons trigger, Consumer<MouseEvent> onClick) {
-        mouseListener.deleteEvent(trigger, events.get(trigger));
-        events.put(trigger, e -> {
-            if (h.isInside(mouseListener.getMousePos())) {
-                onClick.accept(e);
-                return true;
-            }
-            return false;
-        });
-        mouseListener.addEvent(trigger, events.get(trigger));
-        return this;
-    }
-
     @Override
     public void init() {
         //
@@ -111,6 +98,19 @@ public class Button implements Entity {
     public Button setTextColor(Color color) {
         this.textColor = color;
         updateFont();
+        return this;
+    }
+
+    public Button addEvent(MouseButtons trigger, Consumer<MouseEvent> onClick) {
+        mouseListener.deleteEvent(trigger, events.get(trigger));
+        events.put(trigger, e -> {
+            if (h.isInside(mouseListener.getMousePos())) {
+                onClick.accept(e);
+                return true;
+            }
+            return false;
+        });
+        mouseListener.addEvent(trigger, events.get(trigger));
         return this;
     }
 

@@ -128,7 +128,8 @@ public class Display {
         Game.getScene(alias).mouseListener = this.mouseListener;
         try {
             Game.getScenes().values().forEach(Scene::init);
-        } catch (NullPointerException ignored) { //
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         this.attachedScene = alias;
         return this;

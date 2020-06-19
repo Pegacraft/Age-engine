@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,7 +50,6 @@ public class Environment implements Entity {
      * load an environment.ini file using it's path
      *
      * @param path the path pointing to said file
-     * @throws InvalidPropertiesFormatException probably an invalid ini file when this is thrown
      */
     public void loadEnv(String path) {
         this.path = path;
@@ -132,6 +130,7 @@ public class Environment implements Entity {
     }
 
     public void reload() {
-        loadEnv(path);
+        if (path != null)
+            loadEnv(path);
     }
 }
