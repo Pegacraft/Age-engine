@@ -18,11 +18,10 @@ import java.io.File;
 import static engine.rendering.Graphics.g;
 
 public class EditScene extends Scene {
-
+    Grid grid;
     private Hitbox workArea;
     private TextBox scaleBox;
     private JFileChooser chooser;
-    public Grid grid;
     private Environment env;
     private double scale;
     private Tile selection;
@@ -36,7 +35,6 @@ public class EditScene extends Scene {
         env = new Environment();
         scale = 1;
 
-
         Button b = new Button(1130, 500, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
@@ -48,15 +46,14 @@ public class EditScene extends Scene {
                 .setFontSize(15)
                 .setFont("JhengHei UI");
         Button settings = new Button(1130, 600, 100, 40)
-                .addEvent(MouseButtons.LEFT_DOWN, e -> {
-                    display.attachScene("Settings");
-                })
+                .addEvent(MouseButtons.LEFT_DOWN, e -> display.attachScene("Settings"))
                 .setColor(Color.GREEN)
                 .setText("Settings")
                 .setFont("JHengHei UI");
         grid.show(Color.DARK_GRAY);
-        grid.setWidth(((SettingsScene) (Game.getScene("Settings"))).gridWidth);
-        grid.setHeight(((SettingsScene) (Game.getScene("Settings"))).gridHeight);
+        SettingsScene scene = (SettingsScene) (Game.getScene("Settings"));
+        grid.setWidth(scene.gridWidth);
+        grid.setHeight(scene.gridHeight);
         addObject(grid);
         for (int i = 0; i < 10; i++)
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));

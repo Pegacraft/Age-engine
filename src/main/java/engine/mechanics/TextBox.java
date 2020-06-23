@@ -18,13 +18,16 @@ public class TextBox implements Entity {
     private int y;
     private int width;
     private int height;
-    private boolean clicked = false;
+    private boolean selected = false;
     private Color fontColor = Color.BLACK;
     private Color borderColor = Color.BLACK;
     private String textType = "JhengHei UI";
     private int fontSize = 12;
     private int maxValue = 10;
-    private boolean intOnly = false;
+    private int caretPos;
+    private int counter;
+    private boolean matching;
+    private String matcher = ".*";
 
     /**
      * This is a text box. Use it to create an input field.
@@ -48,49 +51,59 @@ public class TextBox implements Entity {
     public void init() {
         textField = scene.display.getTextField();
         scene.mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
-            if (h.isInside(scene.mouseListener.getMousePos())) {
-                clicked = h.isInside(scene.mouseListener.getMousePos());
-                scene.display.getTextField().setText(displayText.replace("|", ""));
-            } else {
-                clicked = false;
-                displayText = displayText.replace("|", "");
+            selected = h.isInside(scene.mouseListener.getMousePos());
+            if (selected) {
+                textField.setText(displayText);
+                caretPos = 0;
+                textField.select(0, 0);
             }
-        }, false);
+            return selected;
+        });
     }
 
     public void logicLoop() {
-        if (intOnly) {
-            try {
-                Integer.parseInt(displayText);
-            } catch (NumberFormatException e) {
-                displayText = displayText.replaceAll("[^0-9]", "");
-                scene.display.getTextField().setText(displayText);
-            }
-        }
+        matching = displayText.matches(matcher);
+        if (counter++ >= 30) counter = 0;
     }
 
     public void renderLoop() {
-        if (clicked) {
+        if (selected) {
             textField.requestFocus();
-            int caretPos = textField.getCaretPosition();
+            while (!textField.isFocusOwner()) Thread.yield();
             displayText = textField.getText();
             if (displayText.length() > maxValue) {
-                textField.setText(displayText.substring(0, maxValue));
-                textField.setCaretPosition(maxValue);
+                displayText = displayText.substring(0, maxValue);
+                textField.setText(displayText);
+                textField.setCaretPosition(caretPos + 1);
             }
-            try {
-                displayText = displayText.substring(0, caretPos) + "|" + displayText.substring(caretPos);
-            } catch (StringIndexOutOfBoundsException ignore) { //
-            }
+            caretPos = textField.getCaretPosition();
         }
+        String text1 = displayText.substring(0, caretPos);
+        String text2 = displayText.substring(caretPos);
         g.setFont(font);
-        int fontWidth = g.getFontMetrics().stringWidth(displayText);
+        int width1 = g.getFontMetrics().stringWidth(text1);
+        int width2 = g.getFontMetrics().stringWidth(text2);
         int fontHeight = g.getFontMetrics().getHeight();
 
-        int drawStrX = (int) (x + width / 2.0 - fontWidth / 2.0);
+        int drawStrX = (int) (x + width / 2.0 - (width1 + width2) / 2.0);
         int drawStrY = (int) (y + height / 2.0 + fontHeight / 4.0);
-        g.setColor(fontColor);
-        g.drawString(displayText, drawStrX, drawStrY);
+        if (!textField.getSelectedText().equals("") && selected) {
+            g.setColor(Color.cyan);
+            String before = displayText.substring(0, textField.getSelectionStart());
+            int beforeWidth = g.getFontMetrics().stringWidth(before);
+            int selectedWidth = g.getFontMetrics().stringWidth(textField.getSelectedText());
+            g.fillRect(
+                    drawStrX + beforeWidth, drawStrY,
+                    selectedWidth, -fontHeight);
+        }
+        if (matching) {
+            if (selected) g.setColor(fontColor);
+            else g.setColor(fontColor.brighter());
+        } else g.setColor(Color.red);
+        g.drawString(text1, drawStrX, drawStrY);
+        if (selected && counter < 15)
+            g.drawLine(drawStrX + width1, drawStrY, drawStrX + width1, drawStrY - fontHeight);
+        g.drawString(text2, drawStrX + width1, drawStrY);
         g.setColor(borderColor);
         g.draw(h.getShape());
     }
@@ -141,7 +154,7 @@ public class TextBox implements Entity {
     }
 
     public String getText() {
-        return displayText.replace("|", "");
+        return displayText;
     }
 
     public TextBox setText(String text) {
@@ -150,8 +163,8 @@ public class TextBox implements Entity {
         return this;
     }
 
-    public TextBox setIntOnly(boolean intOnly) {
-        this.intOnly = intOnly;
+    public TextBox setMatcher(String regex) {
+        this.matcher = regex;
         return this;
     }
 }

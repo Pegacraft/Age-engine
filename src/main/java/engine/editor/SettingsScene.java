@@ -10,20 +10,21 @@ import java.awt.*;
 import static engine.rendering.Graphics.g;
 
 public class SettingsScene extends Scene {
-    public int gridWidth = 90;
-    public int gridHeight = 90;
+    int gridWidth = 90;
+    int gridHeight = 90;
+
     @Override
     public void init() {
-        TextBox GridWidthBox = new TextBox(90, 87, 100, 20, this)
-                .setIntOnly(true)
+        TextBox gridWidthBox = new TextBox(90, 87, 100, 20, this)
+                .setMatcher("[0-9]*")
                 .setText(String.valueOf(gridWidth));
-        TextBox GridHeightBox = new TextBox(90, 127, 100, 20, this)
-                .setIntOnly(true)
+        TextBox gridHeightBox = new TextBox(90, 127, 100, 20, this)
+                .setMatcher("[0-9]*")
                 .setText(String.valueOf(gridHeight));
         Button back = new Button(20, 20, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, e -> {
-                    gridWidth = Integer.parseInt(GridWidthBox.getText());
-                    gridHeight = Integer.parseInt(GridHeightBox.getText());
+                    gridWidth = Integer.parseInt(gridWidthBox.getText());
+                    gridHeight = Integer.parseInt(gridHeightBox.getText());
                     display.attachScene("EditScene");
                 })
                 .setColor(Color.GRAY)
@@ -32,8 +33,8 @@ public class SettingsScene extends Scene {
                 .setTextColor(Color.white);
 
         addObject(back);
-        addObject(GridWidthBox);
-        addObject(GridHeightBox);
+        addObject(gridWidthBox);
+        addObject(gridHeightBox);
     }
 
     @Override
@@ -43,7 +44,6 @@ public class SettingsScene extends Scene {
 
     @Override
     public void renderLoop() {
-
         g.drawString("Grid width:", 20, 100);
         g.drawString("Grid height:", 20, 140);
     }
