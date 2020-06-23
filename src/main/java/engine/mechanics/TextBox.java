@@ -13,7 +13,7 @@ public class TextBox implements Entity {
     private final Font font;
     private final Hitbox h;
     private TextField textField;
-    private String text = "";
+    private String displayText = "";
     private int x;
     private int y;
     private int width;
@@ -49,10 +49,10 @@ public class TextBox implements Entity {
         scene.mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             if (h.isInside(scene.mouseListener.getMousePos())) {
                 clicked = h.isInside(scene.mouseListener.getMousePos());
-                scene.display.getTextField().setText(text.replace("|", ""));
+                scene.display.getTextField().setText(displayText.replace("|", ""));
             } else {
                 clicked = false;
-                text = text.replace("|", "");
+                displayText = displayText.replace("|", "");
             }
         }, false);
     }
@@ -65,24 +65,24 @@ public class TextBox implements Entity {
         if (clicked) {
             textField.requestFocus();
             int caretPos = textField.getCaretPosition();
-            text = textField.getText();
-            if (text.length() > maxValue) {
-                textField.setText(text.substring(0, maxValue));
+            displayText = textField.getText();
+            if (displayText.length() > maxValue) {
+                textField.setText(displayText.substring(0, maxValue));
                 textField.setCaretPosition(maxValue);
             }
             try {
-                text = text.substring(0, caretPos) + "|" + text.substring(caretPos);
+                displayText = displayText.substring(0, caretPos) + "|" + displayText.substring(caretPos);
             } catch (StringIndexOutOfBoundsException ignore) { //
             }
         }
         g.setFont(font);
-        int fontWidth = g.getFontMetrics().stringWidth(text);
+        int fontWidth = g.getFontMetrics().stringWidth(displayText);
         int fontHeight = g.getFontMetrics().getHeight();
 
         int drawStrX = (int) (x + width / 2.0 - fontWidth / 2.0);
         int drawStrY = (int) (y + height / 2.0 + fontHeight / 4.0);
         g.setColor(fontColor);
-        g.drawString(text, drawStrX, drawStrY);
+        g.drawString(displayText, drawStrX, drawStrY);
         g.setColor(borderColor);
         g.draw(h.getShape());
     }
@@ -133,11 +133,11 @@ public class TextBox implements Entity {
     }
 
     public String getText() {
-        return text;
+        return displayText.replace("|", "");
     }
 
     public TextBox setText(String text) {
-        this.text = text;
+        this.displayText = text;
         scene.display.getTextField().setText(text);
         return this;
     }

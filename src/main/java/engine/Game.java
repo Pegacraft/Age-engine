@@ -1,6 +1,7 @@
 package engine;
 
 import engine.editor.EditScene;
+import engine.editor.SettingsScene;
 import engine.loops.Loop;
 
 import java.util.HashMap;
@@ -76,6 +77,7 @@ public class Game {
     public static void startEditor() {
         Display display = Game.display("editor");
         Game.addScene(new EditScene(), "EditScene");
+        Game.addScene(new SettingsScene(), "Settings");
         display.attachScene("EditScene");
         Game.start();
         Game.setFrameRate(60);

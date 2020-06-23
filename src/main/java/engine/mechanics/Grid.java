@@ -1,11 +1,14 @@
 package engine.mechanics;
 
+import engine.Entity;
+
 import java.awt.*;
 
 import static engine.rendering.Graphics.g;
 
-public class Grid {
-
+public class Grid implements Entity {
+    private boolean show = false;
+    private Color color;
     private int x;
     private int y;
     private int width;
@@ -20,6 +23,30 @@ public class Grid {
         this.height = height / row;
         this.row = row;
         this.column = column;
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void logicLoop() {
+
+    }
+
+    @Override
+    public void renderLoop() {
+        if (show) {
+            g.setColor(color);
+            g.drawRect(x, y, width * column, height * row);
+            for (int i = 0; i < column; i++) {
+                g.drawLine(x + width * i, y, x + width * i, y + height * row);
+            }
+            for (int i = 0; i < row; i++) {
+                g.drawLine(x, y + height * i, x + width * column, y + height * i);
+            }
+        }
     }
 
     /**
@@ -40,14 +67,15 @@ public class Grid {
      * @param color The color you want to show it in
      */
     public void show(Color color) {
-        g.setColor(color);
-        g.drawRect(x, y, width * column, height * row);
-        for (int i = 0; i < column; i++) {
-            g.drawLine(x + width * i, y, x + width * i, y + height * row);
-        }
-        for (int i = 0; i < row; i++) {
-            g.drawLine(x, y + height * i, x + width * column, y + height * i);
-        }
+        this.color = color;
+        show = true;
+    }
+
+    /**
+     * Use this method to hide the grid after showing it.
+     */
+    public void hide() {
+        show = false;
     }
 
     public void setX(int x) {
@@ -73,4 +101,5 @@ public class Grid {
     public void setColumn(int column) {
         this.column = column;
     }
+
 }

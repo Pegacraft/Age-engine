@@ -1,5 +1,6 @@
 package engine.editor;
 
+import engine.Game;
 import engine.Scene;
 import engine.editor.menu.Button;
 import engine.editor.menu.Sprite;
@@ -20,22 +21,14 @@ public class EditScene extends Scene {
 
     private final Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
     private final TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
-    private final TextBox gridWidth = new TextBox(1190, 460, 30, 20, this);
-    private final TextBox gridHeight = new TextBox(1190, 460, 30, 20, this);
-    private final TextBox gridRow = new TextBox(1190, 460, 30, 20, this);
-    private final TextBox gridColumn = new TextBox(1190, 460, 30, 20, this);
     private final JFileChooser chooser = new JFileChooser();
-    private final Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
+    public Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
     private final Environment env = new Environment();
     private double scale = 1;
     private Tile selection;
 
     @Override
     public void init() {
-        for (int i = 0; i < 10; i++)
-            addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
-        addObject(scaleBox);
-        addObject(env);
         Button b = new Button(1130, 500, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
@@ -46,7 +39,23 @@ public class EditScene extends Scene {
                 .setTextColor(Color.red)
                 .setFontSize(15)
                 .setFont("JhengHei UI");
+        Button settings = new Button(1130,600,100,40)
+                .addEvent(MouseButtons.LEFT_DOWN,e -> {
+                    display.attachScene("Settings");
+                })
+                .setColor(Color.GREEN)
+                .setText("Settings")
+                .setFont("JHengHei UI");
+        grid.show(Color.DARK_GRAY);
+        grid.setWidth(((SettingsScene) (Game.getScene("Settings"))).gridWidth);
+        grid.setHeight(((SettingsScene) (Game.getScene("Settings"))).gridHeight);
+        addObject(grid);
+        for (int i = 0; i < 10; i++)
+            addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
+        addObject(scaleBox);
+        addObject(env);
         addObject(b);
+        addObject(settings);
 
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             Point p = grid.toGrid(mouseListener.getMousePos());
@@ -93,7 +102,6 @@ public class EditScene extends Scene {
         g.setColor(Color.BLACK);
         g.drawString("Scale:", 1150, 475);
         g.draw(workArea.getShape());
-        grid.show(Color.DARK_GRAY);
     }
 
     public void setSelection(Tile selection) {

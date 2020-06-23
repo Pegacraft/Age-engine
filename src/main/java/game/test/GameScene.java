@@ -9,7 +9,7 @@ public class GameScene extends Scene {
     @Override
     public void init() {
         Player2 pl = new Player2();
-        this.addObject(new Button(200, 200, 200, 50));
+        //this.addObject(new Button(200, 200, 200, 50));
         this.addObject(pl);
     }
 
