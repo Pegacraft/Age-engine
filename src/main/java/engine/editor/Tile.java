@@ -48,6 +48,7 @@ public class Tile implements Entity {
                     if (getFileExtension(importPath).matches("png|jpe?g|gif"))
                         preview = Image.load(importPath);
                     else throw new IllegalArgumentException("this is not a valid image i believe");
+                    System.out.println(preview);
                 }
             }
         }, false);

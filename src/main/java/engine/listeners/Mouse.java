@@ -30,8 +30,12 @@ public class Mouse implements MouseListener {
 
     public Mouse(Display display) {
         this.display = display;
+        clear();
+    }
+
+    public void clear() {
         MouseButtons[] values = MouseButtons.values();
-        for (MouseButtons b : values) onMouseEvent.putIfAbsent(b, new CopyOnWriteArrayList<>());
+        for (MouseButtons b : values) onMouseEvent.put(b, new CopyOnWriteArrayList<>());
     }
 
     public void mouseClicked(MouseEvent e) {

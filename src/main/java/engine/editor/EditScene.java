@@ -19,16 +19,24 @@ import static engine.rendering.Graphics.g;
 
 public class EditScene extends Scene {
 
-    private final Hitbox workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
-    private final TextBox scaleBox = new TextBox(1190, 460, 30, 20, this);
-    private final JFileChooser chooser = new JFileChooser();
-    public Grid grid = new Grid(0, 0, 1100, 720, 10, 10);
-    private final Environment env = new Environment();
-    private double scale = 1;
+    private Hitbox workArea;
+    private TextBox scaleBox;
+    private JFileChooser chooser;
+    public Grid grid;
+    private Environment env;
+    private double scale;
     private Tile selection;
 
     @Override
     public void init() {
+        workArea = new Hitbox(new Point(0, 0), new Point(1100, 720));
+        scaleBox = new TextBox(1190, 460, 30, 20, this);
+        chooser = new JFileChooser();
+        grid = new Grid(0, 0, 1100, 720, 10, 10);
+        env = new Environment();
+        scale = 1;
+
+
         Button b = new Button(1130, 500, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
@@ -39,8 +47,8 @@ public class EditScene extends Scene {
                 .setTextColor(Color.red)
                 .setFontSize(15)
                 .setFont("JhengHei UI");
-        Button settings = new Button(1130,600,100,40)
-                .addEvent(MouseButtons.LEFT_DOWN,e -> {
+        Button settings = new Button(1130, 600, 100, 40)
+                .addEvent(MouseButtons.LEFT_DOWN, e -> {
                     display.attachScene("Settings");
                 })
                 .setColor(Color.GREEN)

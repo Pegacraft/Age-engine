@@ -126,7 +126,9 @@ public class Display {
         Game.getScene(alias).display = this;
         Game.getScene(alias).keyListener = this.keyListener;
         Game.getScene(alias).mouseListener = this.mouseListener;
+        this.mouseListener.clear();
         try {
+            Game.getScenes().get(alias).getObjectList().clear();
             Game.getScenes().get(alias).init();
         } catch (NullPointerException e) {
             e.printStackTrace();

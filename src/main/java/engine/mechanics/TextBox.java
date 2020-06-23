@@ -24,6 +24,7 @@ public class TextBox implements Entity {
     private String textType = "JhengHei UI";
     private int fontSize = 12;
     private int maxValue = 10;
+    private boolean intOnly = false;
 
     /**
      * This is a text box. Use it to create an input field.
@@ -58,7 +59,14 @@ public class TextBox implements Entity {
     }
 
     public void logicLoop() {
-        // textBoxes don't need logic loops
+        if (intOnly) {
+            try {
+                Integer.parseInt(displayText);
+            } catch (NumberFormatException e) {
+                displayText = displayText.replaceAll("[^0-9]", "");
+                scene.display.getTextField().setText(displayText);
+            }
+        }
     }
 
     public void renderLoop() {
@@ -139,6 +147,11 @@ public class TextBox implements Entity {
     public TextBox setText(String text) {
         this.displayText = text;
         scene.display.getTextField().setText(text);
+        return this;
+    }
+
+    public TextBox setIntOnly(boolean intOnly) {
+        this.intOnly = intOnly;
         return this;
     }
 }
