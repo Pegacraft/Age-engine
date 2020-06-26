@@ -23,7 +23,7 @@ public class TextBox implements Entity {
     private Color borderColor = Color.BLACK;
     private String textType = "JhengHei UI";
     private int fontSize = 12;
-    private int maxValue = 10;
+    private int maxValue = 100;
     private int caretPos;
     private int counter;
     private boolean matching;
@@ -55,9 +55,9 @@ public class TextBox implements Entity {
             if (selected) {
                 textField.setText(displayText);
                 caretPos = 0;
-                textField.select(0, 0);
+                textField.select(displayText.length(), displayText.length());
             }
-            return selected;
+            return false;
         });
     }
 
@@ -70,42 +70,41 @@ public class TextBox implements Entity {
         if (selected) {
             textField.requestFocus();
             while (!textField.isFocusOwner()) Thread.yield();
+            caretPos = textField.getCaretPosition();
             displayText = textField.getText();
             if (displayText.length() > maxValue) {
                 displayText = displayText.substring(0, maxValue);
                 textField.setText(displayText);
-                textField.setCaretPosition(caretPos + 1);
+                textField.setCaretPosition(displayText.length());
+                caretPos = textField.getCaretPosition();
             }
-            caretPos = textField.getCaretPosition();
         }
-        String text1 = displayText.substring(0, caretPos);
-        String text2 = displayText.substring(caretPos);
-        g.setFont(font);
-        int width1 = g.getFontMetrics().stringWidth(text1);
-        int width2 = g.getFontMetrics().stringWidth(text2);
-        int fontHeight = g.getFontMetrics().getHeight();
-
-        int drawStrX = (int) (x + width / 2.0 - (width1 + width2) / 2.0);
-        int drawStrY = (int) (y + height / 2.0 + fontHeight / 4.0);
-        if (!textField.getSelectedText().equals("") && selected) {
-            g.setColor(Color.cyan);
-            String before = displayText.substring(0, textField.getSelectionStart());
-            int beforeWidth = g.getFontMetrics().stringWidth(before);
-            int selectedWidth = g.getFontMetrics().stringWidth(textField.getSelectedText());
-            g.fillRect(
-                    drawStrX + beforeWidth, drawStrY,
-                    selectedWidth, -fontHeight);
+        try {
+            String text1 = displayText.substring(0, caretPos);
+            String text2 = displayText.substring(caretPos);
+            g.setFont(font);
+            int width1 = g.getFontMetrics().stringWidth(text1);
+            int width2 = g.getFontMetrics().stringWidth(text2);
+            int fontHeight = g.getFontMetrics().getHeight();
+            int drawStrX = (int) (x + width / 2.0 - (width1 + width2) / 2.0);
+            int drawStrY = (int) (y + height / 2.0 + fontHeight / 4.0);
+            if (selected) {
+                g.setColor(Color.cyan);
+                g.fillRect(drawStrX + g.getFontMetrics().stringWidth(displayText.substring(0, textField.getSelectionStart())), y,
+                        g.getFontMetrics().stringWidth(textField.getSelectedText()), height);
+            }
+            if (matching) {
+                if (selected) g.setColor(fontColor);
+                else g.setColor(fontColor.brighter());
+            } else g.setColor(Color.red);
+            g.drawString(text1, drawStrX, drawStrY);
+            if (selected && counter < 15)
+                g.drawLine(drawStrX + width1, drawStrY, drawStrX + width1, drawStrY - fontHeight);
+            g.drawString(text2, drawStrX + width1, drawStrY);
+            g.setColor(borderColor);
+            g.draw(h.getShape());
+        } catch (StringIndexOutOfBoundsException ignore) {
         }
-        if (matching) {
-            if (selected) g.setColor(fontColor);
-            else g.setColor(fontColor.brighter());
-        } else g.setColor(Color.red);
-        g.drawString(text1, drawStrX, drawStrY);
-        if (selected && counter < 15)
-            g.drawLine(drawStrX + width1, drawStrY, drawStrX + width1, drawStrY - fontHeight);
-        g.drawString(text2, drawStrX + width1, drawStrY);
-        g.setColor(borderColor);
-        g.draw(h.getShape());
     }
 
     public TextBox setX(int x) {

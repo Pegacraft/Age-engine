@@ -8,6 +8,8 @@ import engine.listeners.MouseButtons;
 import engine.mechanics.Grid;
 import engine.mechanics.Hitbox;
 import engine.mechanics.TextBox;
+import engine.mechanics.TickBox;
+import engine.rendering.Graphics;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,6 +37,7 @@ public class EditScene extends Scene {
         env = new Environment();
         scale = 1;
 
+        TickBox t = new TickBox(1190, 650, 30, 30, this);
         Button b = new Button(1130, 500, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
@@ -57,10 +60,11 @@ public class EditScene extends Scene {
         addObject(grid);
         for (int i = 0; i < 10; i++)
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
-        addObject(scaleBox);
         addObject(env);
+        addObject(scaleBox);
         addObject(b);
         addObject(settings);
+        addObject(t);
 
         mouseListener.addEvent(MouseButtons.LEFT_DOWN, e -> {
             Point p = grid.toGrid(mouseListener.getMousePos());
@@ -69,7 +73,6 @@ public class EditScene extends Scene {
                         p.x, p.y,
                         scale, selection.importPath, this));
         }, false);
-
     }
 
     private void mouseHandler(MouseEvent e) {
