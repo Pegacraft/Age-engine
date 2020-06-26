@@ -38,7 +38,7 @@ public class Environment implements Entity {
     }
 
     /**
-     * add a sprite to the environment, as an id, it's hashCode will be uesd
+     * add a sprite to the environment, as an id, it's hashCode will be used
      *
      * @param sprite the sprite to be added
      */

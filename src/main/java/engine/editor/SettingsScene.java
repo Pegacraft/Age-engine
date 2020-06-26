@@ -31,7 +31,6 @@ public class SettingsScene extends Scene {
                 .setFont("JhengHei UI")
                 .setText("Back")
                 .setTextColor(Color.white);
-
         addObject(back);
         addObject(gridWidthBox);
         addObject(gridHeightBox);

@@ -107,61 +107,120 @@ public class TextBox implements Entity {
         }
     }
 
+    /**
+     * Sets the x position of the text box.
+     *
+     * @param x The x position it should be set at.
+     */
     public TextBox setX(int x) {
         this.x = x;
         return this;
     }
 
+    /**
+     * Sets the y position of the text box.
+     *
+     * @param y The y position it should be set at.
+     */
     public TextBox setY(int y) {
         this.y = y;
         return this;
     }
 
+    /**
+     * Sets the width of the text box.
+     *
+     * @param width The width it should be set at.
+     */
     public TextBox setWidth(int width) {
         this.width = width;
         return this;
     }
 
+    /**
+     * Sets the height of the text box.
+     *
+     * @param height The height it should be set at.
+     */
     public TextBox setHeight(int height) {
         this.height = height;
         return this;
     }
 
+    /**
+     * Sets the color of the text in the box.
+     *
+     * @param fontColor The color it should be set to.
+     */
     public TextBox setFontColor(Color fontColor) {
         this.fontColor = fontColor;
         return this;
     }
 
+    /**
+     * Sets the border color of the text box.
+     *
+     * @param borderColor The color it should be set to.
+     */
     public TextBox setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
         return this;
     }
 
+    /**
+     * Sets the font you want the text to be shown in.
+     *
+     * @param textType The font you want to be set.
+     */
     public TextBox setTextType(String textType) {
         this.textType = textType;
         return this;
     }
 
+    /**
+     * Sets the size of the text.
+     *
+     * @param fontSize The size that should be used.
+     */
     public TextBox setFontSize(int fontSize) {
         this.fontSize = fontSize;
         return this;
     }
 
+    /**
+     * Sets the maximum characters in the text box.
+     *
+     * @param maxValue The maximum value that should be used.
+     */
     public TextBox setMaxValue(int maxValue) {
         this.maxValue = maxValue;
         return this;
     }
 
+    /**
+     * @return Returns the text in the text box.
+     */
     public String getText() {
         return displayText;
     }
 
+    /**
+     * Sets the text of the text box
+     *
+     * @param text The the text it should be set to.
+     */
     public TextBox setText(String text) {
         this.displayText = text;
         scene.display.getTextField().setText(text);
         return this;
     }
 
+    /**
+     * Applies an matcher to prohibit certain characters. If a text box contains illegal characters, the text
+     * will be highlighted in red.
+     *
+     * @param regex The regex that you want to apply.
+     */
     public TextBox setMatcher(String regex) {
         this.matcher = regex;
         return this;
