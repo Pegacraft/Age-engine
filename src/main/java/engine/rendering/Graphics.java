@@ -53,8 +53,8 @@ public class Graphics {
      * @param y The y offset
      */
     public static void moveCam(int x, int y) {
-        xOffset = -x + 640;
-        yOffset = -y + 360;
+        xOffset = x;
+        yOffset = -y;
     }
 
     /**

@@ -5,11 +5,9 @@ import engine.Scene;
 import engine.editor.menu.Button;
 import engine.editor.menu.Sprite;
 import engine.listeners.MouseButtons;
-import engine.mechanics.Grid;
-import engine.mechanics.Hitbox;
-import engine.mechanics.TextBox;
-import engine.mechanics.TickBox;
+import engine.mechanics.*;
 import engine.rendering.Graphics;
+import game.TestObject;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -36,7 +34,10 @@ public class EditScene extends Scene {
         grid = new Grid(0, 0, 1100, 720, 10, 10);
         env = new Environment();
         scale = 1;
-
+        MethodObject backPanel = new MethodObject(this).execRenderLoop(e -> {
+            g.setColor(Color.white);
+            g.fillRect(1100, 451, 1280, 720);
+        });
         TickBox t = new TickBox(1190, 650, 30, 30, this);
         Button b = new Button(1130, 500, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
@@ -61,6 +62,7 @@ public class EditScene extends Scene {
         for (int i = 0; i < 10; i++)
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
         addObject(env);
+        addObject(backPanel);
         addObject(scaleBox);
         addObject(b);
         addObject(settings);
