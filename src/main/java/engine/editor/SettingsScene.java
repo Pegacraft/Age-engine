@@ -17,9 +17,11 @@ public class SettingsScene extends Scene {
     public void init() {
         TextBox gridWidthBox = new TextBox(90, 87, 100, 20, this)
                 .setMatcher("[0-9]*")
+                .setMaxValue(4)
                 .setText(String.valueOf(gridWidth));
         TextBox gridHeightBox = new TextBox(90, 127, 100, 20, this)
                 .setMatcher("[0-9]*")
+                .setMaxValue(4)
                 .setText(String.valueOf(gridHeight));
         Button back = new Button(20, 20, 100, 40)
                 .addEvent(MouseButtons.LEFT_DOWN, e -> {

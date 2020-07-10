@@ -3,8 +3,10 @@ package engine.mechanics;
 import engine.Entity;
 import engine.Scene;
 import engine.listeners.MouseButtons;
+import engine.rendering.Image;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import static engine.rendering.Graphics.g;
 
@@ -16,6 +18,7 @@ public class TickBox implements Entity {
     private Hitbox clickArea;
     private final Scene scene;
     private boolean ticked = false;
+    private BufferedImage tickImage;
 
     /**
      * This is a simple tick box. It is used to get a true or false output from the user.
@@ -54,7 +57,11 @@ public class TickBox implements Entity {
     public void renderLoop() {
         if (ticked) {
             g.setColor(tickColor);
-            g.fillRect(x, y, width, height);
+            if (tickImage == null)
+                g.fillRect(x, y, width, height);
+            else {
+                g.drawImage(tickImage, x, y, width, height, null);
+            }
         }
         g.setColor(borderColor);
         g.drawRect(x, y, width, height);
@@ -127,6 +134,16 @@ public class TickBox implements Entity {
      */
     public TickBox setTickColor(Color color) {
         tickColor = color;
+        return this;
+    }
+
+    /**
+     * Sets the image of a tick, if not used, the box will be filled with the tick color.
+     *
+     * @param path The path of the image.
+     */
+    public TickBox setTickImage(String path) {
+        tickImage = Image.load(path);
         return this;
     }
 
