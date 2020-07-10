@@ -1,6 +1,7 @@
 package engine.mechanics;
 
 import engine.Entity;
+import engine.rendering.Image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -31,10 +32,19 @@ public class Bossbar implements Entity {
 
     @Override
     public void renderLoop() {
-        g.setColor(backgroundColor);
-        g.fillRect(x, y, width, height);
-        g.setColor(barColor);
-        g.fillRect(x, y, (int) (width * ((double) currentValue / (double) maxValue)), height);
+        if (backgroundImage == null) {
+            g.setColor(backgroundColor);
+            g.fillRect(x, y, width, height);
+            g.setColor(barColor);
+        } else {
+            g.drawImage(backgroundImage, x, y, width, height, null);
+        }
+        if (barImage == null)
+            g.fillRect(x, y, (int) (width * ((double) currentValue / (double) maxValue)), height);
+        else {
+            BufferedImage croped = barImage.getSubimage(0, 0, (int) (barImage.getWidth() * ((double) currentValue / (double) maxValue)), barImage.getHeight());
+            g.drawImage(croped, x, y, (int) (width * ((double) currentValue / (double) maxValue)), height, null);
+        }
     }
 
     public Bossbar setX(int x) {
@@ -75,6 +85,16 @@ public class Bossbar implements Entity {
 
     public Bossbar setBarColor(Color barColor) {
         this.barColor = barColor;
+        return this;
+    }
+
+    public Bossbar setBackgroundImage(String path) {
+        backgroundImage = Image.load(path);
+        return this;
+    }
+
+    public Bossbar setBarImage(String path) {
+        barImage = Image.load(path);
         return this;
     }
 }

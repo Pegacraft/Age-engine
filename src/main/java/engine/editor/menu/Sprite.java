@@ -22,6 +22,7 @@ public class Sprite implements Entity {
     private final String spritePath;
     private final double scale;
     public boolean delete = false;
+    private final Scene scene;
 
     /**
      * create a sprite at a given location using a position, a scale,a path to an image, and a scene to be bound to.
@@ -37,6 +38,7 @@ public class Sprite implements Entity {
         this.y = y;
         this.spritePath = spritePath;
         this.scale = scale;
+        this.scene = scene;
         BufferedImage sprite = Image.load(spritePath);
         spriteScaled = sprite.getScaledInstance((int) (sprite.getWidth() * scale),
                 (int) (sprite.getHeight() * scale), 3);
@@ -60,7 +62,9 @@ public class Sprite implements Entity {
 
     @Override
     public void logicLoop() {
-        // TBD
+        if (scene.mouseListener.isHeld(3))
+            if (h.isInside(scene.mouseListener.getMousePos()))
+                delete = true;
     }
 
     @Override

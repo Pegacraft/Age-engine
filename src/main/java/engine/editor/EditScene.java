@@ -6,8 +6,6 @@ import engine.editor.menu.Button;
 import engine.editor.menu.Sprite;
 import engine.listeners.MouseButtons;
 import engine.mechanics.*;
-import engine.rendering.Graphics;
-import game.TestObject;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -58,16 +56,10 @@ public class EditScene extends Scene {
         SettingsScene scene = (SettingsScene) (Game.getScene("Settings"));
         grid.setWidth(scene.gridWidth);
         grid.setHeight(scene.gridHeight);
+        addObject(env);
         addObject(grid);
         for (int i = 0; i < 10; i++)
             addObject(new Tile(1100 + (i / 5) * 90, (i % 5) * 90));
-
-        Bossbar test = new Bossbar(20, 20, 100, 30)
-                .setBarColor(Color.pink)
-                .setBackgroundColor(Color.red)
-                .setCurrentValue(34)
-                .setMaxValue(120);
-        addObject(test);
         addObject(env);
         addObject(backPanel);
         addObject(scaleBox);

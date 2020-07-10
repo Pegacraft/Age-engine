@@ -18,7 +18,13 @@ public abstract class Scene {
      * The display, where this scene is attached to.
      */
     public Display display;
+    /**
+     * The key listener, where this scene is attached to.
+     */
     public Keyboard keyListener;
+    /**
+     * The mouse listener, where this scene is attached to.
+     */
     public Mouse mouseListener;
 
     /**
