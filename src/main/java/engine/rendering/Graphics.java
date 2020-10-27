@@ -19,6 +19,8 @@ public class Graphics {
     public static Graphics2D g;
     private static int xOffset = 0;
     private static int yOffset = 0;
+    public static double stdWidth = 1280d;
+    public static double stdHeight = 720d;
 
     private Graphics() {
         throw new IllegalStateException("Utility class");
@@ -31,9 +33,9 @@ public class Graphics {
         Game.getDisplays().values().forEach(e -> {
             BufferStrategy bs = e.bs();
             g = (Graphics2D) bs.getDrawGraphics();
-            g.setColor(Color.white);
+            g.setColor(e.getCanvas().getBackground());
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
-            g.scale(e.getWidth() / 1280d, e.getHeight() / 720d);
+            g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
             Graphics.g.translate(xOffset, yOffset);
             Scene s = Game.getScene(e.getAttachedScene());
             if (s != null) {
@@ -53,12 +55,12 @@ public class Graphics {
      * @param y The y offset
      */
     public static void moveCam(int x, int y) {
-        xOffset = -x + 640;
-        yOffset = -y + 360;
+        xOffset = x;
+        yOffset = y;
     }
 
     /**
-     * @return Returns the current offset
+     * @return Returns the current camera position
      */
     public static Point getCamPos() {
         return new Point(xOffset, yOffset);

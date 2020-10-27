@@ -2,7 +2,7 @@ package engine.editor;
 
 import engine.Game;
 import engine.Scene;
-import engine.editor.menu.Button;
+import engine.mechanics.Button;
 import engine.editor.menu.Sprite;
 import engine.listeners.MouseButtons;
 import engine.mechanics.*;
@@ -37,7 +37,7 @@ public class EditScene extends Scene {
             g.fillRect(1100, 451, 1280, 720);
         });
         TickBox t = new TickBox(1190, 650, 30, 30, this);
-        Button b = new Button(1130, 500, 100, 40)
+        Button b = new Button(1130, 500, 100, 40, this)
                 .addEvent(MouseButtons.LEFT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.RIGHT_DOWN, this::mouseHandler)
                 .addEvent(MouseButtons.MIDDLE_DOWN, this::mouseHandler)
@@ -47,7 +47,7 @@ public class EditScene extends Scene {
                 .setTextColor(Color.red)
                 .setFontSize(15)
                 .setFont("JhengHei UI");
-        Button settings = new Button(1130, 600, 100, 40)
+        Button settings = new Button(1130, 600, 100, 40, this)
                 .addEvent(MouseButtons.LEFT_DOWN, e -> display.attachScene("Settings"))
                 .setColor(Color.GREEN)
                 .setText("Settings")

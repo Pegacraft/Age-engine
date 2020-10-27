@@ -31,7 +31,6 @@ public class Image {
             return image;
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
-            System.exit(1);
             return null;
         }
     }

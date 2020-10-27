@@ -1,7 +1,7 @@
 package engine.editor;
 
 import engine.Scene;
-import engine.editor.menu.Button;
+import engine.mechanics.Button;
 import engine.listeners.MouseButtons;
 import engine.mechanics.TextBox;
 
@@ -23,7 +23,7 @@ public class SettingsScene extends Scene {
                 .setMatcher("[0-9]*")
                 .setMaxValue(4)
                 .setText(String.valueOf(gridHeight));
-        Button back = new Button(20, 20, 100, 40)
+        Button back = new Button(20, 20, 100, 40, this)
                 .addEvent(MouseButtons.LEFT_DOWN, e -> {
                     gridWidth = Integer.parseInt(gridWidthBox.getText());
                     gridHeight = Integer.parseInt(gridHeightBox.getText());

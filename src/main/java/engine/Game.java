@@ -3,6 +3,7 @@ package engine;
 import engine.editor.EditScene;
 import engine.editor.SettingsScene;
 import engine.loops.Loop;
+import engine.rendering.Graphics;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Game {
     private static final Map<String, Display> displays = new HashMap<>();
     private static final Map<String, Scene> scenes = new HashMap<>();
     private static Loop loop;
+    private static int FPS = 60;
 
     private Game() {
         throw new IllegalStateException("Utility class");
@@ -26,6 +28,7 @@ public class Game {
     public static void start() {
         loop = new Loop();
         loop.start();
+        loop.setFrameRate(FPS);
     }
 
     /**
@@ -35,7 +38,9 @@ public class Game {
      * @param frameRate The frame rate you want.
      */
     public static void setFrameRate(int frameRate) {
-        loop.setFrameRate(frameRate);
+        FPS = frameRate;
+        if (loop != null)
+            loop.setFrameRate(frameRate);
     }
 
     /**

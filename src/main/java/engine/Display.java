@@ -2,6 +2,7 @@ package engine;
 
 import engine.listeners.Keyboard;
 import engine.listeners.Mouse;
+import engine.rendering.Graphics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,6 +107,33 @@ public class Display {
     }
 
     /**
+     * makes the window resizable
+     */
+    public Display makeResizable(boolean b){
+        frame.setResizable(b);
+        return this;
+    }
+
+    /**
+     * Sets the width of the window
+     * @param width The value you want the width to be set to
+     */
+    public Display setWidth(int width){
+        this.width = width;
+        frame.setSize(this.width, this.height);
+        return this;
+    }
+    /**
+     * Sets the height of the window
+     * @param height The value you want the height to be set to
+     */
+    public Display setHeight(int height){
+        this.height = height;
+        frame.setSize(this.width, this.height);
+        return this;
+    }
+
+    /**
      * set the window's title to a given string
      *
      * @param name the name to set the title to
@@ -158,14 +186,14 @@ public class Display {
      * @return Returns the screen width.
      */
     public int getWidth() {
-        return canvas.getWidth();
+        return width;
     }
 
     /**
      * @return Returns the screen height.
      */
     public int getHeight() {
-        return canvas.getHeight();
+        return height;
     }
 
     /**

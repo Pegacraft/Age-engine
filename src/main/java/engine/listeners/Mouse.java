@@ -144,10 +144,10 @@ public class Mouse implements MouseListener {
     }
 
     private double scaledX(int x) {
-        return (x / ((double) (display.getWidth()) / 1280));
+        return (x / ((double) (display.getWidth()) / Graphics.stdWidth));
     }
 
     private double scaledY(int y) {
-        return (y / ((double) (display.getHeight()) / 720));
+        return (y / ((double) (display.getHeight()) / Graphics.stdHeight));
     }
 }
