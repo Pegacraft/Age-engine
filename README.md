@@ -2,13 +2,13 @@
 Welcome to the read-me of the Age-engine
 
 ## Features:
-### Window handling
+### [Window](https://github.com/Pegacraft/Age-engine/wiki/Display-class) handling
 The ability to create windows without the need to do all of the JFrame stuff.
 
-### Scene handling
+### [Scene](https://github.com/Pegacraft/Age-engine/wiki/Scene-class) handling
 The ability to split your program into different scenes. For a better project structure and performance.
 
-### Entity handling
+### [Entity](https://github.com/Pegacraft/Age-engine/wiki/Entity-interface) handling
 Ability to create objects that ar looped and rendered by the engine.
 
 ### Simple UI components
@@ -20,8 +20,8 @@ The whole engine is based on one canvas component on the window. becourse you ca
 - Bossbars
 
 ### Simpler key and mouse listener
-The ability to interact with the keyboard and the mouse without the need of the complicated build in listeners in java.
+The ability to interact with the [keyboard](https://github.com/Pegacraft/Age-engine/wiki/Keyboard-listener) and the [mouse](https://github.com/Pegacraft/Age-engine/wiki/Mouse-listener) without the need of the complicated build in listeners in java.
 
 ### Hit detection
-Simple hitboxes to check if objects colide or if a point is inside another. 
+Simple [hitboxes](https://github.com/Pegacraft/Age-engine/wiki/Hitbox-class) to check if objects colide or if a point is inside another. 
 
