@@ -119,7 +119,7 @@ public class Mouse implements MouseListener {
     }
 
     /**
-     * Use this method to check if the mouse is inside a windows
+     * Use this method to check if the mouse is inside a window
      */
     public boolean isMouseInside() {
         return isMouseInside;

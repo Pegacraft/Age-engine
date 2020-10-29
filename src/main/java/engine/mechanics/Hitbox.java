@@ -87,12 +87,42 @@ public class Hitbox {
      * rotate the hitbox by a given angle
      *
      * @param angle the angle to rotate by in radians
+     * @param centerX the x-point you want to rotate around
+     * @param centerY the y-point you want to rotate around
      */
-    public void rotate(double angle) {
+    public void rotate(double angle, int centerX, int centerY) {
         if (original == null)
             original = new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
         shape = new Polygon();
-        AffineTransform transform = AffineTransform.getRotateInstance(angle);
+        AffineTransform transform = AffineTransform.getRotateInstance(angle, centerX, centerY);
+        for (int i = 0; i < original.npoints; i++) {
+            Point2D p = transform.transform(new Point(original.xpoints[i], original.ypoints[i]), null);
+            shape.addPoint((int) p.getX(), (int) p.getY());
+        }
+    }
+
+    /**
+     * rotate the hitbox by a given angle
+     *
+     * @param angle the angle to rotate by in radians
+     */
+    public void rotate(double angle) {
+        int centerX = 0;
+        int centerY = 0;
+        if (original == null)
+            original = new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
+        shape = new Polygon();
+
+        for (int i = 0; i < original.xpoints.length; i++) {
+            centerX += original.xpoints[i];
+        }
+        for (int i = 0; i < original.ypoints.length; i++) {
+            centerY += original.ypoints[i];
+        }
+        centerX /= original.xpoints.length;
+        centerY /= original.ypoints.length;
+
+        AffineTransform transform = AffineTransform.getRotateInstance(angle, centerX, centerY);
         for (int i = 0; i < original.npoints; i++) {
             Point2D p = transform.transform(new Point(original.xpoints[i], original.ypoints[i]), null);
             shape.addPoint((int) p.getX(), (int) p.getY());

@@ -160,4 +160,6 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
+# Test files
+Test.*
 # End of https://www.gitignore.io/api/java,gradle,windows,jetbrains
