@@ -12,7 +12,7 @@ The ability to split your program into different scenes. For a better project st
 Ability to create objects that ar looped and rendered by the engine.
 
 ### Simple UI components
-The whole engine is based on one canvas component on the window. becourse you cant use the normal swing components, we added new simple UI comonents like:
+The whole engine is based on one canvas component on the window. because you cant use the normal swing components, we added new simple UI comonents like:
 
 - Buttons
 - TextBoxes
