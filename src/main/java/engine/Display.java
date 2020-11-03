@@ -186,14 +186,14 @@ public class Display {
      * @return Returns the screen width.
      */
     public int getWidth() {
-        return width;
+        return frame.getWidth();
     }
 
     /**
      * @return Returns the screen height.
      */
     public int getHeight() {
-        return height;
+        return frame.getHeight();
     }
 
     /**

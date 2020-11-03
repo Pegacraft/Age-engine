@@ -43,7 +43,7 @@ public class Button implements Entity {
 
     @Override
     public void init() {
-        //
+        
     }
 
     @Override

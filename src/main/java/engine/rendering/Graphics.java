@@ -21,6 +21,9 @@ public class Graphics {
     private static int yOffset = 0;
     public static double stdWidth = 1280d;
     public static double stdHeight = 720d;
+    private static int dHeight = (int) stdHeight;
+    private static int dWidth = (int) stdHeight;
+
 
     private Graphics() {
         throw new IllegalStateException("Utility class");
@@ -31,6 +34,8 @@ public class Graphics {
      */
     public static void graphicsLoop() {
         Game.getDisplays().values().forEach(e -> {
+            dHeight = e.getHeight();
+            dWidth = e.getWidth();
             BufferStrategy bs = e.bs();
             g = (Graphics2D) bs.getDrawGraphics();
             g.setColor(e.getCanvas().getBackground());
@@ -57,6 +62,13 @@ public class Graphics {
     public static void moveCam(int x, int y) {
         xOffset = x;
         yOffset = y;
+    }
+
+    /**
+     * @return returns the exact center of the screen as a <code>Point</code>.
+     */
+    public static Point screenCenter(){
+        return new Point((int) Math.round(stdWidth / 2), (int) Math.round(stdHeight / 2));
     }
 
     /**
