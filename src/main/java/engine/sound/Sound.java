@@ -36,6 +36,7 @@ public class Sound {
      * Plays the imported sound.
      */
     public void playSound() {
+        stopSound();
         clip.start();
     }
 
