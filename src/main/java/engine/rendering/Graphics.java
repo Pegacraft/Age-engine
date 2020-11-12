@@ -25,6 +25,7 @@ public class Graphics {
     private static int dWidth = (int) stdHeight;
 
 
+
     private Graphics() {
         throw new IllegalStateException("Utility class");
     }
@@ -38,6 +39,9 @@ public class Graphics {
             dWidth = e.getWidth();
             BufferStrategy bs = e.bs();
             g = (Graphics2D) bs.getDrawGraphics();
+            g.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g.setColor(e.getCanvas().getBackground());
             g.fillRect(0, 0, e.getWidth(), e.getHeight());
             g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
