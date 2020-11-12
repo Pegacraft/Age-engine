@@ -58,7 +58,7 @@ public class Slider implements Entity {
 
     @Override
     public void renderLoop() {
-        barColor = new Color(Color.DARK_GRAY.getRed(), Color.DARK_GRAY.getGreen(), Color.DARK_GRAY.getBlue(), barAlpha);
+        barColor = new Color(barColor.getRed(), barColor.getGreen(), barColor.getBlue(), barAlpha);
         g.setColor(barColor);
         g.fillRect(x, y, barLength, barThickness);
         g.setColor(sliderColor);
