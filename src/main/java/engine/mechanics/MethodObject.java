@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * This Object is used to execute a method at a certain position in the object list of a class.
  */
-public class MethodObject implements Entity {
+public class MethodObject extends Entity {
     Consumer<Scene> renderMethod;
     Consumer<Scene> logicMethod;
     Scene scene;

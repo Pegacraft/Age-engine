@@ -6,7 +6,7 @@ import java.awt.*;
 
 import static engine.rendering.Graphics.g;
 
-public class Grid implements Entity {
+public class Grid extends Entity {
     private boolean show = false;
     private Color color;
     private int x;

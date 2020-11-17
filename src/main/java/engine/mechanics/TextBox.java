@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static engine.rendering.Graphics.g;
 
-public class TextBox implements Entity {
+public class TextBox extends Entity {
     private final Scene scene;
     private final Font font;
     private final Hitbox h;

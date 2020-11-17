@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 import static engine.rendering.Graphics.g;
 
-public class TickBox implements Entity {
+public class TickBox extends Entity {
 
     private int x, y, width, height;
     private Color borderColor = Color.black;

@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 
 import static engine.rendering.Graphics.g;
 
-public class Button implements Entity {
+public class Button extends Entity {
     private final Mouse mouseListener;
     private final Hitbox h;
     private final Map<MouseButtons, Predicate<MouseEvent>> events = new EnumMap<>(MouseButtons.class);

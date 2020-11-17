@@ -8,7 +8,7 @@ import static engine.rendering.Graphics.g;
 
 import java.awt.*;
 
-public class Slider implements Entity {
+public class Slider extends Entity {
 
     private Color sliderColor = Color.LIGHT_GRAY;
     private int barAlpha = 255;

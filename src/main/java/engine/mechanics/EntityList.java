@@ -4,7 +4,7 @@ import engine.Entity;
 
 import java.util.ArrayList;
 
-public class EntityList implements Entity {
+public class EntityList extends Entity {
 
     ArrayList<Entity> entityList = new ArrayList<>();
 

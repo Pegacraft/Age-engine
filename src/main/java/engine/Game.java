@@ -100,6 +100,14 @@ public class Game {
     }
 
     /**
+     *
+     * @return Returns the time it took, to show the last frame.
+     */
+    public static double deltaTime() {
+        return (double) Loop.frameTime / 1000000;
+    }
+
+    /**
      * get the sceneMap (don't use unless you know what you're doing)
      *
      * @return the scenes map
