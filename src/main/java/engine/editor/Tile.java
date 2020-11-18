@@ -14,7 +14,7 @@ import java.io.File;
 
 import static engine.rendering.Graphics.g;
 
-public class Tile implements Entity {
+public class Tile extends Entity {
     private static final int WIDTH = 90;
     private static final int HEIGHT = 90;
     private final int x;

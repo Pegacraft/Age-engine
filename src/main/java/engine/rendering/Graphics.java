@@ -25,7 +25,6 @@ public class Graphics {
     private static int dWidth = (int) stdHeight;
 
 
-
     private Graphics() {
         throw new IllegalStateException("Utility class");
     }
@@ -48,7 +47,17 @@ public class Graphics {
             Graphics.g.translate(xOffset, yOffset);
             Scene s = Game.getScene(e.getAttachedScene());
             if (s != null) {
-                s.getObjectList().forEach(Entity::renderLoop);
+                for (Entity entity : s.getObjectList()) {
+                    if (entity.rotatePos == null) {
+                        g.rotate(entity.rotation, entity.x, entity.y);
+                        entity.renderLoop();
+                        g.rotate(-entity.rotation, entity.x, entity.y);
+                    } else {
+                        g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                        entity.renderLoop();
+                        g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                    }
+                }
                 s.renderLoop();
             } else throw new IllegalStateException("no state defined for that display");
             Animation.animationLoop();
@@ -71,7 +80,7 @@ public class Graphics {
     /**
      * @return returns the exact center of the screen as a <code>Point</code>.
      */
-    public static Point screenCenter(){
+    public static Point screenCenter() {
         return new Point((int) Math.round(stdWidth / 2), (int) Math.round(stdHeight / 2));
     }
 

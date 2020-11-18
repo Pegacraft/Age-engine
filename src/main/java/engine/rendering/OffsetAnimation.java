@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import static engine.rendering.Graphics.g;
 
-public class OffsetAnimation implements Entity {
+public class OffsetAnimation extends Entity {
 
     int x, y;
     BufferedImage[] images;

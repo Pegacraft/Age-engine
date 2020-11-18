@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.String.format;
 
-public class Environment implements Entity {
+public class Environment extends Entity {
     private final Map<Integer, Sprite> entityList = new ConcurrentHashMap<>();
     private String path;
 
@@ -83,18 +83,13 @@ public class Environment implements Entity {
             String key = line.split("=")[0].trim();
             String value = line.split("=")[1].trim();
             switch (key) {
-                case "Pos":
+                case "Pos" -> {
                     x = Integer.parseInt(value.split(",")[0]);
                     y = Integer.parseInt(value.split(",")[1]);
-                    break;
-                case "Image":
-                    spritePath = value;
-                    break;
-                case "Scale":
-                    scale = Double.parseDouble(value);
-                    break;
-                default:
-                    System.out.println("invalid value in line " + (Arrays.asList(content).indexOf(line) + 1));
+                }
+                case "Image" -> spritePath = value;
+                case "Scale" -> scale = Double.parseDouble(value);
+                default -> System.out.println("invalid value in line " + (Arrays.asList(content).indexOf(line) + 1));
             }
         }
     }

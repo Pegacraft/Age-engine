@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 import static engine.rendering.Graphics.g;
 
-public class Sprite implements Entity {
+public class Sprite extends Entity {
     public final Predicate<MouseEvent> onClickEvent;
     private final int x;
     private final int y;
