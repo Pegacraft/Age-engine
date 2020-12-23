@@ -62,6 +62,23 @@ public class Grid extends Entity {
     }
 
     /**
+     * Use this method to add an object to a certain position of the grid
+     * @param x The row you want the x-variable for.
+     * @return The x position the object has to be according to the grid
+     */
+    public int assignXToGrid(int x){
+        return this.x + (height * x);
+    }
+    /**
+     * Use this method to add an object to a certain position of the grid
+     * @param y The row you want the y-variable for.
+     * @return The y position the object has to be according to the grid
+     */
+    public int assignYToGrid(int y){
+        return this.y + (width * y);
+    }
+
+    /**
      * Use this method to show the grid on screen
      *
      * @param color The color you want to show it in

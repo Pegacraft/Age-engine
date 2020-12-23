@@ -1,7 +1,6 @@
 package engine;
 
 import java.awt.*;
-import java.security.interfaces.RSAMultiPrimePrivateCrtKey;
 
 public abstract class Entity {
     public int x = 0, y = 0;
@@ -41,6 +40,8 @@ public abstract class Entity {
      * @param speed The speed you want it to be moved. (I recommend using values over 3 because with lower values, the result would be greatly impacted)
      */
     public void moveTo(Point p, int speed) {
+        if (rotatePos == null)
+            rotatePos = new Point(x, y);
         float len = (float) Math.sqrt(Math.pow(rotatePos.x - p.x, 2) + Math.pow(rotatePos.y - p.y, 2));
         if (speed < len) {
             double angle = Math.atan2(p.y - (double) rotatePos.y, p.x - (double) rotatePos.x);
