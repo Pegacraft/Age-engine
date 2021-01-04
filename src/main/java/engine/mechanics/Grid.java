@@ -9,8 +9,6 @@ import static engine.rendering.Graphics.g;
 public class Grid extends Entity {
     private boolean show = false;
     private Color color;
-    private int x;
-    private int y;
     private int width;
     private int height;
     private int row;

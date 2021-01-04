@@ -12,7 +12,7 @@ import static engine.rendering.Graphics.g;
 
 public class TickBox extends Entity {
 
-    private int x, y, width, height;
+    private int width, height;
     private Color borderColor = Color.black;
     private Color tickColor = Color.green;
     private Hitbox clickArea;
@@ -55,6 +55,7 @@ public class TickBox extends Entity {
 
     @Override
     public void renderLoop() {
+        clickArea.move(x, y);
         if (ticked) {
             g.setColor(tickColor);
             if (tickImage == null)

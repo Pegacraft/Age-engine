@@ -77,6 +77,8 @@ public class Graphics {
         yOffset = y;
     }
 
+
+
     /**
      * @return returns the exact center of the screen as a <code>Point</code>.
      */

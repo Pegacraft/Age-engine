@@ -14,8 +14,6 @@ public class TextBox extends Entity {
     private final Hitbox h;
     private TextField textField;
     private String displayText = "";
-    private int x;
-    private int y;
     private int width;
     private int height;
     private boolean selected = false;
@@ -67,6 +65,7 @@ public class TextBox extends Entity {
     }
 
     public void renderLoop() {
+        h.move(x, y);
         if (selected) {
             textField.requestFocus();
             while (!textField.isFocusOwner()) Thread.yield();
@@ -114,6 +113,7 @@ public class TextBox extends Entity {
      */
     public TextBox setX(int x) {
         this.x = x;
+        h.move(x, y);
         return this;
     }
 
@@ -124,6 +124,7 @@ public class TextBox extends Entity {
      */
     public TextBox setY(int y) {
         this.y = y;
+        h.move(x, y);
         return this;
     }
 

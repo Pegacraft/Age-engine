@@ -56,7 +56,7 @@ public abstract class Scene {
     /**
      * @param obj The object to be added.
      */
-    protected void addObject(Entity obj) {
+    public void addObject(Entity obj) {
         if (obj == null)
             throw new NullPointerException("The object can not be null");
         obj.init();

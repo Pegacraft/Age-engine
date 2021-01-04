@@ -22,6 +22,11 @@ public abstract class Entity {
      */
     public abstract void renderLoop();
 
+    public void move(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     /**
      * Use this method to make an entity face an point via rotating it around the set rotationPosition.
      *

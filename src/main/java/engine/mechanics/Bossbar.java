@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import static engine.rendering.Graphics.g;
 
 public class Bossbar extends Entity {
-    private int x, y, width, height, maxValue = 100, currentValue = 50;
+    private int width, height, maxValue = 100, currentValue = 50;
     private BufferedImage backgroundImage, barImage, overlayImage;
     private Color backgroundColor = Color.GRAY, barColor = Color.green;
 

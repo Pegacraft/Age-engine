@@ -18,8 +18,6 @@ public class Button extends Entity {
     private final Mouse mouseListener;
     private final Hitbox h;
     private final Map<MouseButtons, Predicate<MouseEvent>> events = new EnumMap<>(MouseButtons.class);
-    private final int x;
-    private final int y;
     private final int width;
     private final int height;
     private boolean inside;
@@ -43,7 +41,7 @@ public class Button extends Entity {
 
     @Override
     public void init() {
-        
+
     }
 
     @Override
@@ -53,6 +51,7 @@ public class Button extends Entity {
 
     @Override
     public void renderLoop() {
+        h.move(x, y);
         if (inside) g.setColor(hoverColor);
         else g.setColor(color);
         g.fill(h.getShape());
