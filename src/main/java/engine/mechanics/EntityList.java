@@ -12,8 +12,6 @@ public class EntityList extends Entity {
      * This is an entity list. It can be used like a <code>ArrayList</code>. The advantage is, that you can add it to
      * the entity list of a scene.
      */
-    public EntityList() {
-    }
 
     @Override
     public void init() {

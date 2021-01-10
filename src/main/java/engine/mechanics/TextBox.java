@@ -14,8 +14,6 @@ public class TextBox extends Entity {
     private final Hitbox h;
     private TextField textField;
     private String displayText = "";
-    private int width;
-    private int height;
     private boolean selected = false;
     private Color fontColor = Color.BLACK;
     private Color borderColor = Color.BLACK;

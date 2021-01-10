@@ -18,8 +18,6 @@ public class Button extends Entity {
     private final Mouse mouseListener;
     private final Hitbox h;
     private final Map<MouseButtons, Predicate<MouseEvent>> events = new EnumMap<>(MouseButtons.class);
-    private final int width;
-    private final int height;
     private boolean inside;
     private Color color = Color.black;
     private Color hoverColor = Color.darkGray;

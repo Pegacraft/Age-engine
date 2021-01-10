@@ -19,7 +19,6 @@ public class Slider extends Entity {
     private int sliderHeight = 20;
     private double sliderPosition = 0;
     private boolean slide = false;
-
     private int sliderX;
     private int sliderY;
     private final Mouse mouseListener;

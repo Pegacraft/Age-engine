@@ -4,6 +4,7 @@ import java.awt.*;
 
 public abstract class Entity {
     public int x = 0, y = 0;
+    public int width = 0, height = 0;
     public double rotation = 0;
     public Point rotatePos;
 

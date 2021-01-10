@@ -12,7 +12,6 @@ import static engine.rendering.Graphics.g;
 
 public class TickBox extends Entity {
 
-    private int width, height;
     private Color borderColor = Color.black;
     private Color tickColor = Color.green;
     private Hitbox clickArea;
