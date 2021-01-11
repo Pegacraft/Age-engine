@@ -6,6 +6,7 @@ import engine.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ConcurrentModificationException;
 
 /**
  * This is the <code>Graphics</code> class. It is used for everything that has to do with graphics.
@@ -47,16 +48,32 @@ public class Graphics {
             Graphics.g.translate(xOffset, yOffset);
             Scene s = Game.getScene(e.getAttachedScene());
             if (s != null) {
-                for (Entity entity : s.getObjectList()) {
-                    if (entity.rotatePos == null) {
-                        g.rotate(entity.rotation, entity.x, entity.y);
-                        entity.renderLoop();
-                        g.rotate(-entity.rotation, entity.x, entity.y);
-                    } else {
-                        g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
-                        entity.renderLoop();
-                        g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                try {
+                    for (Entity entity : s.getObjectList()) {
+                        if (entity.rotatePos == null) {
+                            g.rotate(entity.rotation, entity.x, entity.y);
+                            entity.renderLoop();
+                            g.rotate(-entity.rotation, entity.x, entity.y);
+                        } else {
+                            g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                            entity.renderLoop();
+                            g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                        }
+
+                        for (Entity entity1 : entity.getObjectList()){
+                            if (entity1.rotatePos == null) {
+                                g.rotate(entity1.rotation, entity1.x, entity1.y);
+                                entity1.renderLoop();
+                                g.rotate(-entity1.rotation, entity1.x, entity1.y);
+                            } else {
+                                g.rotate(entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
+                                entity1.renderLoop();
+                                g.rotate(-entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
+                            }
+                        }
                     }
+                } catch (ConcurrentModificationException ignore) {
+                    System.out.println(ignore);
                 }
                 s.renderLoop();
             } else throw new IllegalStateException("no state defined for that display");
@@ -76,7 +93,6 @@ public class Graphics {
         xOffset = x;
         yOffset = y;
     }
-
 
 
     /**

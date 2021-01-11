@@ -25,10 +25,12 @@ public class Button extends Entity {
     private Font font;
     private Color textColor = Color.black;
     private int fontSize = 13;
-    private String fontFace = "Comic Sans MS";
+    private String fontFace = "JhengHei UI";
+    public Scene scene;
 
     public Button(int x, int y, int width, int height, Scene scene) {
         this.mouseListener = scene.mouseListener;
+        this.scene = scene;
         this.x = x;
         this.y = y;
         this.width = width;

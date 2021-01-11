@@ -3,7 +3,10 @@ package engine.loops;
 import engine.Entity;
 import engine.Game;
 import engine.Scene;
+import engine.mechanics.EntityList;
 import engine.rendering.Graphics;
+
+import java.util.ConcurrentModificationException;
 
 /**
  * This is a engine internal function. It shall not be used.
@@ -40,8 +43,15 @@ public class Loop implements Runnable {
         Game.getDisplays().values().forEach(e -> {
             Scene s = Game.getScene(e.getAttachedScene());
             if (s != null) {
-                s.logicLoop();
-                s.getObjectList().forEach(Entity::logicLoop);
+                try {
+                    s.logicLoop();
+                    s.getObjectList().forEach(Entity::logicLoop);
+                    s.getObjectList().forEach(entity -> {
+                        entity.getObjectList().forEach(Entity::logicLoop);
+                    });
+                } catch (ConcurrentModificationException ignore) {
+                    System.out.println(ignore);
+                }
             } else throw new IllegalStateException("no state defined for that display");
             e.mouseListener.mouseLoop(e);
         });

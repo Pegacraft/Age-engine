@@ -68,6 +68,14 @@ public abstract class Scene {
      */
     protected void removeObject(Entity obj) {
         objectList.remove(obj);
+        obj.getObjectList().clear();
+    }
+
+    protected void removeAll() {
+        objectList.forEach(e -> {
+            e.getObjectList().clear();
+        });
+        objectList.clear();
     }
 
     /**
@@ -76,5 +84,12 @@ public abstract class Scene {
      */
     protected Entity getObject(int index) {
         return objectList.get(index);
+    }
+
+    protected void replaceObject(Entity obj, Entity newObj) {
+        if (obj == null || newObj == null)
+            throw new NullPointerException("The object can not be null");
+        newObj.init();
+        objectList.set(objectList.indexOf(obj), newObj);
     }
 }

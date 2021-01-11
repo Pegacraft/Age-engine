@@ -1,12 +1,17 @@
 package engine;
 
+import engine.mechanics.EntityList;
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Entity {
     public int x = 0, y = 0;
     public int width = 0, height = 0;
     public double rotation = 0;
     public Point rotatePos;
+    public List<Entity> objectList = new ArrayList<>();
 
     /**
      * This Method will be called once on creation of the object
@@ -26,6 +31,49 @@ public abstract class Entity {
     public void move(int x, int y){
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * @return Returns the Object list of an scene. Its not recommended to use, because there are simpler ways
+     * e. g. the <code>scene.addObject</code> method, or the <code>scene.getObject</code> method.
+     * @see Scene#addObject(Entity)
+     * @see Scene#removeObject(Entity)
+     * @see Scene#getObject(int)
+     */
+    public List<Entity> getObjectList() {
+        return objectList;
+    }
+
+    /**
+     * @param obj The object to be added.
+     */
+    public void addObject(Entity obj) {
+        if (obj == null)
+            throw new NullPointerException("The object can not be null");
+        obj.init();
+        objectList.add(obj);
+    }
+
+    /**
+     * @param obj The object to be removed
+     */
+    protected void removeObject(Entity obj) {
+        objectList.remove(obj);
+    }
+
+    /**
+     * @param index The position in the ObjectList
+     * @return The wanted object
+     */
+    protected Entity getObject(int index) {
+        return objectList.get(index);
+    }
+
+    protected void replaceObject(Entity obj, Entity newObj){
+        if (obj == null || newObj == null)
+            throw new NullPointerException("The object can not be null");
+        newObj.init();
+        objectList.set(objectList.indexOf(obj), newObj);
     }
 
     /**
