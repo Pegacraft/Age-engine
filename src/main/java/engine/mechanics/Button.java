@@ -16,7 +16,7 @@ import static engine.rendering.Graphics.g;
 
 public class Button extends Entity {
     private final Mouse mouseListener;
-    private final Hitbox h;
+    private Hitbox h;
     private final Map<MouseButtons, Predicate<MouseEvent>> events = new EnumMap<>(MouseButtons.class);
     private boolean inside;
     private Color color = Color.black;
@@ -41,6 +41,7 @@ public class Button extends Entity {
 
     @Override
     public void init() {
+        h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
 
     }
 
@@ -111,6 +112,10 @@ public class Button extends Entity {
         });
         mouseListener.addEvent(trigger, events.get(trigger));
         return this;
+    }
+
+    public void deleteEvent(MouseButtons trigger){
+        mouseListener.deleteEvent(trigger, events.get(trigger));
     }
 
     private void updateFont() {

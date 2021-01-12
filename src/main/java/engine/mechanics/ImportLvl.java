@@ -1,7 +1,9 @@
 package engine.mechanics;
 
 import engine.Entity;
+import engine.Scene;
 
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,9 +12,11 @@ import java.util.Scanner;
 public class ImportLvl {
     static String type, className, x, y, width, height, params;
     static Entity entity;
+    static Scene scene;
     static EntityList entityList = new EntityList();
 
-    public static EntityList importLvl(String path) {
+    public static EntityList importLvl(String path, Scene scene) {
+        ImportLvl.scene = scene;
         Scanner reader = null;
         try {
             File f = new File((ImportLvl.class.getResource(path)).getPath());
@@ -65,6 +69,29 @@ public class ImportLvl {
     }
 
     static private void typeTextBox() {
+        String borderColor, textType, fontSize, maxValue, setText, setMatcher;
+        TextBox textBox = new TextBox(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
 
+        //get values for customisation
+        borderColor = params.split(",")[0];
+        textType = params.split(",")[1];
+        fontSize = params.split(",")[2];
+        maxValue = params.split(",")[3];
+        setText = params.split(",")[4];
+        setMatcher = params.split(",")[5];
+        if (!borderColor.matches("NONE"))
+            textBox.setBorderColor(new Color(Integer.parseInt(borderColor.replace("#", ""), 16)));
+        if (!textType.matches("NONE"))
+            textBox.setTextType(textType);
+        if (!fontSize.matches("NONE"))
+            textBox.setFontSize(Integer.parseInt(fontSize));
+        if (!maxValue.matches("NONE"))
+            textBox.setMaxValue(Integer.parseInt(maxValue));
+        if (!setText.matches("NONE"))
+            textBox.setText(setText);
+        if (!setMatcher.matches("NONE"))
+            textBox.setMatcher(setMatcher);
+
+        entityList.add(textBox);
     }
 }
