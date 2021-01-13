@@ -38,6 +38,8 @@ public class ImportLvl {
                     typeTextBox();
                 if (type.matches("BUTTON"))
                     typeButton();
+                if (type.matches("TICKBOX"))
+                    typeTickBox();
 
             }
         } catch (FileNotFoundException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -122,5 +124,27 @@ public class ImportLvl {
             button.setTextColor(new Color(Integer.parseInt(textColor.replace("#", ""), 16)));
 
         entityList.add(button);
+    }
+
+    static private void typeTickBox() {
+        String borderColor, tickColor, tickImage, isTicked;
+        TickBox tickBox = new TickBox(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
+
+        //get values for customisation
+        borderColor = params.split(",")[0];
+        tickColor = params.split(",")[1];
+        tickImage = params.split(",")[2];
+        isTicked = params.split(",")[3];
+
+        if (!borderColor.matches("NONE"))
+            tickBox.setBorderColor(new Color(Integer.parseInt(borderColor.replace("#", ""), 16)));
+        if (!tickColor.matches("NONE"))
+            tickBox.setTickColor(new Color(Integer.parseInt(tickColor.replace("#", ""), 16)));
+        if (!tickImage.matches("NONE"))
+            tickBox.setTickImage(tickImage);
+        if (!isTicked.matches("NONE"))
+            tickBox.setTicked(isTicked.matches("true"));
+
+        entityList.add(tickBox);
     }
 }
