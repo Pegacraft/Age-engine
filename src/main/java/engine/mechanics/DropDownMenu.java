@@ -24,10 +24,18 @@ public class DropDownMenu extends Entity {
         menuButton.addEvent(MouseButtons.LEFT_DOWN, e -> {
             isOpen = !isOpen;
 
-            if (isOpen)
+            if (isOpen) {
+                for (int i = 0; i < size(); i++) {
+                    ((Button)dropDown.get(i)).isEventEnabled = true;
+                }
                 scene.addObject(dropDown);
-            else
+            }
+            else {
+                for (int i = 0; i < size(); i++) {
+                    ((Button)dropDown.get(i)).isEventEnabled = false;
+                }
                 scene.getObjectList().remove(dropDown);
+            }
         });
 
         //add objects
@@ -91,8 +99,23 @@ public class DropDownMenu extends Entity {
         return this;
     }
 
+    public void deleteEvent(int index, MouseButtons event) {
+        ((Button) dropDown.get(index)).deleteEvent(event);
+    }
+
+    public void deleteEvent(Button btn, MouseButtons event) {
+        ((Button) dropDown.get(btn)).deleteEvent(event);
+    }
+
+    public int size() {
+        return dropDown.getEntityList().size();
+    }
+
     public void closeMenu() {
         if (isOpen) {
+            for (int i = 0; i < size(); i++) {
+                ((Button)dropDown.get(i)).isEventEnabled = false;
+            }
             scene.getObjectList().remove(dropDown);
             isOpen = false;
         }
@@ -100,6 +123,9 @@ public class DropDownMenu extends Entity {
 
     public void openMenu() {
         if (!isOpen) {
+            for (int i = 0; i < size(); i++) {
+                ((Button)dropDown.get(i)).isEventEnabled = true;
+            }
             scene.addObject(dropDown);
             isOpen = true;
         }

@@ -27,6 +27,7 @@ public class Button extends Entity {
     private int fontSize = 13;
     private String fontFace = "JhengHei UI";
     public Scene scene;
+    public  boolean isEventEnabled = true;
 
     public Button(int x, int y, int width, int height, Scene scene) {
         this.mouseListener = scene.mouseListener;
@@ -104,7 +105,7 @@ public class Button extends Entity {
     public Button addEvent(MouseButtons trigger, Consumer<MouseEvent> onClick) {
         mouseListener.deleteEvent(trigger, events.get(trigger));
         events.put(trigger, e -> {
-            if (h.isInside(mouseListener.getMousePos())) {
+            if (h.isInside(mouseListener.getMousePos()) && isEventEnabled) {
                 onClick.accept(e);
                 return true;
             }
