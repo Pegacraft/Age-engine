@@ -2,6 +2,7 @@ package engine;
 
 import engine.listeners.Keyboard;
 import engine.listeners.Mouse;
+import engine.mechanics.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,8 @@ public abstract class Scene {
     public void addObject(Entity obj) {
         if (obj == null)
             throw new NullPointerException("The object can not be null");
+        if (obj.getClass() == Button.class)
+            ((Button)obj).isEventEnabled = true;
         obj.init();
         objectList.add(obj);
     }
@@ -67,12 +70,20 @@ public abstract class Scene {
      * @param obj The object to be removed
      */
     protected void removeObject(Entity obj) {
+        if (obj.getClass() == Button.class)
+            ((Button)obj).isEventEnabled = false;
         objectList.remove(obj);
         obj.getObjectList().clear();
     }
 
     protected void removeAll() {
         objectList.forEach(e -> {
+            e.getObjectList().forEach(o -> {
+                if (o.getClass() == Button.class)
+                    ((Button)o).isEventEnabled = false;
+            });
+            if (e.getClass() == Button.class)
+                ((Button)e).isEventEnabled = false;
             e.getObjectList().clear();
         });
         objectList.clear();

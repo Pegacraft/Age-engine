@@ -1,5 +1,6 @@
 package engine;
 
+import engine.mechanics.Button;
 import engine.mechanics.EntityList;
 import engine.rendering.Graphics;
 
@@ -56,6 +57,8 @@ public abstract class Entity {
     public void addObject(Entity obj) {
         if (obj == null)
             throw new NullPointerException("The object can not be null");
+        if (obj.getClass() == Button.class)
+            ((Button)obj).isEventEnabled = true;
         obj.init();
         objectList.add(obj);
     }
@@ -64,6 +67,8 @@ public abstract class Entity {
      * @param obj The object to be removed
      */
     protected void removeObject(Entity obj) {
+        if (obj.getClass() == engine.mechanics.Button.class)
+            ((Button)obj).isEventEnabled = false;
         objectList.remove(obj);
     }
 
