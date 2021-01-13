@@ -36,6 +36,8 @@ public class ImportLvl {
                     typeCustom();
                 if (type.matches("TEXTBOX"))
                     typeTextBox();
+                if (type.matches("BUTTON"))
+                    typeButton();
 
             }
         } catch (FileNotFoundException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -93,5 +95,32 @@ public class ImportLvl {
             textBox.setMatcher(setMatcher);
 
         entityList.add(textBox);
+    }
+
+    static private void typeButton() {
+        String color, hoverColor, text, font, fontSize, textColor;
+        Button button = new Button(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
+
+        //get values for customisation
+        color = params.split(",")[0];
+        hoverColor = params.split(",")[1];
+        text = params.split(",")[2];
+        font = params.split(",")[3];
+        fontSize = params.split(",")[4];
+        textColor = params.split(",")[5];
+        if (!color.matches("NONE"))
+            button.setColor(new Color(Integer.parseInt(color.replace("#", ""), 16)));
+        if (!hoverColor.matches("NONE"))
+            button.setHoverColor(new Color(Integer.parseInt(hoverColor.replace("#", ""), 16)));
+        if (!text.matches("NONE"))
+            button.setText(text);
+        if (!font.matches("NONE"))
+            button.setFont(font);
+        if (!fontSize.matches("NONE"))
+            button.setFontSize(Integer.parseInt(fontSize));
+        if (!textColor.matches("NONE"))
+            button.setTextColor(new Color(Integer.parseInt(textColor.replace("#", ""), 16)));
+
+        entityList.add(button);
     }
 }

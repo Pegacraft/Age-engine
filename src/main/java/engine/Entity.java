@@ -1,6 +1,7 @@
 package engine;
 
 import engine.mechanics.EntityList;
+import engine.rendering.Graphics;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -31,6 +32,11 @@ public abstract class Entity {
     public void move(int x, int y){
         this.x = x;
         this.y = y;
+    }
+
+    public void anchorToCam(int offsetX, int offsetY){
+        x = offsetX + -Graphics.getCamPos().x;
+        y = offsetY + -Graphics.getCamPos().y;
     }
 
     /**

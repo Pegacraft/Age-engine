@@ -37,6 +37,14 @@ public class EntityList extends Entity {
         entityList.add(entity);
     }
 
+    public Entity get(int index) {
+        return entityList.get(index);
+    }
+
+    public Entity get(Entity e) {
+        return entityList.get(entityList.indexOf(e));
+    }
+
     /**
      * Removes an entity from the entity list.
      *
