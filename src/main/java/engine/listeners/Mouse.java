@@ -73,12 +73,15 @@ public class Mouse implements MouseListener {
      * Internal function. it shall not be used.
      */
     public void mouseLoop(Display display) {
-        x = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()
-                - display.getCanvas().getLocationOnScreen().getX());
-        y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
-                - display.getCanvas().getLocationOnScreen().getY());
-        x = (int) scaledX(x) - Graphics.getCamPos().x;
-        y = (int) scaledY(y) - Graphics.getCamPos().y;
+        try {
+            x = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()
+                    - display.getCanvas().getLocationOnScreen().getX());
+            y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
+                    - display.getCanvas().getLocationOnScreen().getY());
+            x = (int) scaledX(x) - Graphics.getCamPos().x;
+            y = (int) scaledY(y) - Graphics.getCamPos().y;
+        } catch (IllegalComponentStateException ignore) {
+        }
 
     }
 

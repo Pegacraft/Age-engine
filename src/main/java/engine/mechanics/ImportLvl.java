@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class ImportLvl {
     static String type, className, x, y, width, height, params;
+    static boolean isAnchored;
     static Entity entity;
     static Scene scene;
     static EntityList entityList = new EntityList();
@@ -19,11 +20,13 @@ public class ImportLvl {
         ImportLvl.scene = scene;
         Scanner reader = null;
         try {
-            File f = new File((ImportLvl.class.getResource(path)).getPath());
+            File f = new File((ImportLvl.class.getResource("/" + path)).getPath());
             reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
                 String input = reader.nextLine();
+                if (input.isEmpty())
+                    continue;
                 type = input.split("[~]")[0];
                 className = input.split("[~]")[1];
                 x = input.split("[~]")[2];
@@ -31,15 +34,14 @@ public class ImportLvl {
                 width = input.split("[~]")[4];
                 height = input.split("[~]")[5];
                 params = input.split("[~]")[6];
+                isAnchored = Boolean.parseBoolean(input.split("[~]")[7]);
 
-                if (type.matches("CUSTOM"))
-                    typeCustom();
-                if (type.matches("TEXTBOX"))
-                    typeTextBox();
-                if (type.matches("BUTTON"))
-                    typeButton();
-                if (type.matches("TICKBOX"))
-                    typeTickBox();
+                switch (type) {
+                    case "CUSTOM" -> typeCustom();
+                    case "TEXTBOX" -> typeTextBox();
+                    case "BUTTON" -> typeButton();
+                    case "TICKBOX" -> typeTickBox();
+                }
 
             }
         } catch (FileNotFoundException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -56,6 +58,10 @@ public class ImportLvl {
             entity = (Entity) con.newInstance(params);
             entity.x = Integer.parseInt(x);
             entity.y = Integer.parseInt(y);
+            if (isAnchored) {
+                entity.isAnchored(true);
+                entity.setAnchor(Integer.parseInt(x), Integer.parseInt(y));
+            }
             entity.width = Integer.parseInt(width);
             entity.height = Integer.parseInt(height);
 
@@ -65,6 +71,10 @@ public class ImportLvl {
             entity = (Entity) con.newInstance();
             entity.x = Integer.parseInt(x);
             entity.y = Integer.parseInt(y);
+            if (isAnchored) {
+                entity.isAnchored(true);
+                entity.setAnchor(Integer.parseInt(x), Integer.parseInt(y));
+            }
             entity.width = Integer.parseInt(width);
             entity.height = Integer.parseInt(height);
         }
@@ -75,6 +85,11 @@ public class ImportLvl {
     static private void typeTextBox() {
         String borderColor, textType, fontSize, maxValue, setText, setMatcher;
         TextBox textBox = new TextBox(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
+
+        if (isAnchored) {
+            textBox.isAnchored(true);
+            textBox.setAnchor(Integer.parseInt(x), Integer.parseInt(y));
+        }
 
         //get values for customisation
         borderColor = params.split(",")[0];
@@ -103,6 +118,10 @@ public class ImportLvl {
         String color, hoverColor, text, font, fontSize, textColor;
         Button button = new Button(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
 
+        if (isAnchored) {
+            button.isAnchored(true);
+            button.setAnchor(Integer.parseInt(x), Integer.parseInt(y));
+        }
         //get values for customisation
         color = params.split(",")[0];
         hoverColor = params.split(",")[1];
@@ -130,6 +149,10 @@ public class ImportLvl {
         String borderColor, tickColor, tickImage, isTicked;
         TickBox tickBox = new TickBox(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height), scene);
 
+        if (isAnchored) {
+            tickBox.isAnchored(true);
+            tickBox.setAnchor(Integer.parseInt(x), Integer.parseInt(y));
+        }
         //get values for customisation
         borderColor = params.split(",")[0];
         tickColor = params.split(",")[1];

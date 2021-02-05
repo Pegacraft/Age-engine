@@ -13,6 +13,8 @@ public abstract class Entity {
     public int width = 0, height = 0;
     public double rotation = 0;
     public Point rotatePos;
+    private boolean isAnchored = false;
+    private int offsetX = 0, offsetY = 0;
     public List<Entity> objectList = new ArrayList<>();
 
     /**
@@ -30,14 +32,41 @@ public abstract class Entity {
      */
     public abstract void renderLoop();
 
-    public void move(int x, int y){
+    public void move(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void anchorToCam(int offsetX, int offsetY){
-        x = offsetX + -Graphics.getCamPos().x;
-        y = offsetY + -Graphics.getCamPos().y;
+    public void anchorToCam() {
+        if (isAnchored) {
+            x = offsetX + -Graphics.getCamPos().x;
+            y = offsetY + -Graphics.getCamPos().y;
+        }
+    }
+
+    public Entity isAnchored(boolean b) {
+        isAnchored = b;
+        return this;
+    }
+
+    public boolean isAnchored(){
+        return isAnchored;
+    }
+
+    public Entity setAnchor(int offsetX, int offsetY){
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        return this;
+    }
+
+    public Entity setAnchorX(int offsetX){
+        this.offsetX = offsetX;
+        return this;
+    }
+
+    public Entity setAnchorY(int offsetY){
+        this.offsetY = offsetY;
+        return this;
     }
 
     /**
@@ -58,7 +87,7 @@ public abstract class Entity {
         if (obj == null)
             throw new NullPointerException("The object can not be null");
         if (obj.getClass() == Button.class)
-            ((Button)obj).isEventEnabled = true;
+            ((Button) obj).isEventEnabled = true;
         obj.init();
         objectList.add(obj);
     }
@@ -68,7 +97,7 @@ public abstract class Entity {
      */
     protected void removeObject(Entity obj) {
         if (obj.getClass() == engine.mechanics.Button.class)
-            ((Button)obj).isEventEnabled = false;
+            ((Button) obj).isEventEnabled = false;
         objectList.remove(obj);
     }
 
@@ -80,7 +109,7 @@ public abstract class Entity {
         return objectList.get(index);
     }
 
-    protected void replaceObject(Entity obj, Entity newObj){
+    protected void replaceObject(Entity obj, Entity newObj) {
         if (obj == null || newObj == null)
             throw new NullPointerException("The object can not be null");
         newObj.init();
@@ -101,7 +130,8 @@ public abstract class Entity {
 
     /**
      * Use this method to move the entity to a certain point. (Entity position is the rotate position)
-     * @param p The point you want the entity to be moved to.
+     *
+     * @param p     The point you want the entity to be moved to.
      * @param speed The speed you want it to be moved. (I recommend using values over 3 because with lower values, the result would be greatly impacted)
      */
     public void moveTo(Point p, int speed) {

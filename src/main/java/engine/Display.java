@@ -67,6 +67,8 @@ public class Display {
      */
     public Display setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
+        String backup = attachedScene;
+        attachedScene = null;
         frame.dispose();
         if (fullScreen) {
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -74,10 +76,12 @@ public class Display {
         } else {
             frame.setExtendedState(Frame.NORMAL);
             frame.setSize(width, height);
+            frame.setLocation(100, 100);
             frame.setUndecorated(false);
         }
 
         frame.setVisible(true);
+        this.attachScene(backup);
         return this;
     }
 
@@ -109,25 +113,28 @@ public class Display {
     /**
      * makes the window resizable
      */
-    public Display makeResizable(boolean b){
+    public Display makeResizable(boolean b) {
         frame.setResizable(b);
         return this;
     }
 
     /**
      * Sets the width of the window
+     *
      * @param width The value you want the width to be set to
      */
-    public Display setWidth(int width){
+    public Display setWidth(int width) {
         this.width = width;
         frame.setSize(this.width, this.height);
         return this;
     }
+
     /**
      * Sets the height of the window
+     *
      * @param height The value you want the height to be set to
      */
-    public Display setHeight(int height){
+    public Display setHeight(int height) {
         this.height = height;
         frame.setSize(this.width, this.height);
         return this;
@@ -180,6 +187,10 @@ public class Display {
             bs = canvas.getBufferStrategy();
         }
         return bs;
+    }
+
+    public boolean isFullScreen() {
+        return fullScreen;
     }
 
     /**

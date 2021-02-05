@@ -59,19 +59,28 @@ public class Grid extends Entity {
 
     /**
      * Use this method to add an object to a certain position of the grid
+     *
      * @param x The row you want the x-variable for.
      * @return The x position the object has to be according to the grid
      */
-    public int assignXToGrid(int x){
-        return this.x + (height * x);
+    public int assignXToGrid(int x) {
+        return this.x + (width * x);
     }
+
     /**
      * Use this method to add an object to a certain position of the grid
+     *
      * @param y The row you want the y-variable for.
      * @return The y position the object has to be according to the grid
      */
-    public int assignYToGrid(int y){
-        return this.y + (width * y);
+    public int assignYToGrid(int y) {
+        return this.y + (height * y);
+    }
+
+    public Point getFieldFromVar(Point p) {
+        double distToBorderX = p.x - x;
+        double distToBorderY = p.y - y;
+        return new Point((int) Math.ceil(distToBorderX / width) - 1, (int) Math.ceil(distToBorderY / height) - 1);
     }
 
     /**

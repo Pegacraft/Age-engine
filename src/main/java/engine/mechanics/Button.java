@@ -4,9 +4,11 @@ import engine.Entity;
 import engine.Scene;
 import engine.listeners.Mouse;
 import engine.listeners.MouseButtons;
+import engine.rendering.Image;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -27,7 +29,9 @@ public class Button extends Entity {
     private int fontSize = 13;
     private String fontFace = "JhengHei UI";
     public Scene scene;
-    public  boolean isEventEnabled = true;
+    public boolean isEventEnabled = true;
+    private BufferedImage stdImg = null;
+    private BufferedImage hoverImg = null;
 
     public Button(int x, int y, int width, int height, Scene scene) {
         this.mouseListener = scene.mouseListener;
@@ -54,9 +58,19 @@ public class Button extends Entity {
     @Override
     public void renderLoop() {
         h.move(x, y);
-        if (inside) g.setColor(hoverColor);
-        else g.setColor(color);
-        g.fill(h.getShape());
+        if (inside) {
+            if (hoverImg == null)
+                g.setColor(hoverColor);
+            else
+                g.drawImage(hoverImg, x, y, width, height, null);
+        } else {
+            if (stdImg == null)
+                g.setColor(color);
+            else
+                g.drawImage(stdImg, x, y, width, height, null);
+        }
+        if (stdImg == null || hoverImg == null)
+            g.fill(h.getShape());
         if (text != null) {
             g.setFont(font);
             int fontWidth = g.getFontMetrics().stringWidth(text);
@@ -90,6 +104,11 @@ public class Button extends Entity {
         return this;
     }
 
+    public Button setFont(Font font) {
+        this.font = font;
+        return this;
+    }
+
     public Button setFontSize(int size) {
         this.fontSize = size;
         updateFont();
@@ -99,6 +118,13 @@ public class Button extends Entity {
     public Button setTextColor(Color color) {
         this.textColor = color;
         updateFont();
+        return this;
+    }
+
+
+    public Button setImageDesign(BufferedImage stdImg, BufferedImage hoverImg) {
+        this.stdImg = stdImg;
+        this.hoverImg = hoverImg;
         return this;
     }
 
@@ -115,7 +141,7 @@ public class Button extends Entity {
         return this;
     }
 
-    public void deleteEvent(MouseButtons trigger){
+    public void deleteEvent(MouseButtons trigger) {
         mouseListener.deleteEvent(trigger, events.get(trigger));
     }
 

@@ -52,7 +52,7 @@ public class Loop implements Runnable {
                 } catch (ConcurrentModificationException ignore) {
                     System.out.println(ignore);
                 }
-            } else throw new IllegalStateException("no state defined for that display");
+            }
             e.mouseListener.mouseLoop(e);
         });
     }

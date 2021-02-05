@@ -25,6 +25,7 @@ public class EntityList extends Entity {
 
     @Override
     public void renderLoop() {
+        entityList.forEach(Entity::anchorToCam);
         entityList.forEach(Entity::renderLoop);
     }
 

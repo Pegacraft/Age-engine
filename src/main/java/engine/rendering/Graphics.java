@@ -38,48 +38,61 @@ public class Graphics {
             dHeight = e.getHeight();
             dWidth = e.getWidth();
             BufferStrategy bs = e.bs();
-            g = (Graphics2D) bs.getDrawGraphics();
-            g.setRenderingHint(
-                    RenderingHints.KEY_TEXT_ANTIALIASING,
-                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            g.setColor(e.getCanvas().getBackground());
-            g.fillRect(0, 0, e.getWidth(), e.getHeight());
-            g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
-            Graphics.g.translate(xOffset, yOffset);
-            Scene s = Game.getScene(e.getAttachedScene());
-            if (s != null) {
-                try {
-                    for (Entity entity : s.getObjectList()) {
-                        if (entity.rotatePos == null) {
-                            g.rotate(entity.rotation, entity.x, entity.y);
-                            entity.renderLoop();
-                            g.rotate(-entity.rotation, entity.x, entity.y);
-                        } else {
-                            g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
-                            entity.renderLoop();
-                            g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
-                        }
+            try {
+                g = (Graphics2D) bs.getDrawGraphics();
+                g.setRenderingHint(
+                        RenderingHints.KEY_TEXT_ANTIALIASING,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                g.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setColor(e.getCanvas().getBackground());
+                g.fillRect(0, 0, e.getWidth(), e.getHeight());
+                g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
 
-                        for (Entity entity1 : entity.getObjectList()){
-                            if (entity1.rotatePos == null) {
-                                g.rotate(entity1.rotation, entity1.x, entity1.y);
-                                entity1.renderLoop();
-                                g.rotate(-entity1.rotation, entity1.x, entity1.y);
+                Scene s = Game.getScene(e.getAttachedScene());
+                if (s != null)
+                    for (Entity entity : s.getObjectList()) {
+                        for (Entity entity1 : entity.getObjectList()) {
+                            entity1.anchorToCam();
+                        }
+                        entity.anchorToCam();
+                    }
+
+                Graphics.g.translate(xOffset, yOffset);
+                if (s != null) {
+                    try {
+                        s.renderLoop();
+                        for (Entity entity : s.getObjectList()) {
+                            if (entity.rotatePos == null) {
+                                g.rotate(entity.rotation, entity.x, entity.y);
+                                entity.renderLoop();
+                                g.rotate(-entity.rotation, entity.x, entity.y);
                             } else {
-                                g.rotate(entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
-                                entity1.renderLoop();
-                                g.rotate(-entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
+                                g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                                entity.renderLoop();
+                                g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                            }
+                            for (Entity entity1 : entity.getObjectList()) {
+                                if (entity1.rotatePos == null) {
+                                    g.rotate(entity1.rotation, entity1.x, entity1.y);
+                                    entity1.renderLoop();
+                                    g.rotate(-entity1.rotation, entity1.x, entity1.y);
+                                } else {
+                                    g.rotate(entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
+                                    entity1.renderLoop();
+                                    g.rotate(-entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
+                                }
                             }
                         }
+                    } catch (ConcurrentModificationException ignore) {
                     }
-                } catch (ConcurrentModificationException ignore) {
-                    System.out.println(ignore);
                 }
-                s.renderLoop();
-            } else throw new IllegalStateException("no state defined for that display");
-            Animation.animationLoop();
-            bs.show();
-            g.dispose();
+                Animation.animationLoop();
+                bs.show();
+                g.dispose();
+            } catch (IllegalStateException ignore) {
+            }
         });
     }
 
