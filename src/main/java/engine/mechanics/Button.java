@@ -117,7 +117,6 @@ public class Button extends Entity {
 
     public Button setTextColor(Color color) {
         this.textColor = color;
-        updateFont();
         return this;
     }
 
