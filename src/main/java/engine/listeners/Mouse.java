@@ -6,6 +6,8 @@ import engine.rendering.Graphics;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.EnumMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -18,7 +20,7 @@ import java.util.function.Predicate;
  *
  * @see Mouse#addEvent
  */
-public class Mouse implements MouseListener {
+public class Mouse implements MouseListener, MouseWheelListener {
     private final EnumMap<MouseButtons, CopyOnWriteArrayList<Predicate<MouseEvent>>> onMouseEvent =
             new EnumMap<>(MouseButtons.class);
     private final Display display;
@@ -27,6 +29,15 @@ public class Mouse implements MouseListener {
     private boolean held = false;
     private int mouseEvent;
     private boolean isMouseInside = true;
+    /**
+     * negative when scrolling upwards<br>
+     * positive downwards<br>
+     * dependant on system setting
+     */
+    public int scrollDirection;
+    private int scrollDirectionBuffer;
+    public int scrollingSpeed;
+    private int scrollingSpeedBuffer;
 
     public Mouse(Display display) {
         this.display = display;
@@ -73,6 +84,11 @@ public class Mouse implements MouseListener {
      * Internal function. it shall not be used.
      */
     public void mouseLoop(Display display) {
+        scrollDirection = scrollDirectionBuffer;
+        scrollingSpeed = scrollingSpeedBuffer;
+        scrollDirectionBuffer = 0;
+        scrollingSpeedBuffer = 0;
+
         try {
             x = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX()
                     - display.getCanvas().getLocationOnScreen().getX());
@@ -152,5 +168,11 @@ public class Mouse implements MouseListener {
 
     private double scaledY(int y) {
         return (y / ((double) (display.getHeight()) / Graphics.stdHeight));
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        scrollingSpeedBuffer = Math.abs(e.getUnitsToScroll());
+        scrollDirectionBuffer = (int) Math.signum(e.getUnitsToScroll());
     }
 }

@@ -58,6 +58,7 @@ public class Display {
 
         canvas.addKeyListener(keyListener);
         canvas.addMouseListener(mouseListener);
+        canvas.addMouseWheelListener(mouseListener);
     }
 
     /**
