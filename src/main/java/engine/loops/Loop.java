@@ -3,7 +3,6 @@ package engine.loops;
 import engine.Entity;
 import engine.Game;
 import engine.Scene;
-import engine.mechanics.EntityList;
 import engine.rendering.Graphics;
 
 import java.util.ConcurrentModificationException;
@@ -15,19 +14,22 @@ public class Loop implements Runnable {
     /**
      * the time it took to calculate the last frame in ns
      */
-    public static long frameTime = 1;
+    private static long calculationTime = 1;
+    public static int frameTime = 0;
     private int frameRate = 60;
     private boolean running = false;
+    private long lastFrame = System.nanoTime();
 
     @Override
     public void run() {
         while (running) {
-            long startTime = System.nanoTime();
+            frameTime = (int) (System.nanoTime() - lastFrame);
+            long startTime = lastFrame = System.nanoTime();
             logicLoop();
             renderLoop();
             try {
-                frameTime = (System.nanoTime() - startTime);
-                long toWait = (long) 1E9 / frameRate - frameTime;
+                calculationTime = (System.nanoTime() - startTime);
+                long toWait = (long) 1E9 / frameRate - calculationTime;
                 if (toWait < 0) toWait = 0;
                 //noinspection BusyWait
                 Thread.sleep((long) (toWait / 1E6), (int) (toWait % 1E6));

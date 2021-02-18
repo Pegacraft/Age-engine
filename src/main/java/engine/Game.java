@@ -101,10 +101,10 @@ public class Game {
 
     /**
      *
-     * @return Returns the time it took, to show the last frame.
+     * @return How long it took to calculate the last frame in respect to the framerate
      */
     public static double deltaTime() {
-        return (double) Loop.frameTime / 1000000;
+        return (double) Loop.frameTime / (1E9 / FPS);
     }
 
     /**
