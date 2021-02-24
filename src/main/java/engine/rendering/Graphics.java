@@ -6,7 +6,9 @@ import engine.Scene;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 /**
  * This is the <code>Graphics</code> class. It is used for everything that has to do with graphics.
@@ -24,6 +26,8 @@ public class Graphics {
     public static double stdHeight = 720d;
     private static int dHeight = (int) stdHeight;
     private static int dWidth = (int) stdHeight;
+    private static double scaleWidth = 1;
+    private static double scaleHeight = 1;
 
 
     private Graphics() {
@@ -49,42 +53,25 @@ public class Graphics {
                 g.setColor(e.getCanvas().getBackground());
                 g.fillRect(0, 0, e.getWidth(), e.getHeight());
                 g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
-
+                scaleWidth = e.getWidth() / stdWidth;
+                scaleHeight = e.getHeight() / stdHeight;
                 Scene s = Game.getScene(e.getAttachedScene());
-                if (s != null)
-                    for (Entity entity : s.getObjectList()) {
-                        for (Entity entity1 : entity.getObjectList()) {
-                            entity1.anchorToCam();
+                if (s != null) {
+                    List<Entity> queue = new ArrayList<>(s.getObjectList());
+                    while (!queue.isEmpty()) {
+                        Entity ent = queue.remove(0);
+                        if (ent.enabled) {
+                            ent.anchorToCam();
+                            queue.addAll(ent.getObjectList());
                         }
-                        entity.anchorToCam();
                     }
+                }
 
                 Graphics.g.translate(xOffset, yOffset);
                 if (s != null) {
                     try {
                         s.renderLoop();
-                        for (Entity entity : s.getObjectList()) {
-                            if (entity.rotatePos == null) {
-                                g.rotate(entity.rotation, entity.x, entity.y);
-                                entity.renderLoop();
-                                g.rotate(-entity.rotation, entity.x, entity.y);
-                            } else {
-                                g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
-                                entity.renderLoop();
-                                g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
-                            }
-                            for (Entity entity1 : entity.getObjectList()) {
-                                if (entity1.rotatePos == null) {
-                                    g.rotate(entity1.rotation, entity1.x, entity1.y);
-                                    entity1.renderLoop();
-                                    g.rotate(-entity1.rotation, entity1.x, entity1.y);
-                                } else {
-                                    g.rotate(entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
-                                    entity1.renderLoop();
-                                    g.rotate(-entity1.rotation, entity1.rotatePos.x, entity1.rotatePos.y);
-                                }
-                            }
-                        }
+                        renderChildren(s.getObjectList());
                     } catch (ConcurrentModificationException ignore) {
                     }
                 }
@@ -94,6 +81,25 @@ public class Graphics {
             } catch (IllegalStateException ignore) {
             }
         });
+
+
+    }
+
+    private static void renderChildren(List<Entity> entities) {
+        for (Entity entity : entities) {
+            if (entity.enabled) {
+                if (entity.rotatePos == null) {
+                    g.rotate(entity.rotation, entity.x, entity.y);
+                    entity.renderLoop();
+                    g.rotate(-entity.rotation, entity.x, entity.y);
+                } else {
+                    g.rotate(entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                    entity.renderLoop();
+                    g.rotate(-entity.rotation, entity.rotatePos.x, entity.rotatePos.y);
+                }
+                renderChildren(entity.getObjectList());
+            }
+        }
     }
 
     /**
@@ -120,5 +126,13 @@ public class Graphics {
      */
     public static Point getCamPos() {
         return new Point(xOffset, yOffset);
+    }
+
+    public static double getScaleHeight() {
+        return scaleHeight;
+    }
+
+    public static double getScaleWidth() {
+        return scaleWidth;
     }
 }

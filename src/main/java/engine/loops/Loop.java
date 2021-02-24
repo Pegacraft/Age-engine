@@ -5,7 +5,9 @@ import engine.Game;
 import engine.Scene;
 import engine.rendering.Graphics;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 /**
  * This is a engine internal function. It shall not be used.
@@ -47,12 +49,15 @@ public class Loop implements Runnable {
             if (s != null) {
                 try {
                     s.logicLoop();
-                    s.getObjectList().forEach(Entity::logicLoop);
-                    s.getObjectList().forEach(entity -> {
-                        entity.getObjectList().forEach(Entity::logicLoop);
-                    });
+                    List<Entity> queue = new ArrayList<>(s.getObjectList());
+                    while (!queue.isEmpty()) {
+                        Entity ent = queue.remove(0);
+                        if (ent.enabled) {
+                            ent.logicLoop();
+                            queue.addAll(ent.getObjectList());
+                        }
+                    }
                 } catch (ConcurrentModificationException ignore) {
-                    System.out.println(ignore);
                 }
             }
             e.mouseListener.mouseLoop(e);

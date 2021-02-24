@@ -13,6 +13,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import static engine.rendering.Graphics.getCamPos;
+
 
 /**
  * This handles all mouse presses.
@@ -94,8 +96,8 @@ public class Mouse implements MouseListener, MouseWheelListener {
                     - display.getCanvas().getLocationOnScreen().getX());
             y = (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY()
                     - display.getCanvas().getLocationOnScreen().getY());
-            x = (int) scaledX(x) - Graphics.getCamPos().x;
-            y = (int) scaledY(y) - Graphics.getCamPos().y;
+            x = (int) scaledX(x) - getCamPos().x;
+            y = (int) scaledY(y) - getCamPos().y;
         } catch (IllegalComponentStateException ignore) {
         }
 
@@ -154,12 +156,21 @@ public class Mouse implements MouseListener, MouseWheelListener {
     }
 
     /**
-     * Use this method to get the mouse position relative to the window.
+     * Use this method to get the mouse position relative to the world.
      *
-     * @return Returns a dimension with the mouse position.
+     * @return Returns a Point with the mouse position.
      */
     public Point getMousePos() {
         return new Point(x, y);
+    }
+
+    /**
+     * Use this method to get the mouse position relative to the window.
+     *
+     * @return Returns a Point with the mouse position.
+     */
+    public Point getMousePosToCam() {
+        return new Point(x + getCamPos().x, y + getCamPos().y);
     }
 
     private double scaledX(int x) {

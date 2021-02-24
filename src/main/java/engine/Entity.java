@@ -16,6 +16,11 @@ public abstract class Entity {
     private boolean isAnchored = false;
     private int offsetX = 0, offsetY = 0;
     public List<Entity> objectList = new ArrayList<>();
+    /**
+     * if the entity is enabled
+     * if this variable is false, it won't be ticked nor rendered
+     */
+    public boolean enabled = true;
 
     /**
      * This Method will be called once on creation of the object
