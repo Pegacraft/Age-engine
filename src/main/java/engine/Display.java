@@ -6,6 +6,7 @@ import engine.rendering.Graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -68,8 +69,6 @@ public class Display {
      */
     public Display setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
-        String backup = attachedScene;
-        attachedScene = null;
         frame.dispose();
         if (fullScreen) {
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -80,9 +79,9 @@ public class Display {
             frame.setLocation(100, 100);
             frame.setUndecorated(false);
         }
-
         frame.setVisible(true);
-        this.attachScene(backup);
+        frame.toFront();
+        frame.requestFocus();
         return this;
     }
 
@@ -159,13 +158,15 @@ public class Display {
      */
     public Display attachScene(String alias) {
         //runs the init in a loaded scene
-        Game.getScene(alias).display = this;
-        Game.getScene(alias).keyListener = this.keyListener;
-        Game.getScene(alias).mouseListener = this.mouseListener;
+        Scene scene = Game.getScene(alias);
+        scene.display = this;
+        scene.keyListener = this.keyListener;
+        scene.mouseListener = this.mouseListener;
         this.mouseListener.clear();
-        Game.getScenes().get(alias).getObjectList().clear();
-        Game.getScenes().get(alias).init();
+        this.keyListener.clear();
+        scene.getObjectList().clear();
         this.attachedScene = alias;
+        scene.init();
         return this;
     }
 

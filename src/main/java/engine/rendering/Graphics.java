@@ -75,7 +75,6 @@ public class Graphics {
                     } catch (ConcurrentModificationException ignore) {
                     }
                 }
-                Animation.animationLoop();
                 bs.show();
                 g.dispose();
             } catch (IllegalStateException ignore) {

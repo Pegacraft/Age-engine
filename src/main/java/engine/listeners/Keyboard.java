@@ -78,6 +78,13 @@ public class Keyboard implements KeyListener {
     }
 
     /**
+     * clears all keyboard events
+     */
+    public void clear() {
+        onKeyPress.clear();
+    }
+
+    /**
      * Use this method to check if a key is held down
      *
      * @param key The key you wanna check
