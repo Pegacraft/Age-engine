@@ -6,7 +6,6 @@ import engine.rendering.Graphics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -96,6 +95,9 @@ public class Display {
             this.width = width;
             this.height = height;
             frame.setSize(width, height);
+            canvas.setSize(width, height);
+            Graphics.setStdWidth(width);
+            Graphics.setStdHeight(height);
         }
         return this;
     }
@@ -196,17 +198,17 @@ public class Display {
     }
 
     /**
-     * @return Returns the screen width.
+     * @return Returns the screen width. (Don't use this to render something at a relative position of the screen, use <code>Graphics.getStdWidth()</code>)
      */
     public int getWidth() {
-        return frame.getWidth();
+        return canvas.getWidth();
     }
 
     /**
-     * @return Returns the screen height.
+     * @return Returns the screen height. (Don't use this to render something at a relative position of the screen, use <code>Graphics.getStdHeight()</code>)
      */
     public int getHeight() {
-        return frame.getHeight();
+        return canvas.getHeight();
     }
 
     /**

@@ -1,9 +1,6 @@
 package engine;
 
-import engine.editor.EditScene;
-import engine.editor.SettingsScene;
 import engine.loops.Loop;
-import engine.rendering.Graphics;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,12 +51,12 @@ public class Game {
     }
 
     /**
-     * proxy to a display named <code>"MAIN"</code>
+     * proxy to a display named <code>"main"</code>
      *
      * @return the display named MAIN
      */
     public static Display display() {
-        return display("MAIN");
+        return display("main");
     }
 
     /**
@@ -77,19 +74,6 @@ public class Game {
     }
 
     /**
-     * start the environment-editor using a new display called "editor"
-     */
-    public static void startEditor() {
-        Display display = Game.display("editor");
-        Game.addScene(new EditScene(), "EditScene");
-        Game.addScene(new SettingsScene(), "Settings");
-        display.attachScene("EditScene");
-        Game.start();
-        Game.setFrameRate(60);
-        display.setTitle("Map Editor");
-    }
-
-    /**
      * get a scene using it's alias
      *
      * @param alias the alias to look for
@@ -100,7 +84,6 @@ public class Game {
     }
 
     /**
-     *
      * @return How long it took to calculate the last frame in respect to the framerate
      */
     public static double deltaTime() {

@@ -174,11 +174,11 @@ public class Mouse implements MouseListener, MouseWheelListener {
     }
 
     private double scaledX(int x) {
-        return (x / ((double) (display.getWidth()) / Graphics.stdWidth));
+        return (x / ((double) (display.getWidth()) / Graphics.getStdWidth()));
     }
 
     private double scaledY(int y) {
-        return (y / ((double) (display.getHeight()) / Graphics.stdHeight));
+        return (y / ((double) (display.getHeight()) / Graphics.getStdHeight()));
     }
 
     @Override

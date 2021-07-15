@@ -53,7 +53,7 @@ public class DropDownMenu extends Entity {
             totalSize += dropDown.getEntityList().get(i).height;
         }
 
-        if (totalSize < Graphics.stdHeight) {
+        if (totalSize < Graphics.getStdHeight()) {
             //dropDown Button alignment
             dropDown.getEntityList().get(0).x = x;
             dropDown.getEntityList().get(0).y = y + menuButton.height;

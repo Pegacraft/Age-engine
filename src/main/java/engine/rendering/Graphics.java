@@ -22,10 +22,8 @@ public class Graphics {
     public static Graphics2D g;
     private static int xOffset = 0;
     private static int yOffset = 0;
-    public static double stdWidth = 1280d;
-    public static double stdHeight = 720d;
-    private static int dHeight = (int) stdHeight;
-    private static int dWidth = (int) stdHeight;
+    private static double stdWidth = 1280d;
+    private static double stdHeight = 720d;
     private static double scaleWidth = 1;
     private static double scaleHeight = 1;
 
@@ -39,8 +37,6 @@ public class Graphics {
      */
     public static void graphicsLoop() {
         Game.getDisplays().values().forEach(e -> {
-            dHeight = e.getHeight();
-            dWidth = e.getWidth();
             BufferStrategy bs = e.bs();
             try {
                 g = (Graphics2D) bs.getDrawGraphics();
@@ -52,9 +48,9 @@ public class Graphics {
                         RenderingHints.VALUE_ANTIALIAS_ON);
                 g.setColor(e.getCanvas().getBackground());
                 g.fillRect(0, 0, e.getWidth(), e.getHeight());
-                g.scale(e.getWidth() / stdWidth, e.getHeight() / stdHeight);
                 scaleWidth = e.getWidth() / stdWidth;
                 scaleHeight = e.getHeight() / stdHeight;
+                g.scale(scaleWidth, scaleHeight);
                 Scene s = Game.getScene(e.getAttachedScene());
                 if (s != null) {
                     List<Entity> queue = new ArrayList<>(s.getObjectList());
@@ -107,7 +103,7 @@ public class Graphics {
      * @param x The x offset
      * @param y The y offset
      */
-    public static void moveCam(int x, int y) {
+    public static void setCamPos(int x, int y) {
         xOffset = x;
         yOffset = y;
     }
@@ -127,11 +123,33 @@ public class Graphics {
         return new Point(xOffset, yOffset);
     }
 
-    public static double getScaleHeight() {
-        return scaleHeight;
+    /**
+     * @return Returns the Standard width (Original window width)
+     */
+    public static int getStdWidth() {
+        return (int) stdWidth;
     }
 
-    public static double getScaleWidth() {
-        return scaleWidth;
+    /**
+     * Sets the standard width of the window (changing could break scaling)
+     * @param stdWidth The new standard width
+     */
+    public static void setStdWidth(int stdWidth) {
+        Graphics.stdWidth = stdWidth;
+    }
+
+    /**
+     * @return Returns the Standard height (Original window height)
+     */
+    public static int getStdHeight() {
+        return (int) stdHeight;
+    }
+
+    /**
+     * Sets the standard height of the window (changing could break scaling)
+     * @param stdHeight The new standard height
+     */
+    public static void setStdHeight(int stdHeight) {
+        Graphics.stdHeight = stdHeight;
     }
 }
