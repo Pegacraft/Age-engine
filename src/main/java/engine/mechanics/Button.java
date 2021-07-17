@@ -4,7 +4,6 @@ import engine.Entity;
 import engine.Scene;
 import engine.listeners.Mouse;
 import engine.listeners.MouseButtons;
-import engine.rendering.Image;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -42,6 +41,11 @@ public class Button extends Entity {
         this.height = height;
         h = new Hitbox(new Point(x, y), new Point(x + width, y + height));
         updateFont();
+    }
+
+    @Override
+    public void finalize() {
+        isEventEnabled = false;
     }
 
     @Override
