@@ -11,6 +11,9 @@ public class Hitbox {
 
     private Polygon shape;
     private Polygon original;
+    private double currentRotation = 0;
+    private int[] originalX, originalY;
+    private int centerX = 0, centerY = 0;
 
     /**
      * The constructor of the hitbox class. It takes an infinite amount of points which represent an n-shape. If only two
@@ -29,12 +32,16 @@ public class Hitbox {
                 shape.addPoint(points[1].x, points[0].y);
                 shape.addPoint(points[1].x, points[1].y);
                 shape.addPoint(points[0].x, points[1].y);
+                originalX = shape.xpoints.clone();
+                originalY = shape.ypoints.clone();
                 return;
             default:
                 for (Point p : points) {
                     shape.addPoint(p.x, p.y);
                 }
         }
+        originalX = shape.xpoints.clone();
+        originalY = shape.ypoints.clone();
     }
 
     /**
@@ -78,15 +85,28 @@ public class Hitbox {
      * @param y The y pos you want to move in.
      */
     public void move(int x, int y) {
-        int xDiff = x - shape.xpoints[0];
-        int yDiff = y - shape.ypoints[0];
-        shape.translate(xDiff, yDiff);
+        int[] xValues = originalX.clone();
+        int[] yValues = originalY.clone();
+        int nValues = shape.npoints;
+        int xOffset = x - originalX[0];
+        int yOffset = y - originalY[0];
+
+        for (int i = 0; i < nValues; i++) {
+            xValues[i] += xOffset;
+            yValues[i] += yOffset;
+        }
+
+        shape = new Polygon(xValues, yValues, nValues);
+        originalX = shape.xpoints.clone();
+        originalY = shape.ypoints.clone();
+        original = new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
+        rotate(currentRotation, centerX, centerY);
     }
 
     /**
      * rotate the hitbox by a given angle
      *
-     * @param angle the angle to rotate by in radians
+     * @param angle   the angle to rotate by in radians
      * @param centerX the x-point you want to rotate around
      * @param centerY the y-point you want to rotate around
      */
@@ -99,6 +119,9 @@ public class Hitbox {
             Point2D p = transform.transform(new Point(original.xpoints[i], original.ypoints[i]), null);
             shape.addPoint((int) p.getX(), (int) p.getY());
         }
+        currentRotation = angle;
+        this.centerX = centerX;
+        this.centerY = centerY;
     }
 
     /**
@@ -107,27 +130,11 @@ public class Hitbox {
      * @param angle the angle to rotate by in radians
      */
     public void rotate(double angle) {
-        int centerX = 0;
-        int centerY = 0;
-        if (original == null)
-            original = new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
-        shape = new Polygon();
-
-        for (int i = 0; i < original.xpoints.length; i++) {
-            centerX += original.xpoints[i];
-        }
-        for (int i = 0; i < original.ypoints.length; i++) {
-            centerY += original.ypoints[i];
-        }
-        centerX /= original.xpoints.length;
-        centerY /= original.ypoints.length;
-
-        AffineTransform transform = AffineTransform.getRotateInstance(angle, centerX, centerY);
-        for (int i = 0; i < original.npoints; i++) {
-            Point2D p = transform.transform(new Point(original.xpoints[i], original.ypoints[i]), null);
-            shape.addPoint((int) p.getX(), (int) p.getY());
-        }
+        centerX = originalX[0];
+        centerY = originalY[0];
+        rotate(angle, centerX, centerY);
     }
+
 
     @Override
     public String toString() {
