@@ -1,5 +1,6 @@
 # Age-engine
 Welcome to the read-me of the Age-engine
+This was my first attempt at creating an java engine, and I've learned a lot since. Maybe I'll do a version 2 at some point
 
 ## Features:
 ### [Window](https://github.com/Pegacraft/Age-engine/wiki/Display-class) handling
